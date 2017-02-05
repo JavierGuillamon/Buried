@@ -43,16 +43,14 @@ public class ControllCoffin : MonoBehaviour {
     Rigidbody2D rb;
 
     [Header("THROWWW")]
-    public Transform targetThrow;
     [SerializeField]
     private KeyCode throwCoffin;
-    public float maxH = 5;
-    float h;
-    public float gravity = -9.8f;
-    public float maxDistance;
+    [SerializeField]
+    private float maxDistance;
+    [SerializeField]
+    private float force;
     Vector2 mousePos;
     float mouseDistance;
-    public float maxPower;
     float power;
     float angle;
 
@@ -142,17 +140,29 @@ public class ControllCoffin : MonoBehaviour {
         {
             if (Vector3.Distance(target.position, transform.position) <= distanceToTakeCoffin)
             {
-                coffinTaken = !coffinTaken;
+               /* coffinTaken = !coffinTaken;
                 if (coffinTaken == false)
+                {
                     transform.position = new Vector3(target.position.x + 0.75f, target.position.y, 0);
+                }*/
             }
             else
             {
                transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speedTakeCoffin * Time.deltaTime);
-            } 
-             
-       }
+            }       
+        }
 
+        if (Input.GetKeyDown(takeCoffin))
+        {
+            if (Vector3.Distance(target.position, transform.position) <= distanceToTakeCoffin)
+            {
+                coffinTaken = !coffinTaken;
+                if (coffinTaken == false)
+                {
+                    transform.position = new Vector3(target.position.x + 0.75f, target.position.y, 0);
+                }
+            }
+        }
     }
 
     public void ThrowCoffin()
@@ -174,18 +184,18 @@ public class ControllCoffin : MonoBehaviour {
     {
         Vector2 v2 = mousePos - (Vector2)transform.position;
         angle = Mathf.Atan2(v2.y, v2.x) * Mathf.Rad2Deg;
-
+/*
         if (angle >= 0 && angle < 45)
         {
             if (Mathf.Abs(0 - angle) < Mathf.Abs(45 - angle))
             {
                 angle = 0;
-                targetThrow.position = new Vector2(transform.position.x + power * maxDistance, transform.position.y);
+               // targetThrow.position = new Vector2(transform.position.x + power * maxDistance, transform.position.y);
             }
             else
             {
                 angle = 45;
-                targetThrow.position = new Vector2(transform.position.x + power * maxDistance, transform.position.y + (Mathf.Tan(45) * maxDistance * power) / 4);
+               // targetThrow.position = new Vector2(transform.position.x + power * maxDistance, transform.position.y + (Mathf.Tan(45) * maxDistance * power) / 4);
 
             }
         }
@@ -194,12 +204,12 @@ public class ControllCoffin : MonoBehaviour {
             if (Mathf.Abs(45 - angle) < Mathf.Abs(90 - angle))
             {
                 angle = 45;
-                targetThrow.position = new Vector2(transform.position.x + power * maxDistance, transform.position.y + (Mathf.Tan(45) * maxDistance * power) / 4);
+               // targetThrow.position = new Vector2(transform.position.x + power * maxDistance, transform.position.y + (Mathf.Tan(45) * maxDistance * power) / 4);
             }
             else
             {
                 angle = 90;
-                targetThrow.position = new Vector2(transform.position.x, transform.position.y + power * maxH);
+                //targetThrow.position = new Vector2(transform.position.x, transform.position.y + power * maxH);
             }
         }
         else if (angle >= 90 && angle < 135)
@@ -207,12 +217,12 @@ public class ControllCoffin : MonoBehaviour {
             if (Mathf.Abs(90 - angle) < Mathf.Abs(135 - angle))
             {
                 angle = 90;
-                targetThrow.position = new Vector2(transform.position.x, transform.position.y + power * maxH);
+                //targetThrow.position = new Vector2(transform.position.x, transform.position.y + power * maxH);
             }
             else
             {
                 angle = 135;
-                targetThrow.position = new Vector2(transform.position.x - power * maxDistance, transform.position.y + Mathf.Abs((Mathf.Tan(135) * maxDistance * power) / 4));
+                //targetThrow.position = new Vector2(transform.position.x - power * maxDistance, transform.position.y + Mathf.Abs((Mathf.Tan(135) * maxDistance * power) / 4));
             }
         }
         else if (angle >= 135 && angle < 180)
@@ -220,12 +230,12 @@ public class ControllCoffin : MonoBehaviour {
             if (Mathf.Abs(135 - angle) < Mathf.Abs(180 - angle))
             {
                 angle = 135;
-                targetThrow.position = new Vector2(transform.position.x - power * maxDistance, transform.position.y + Mathf.Abs((Mathf.Tan(135) * maxDistance * power) / 4));
+                //targetThrow.position = new Vector2(transform.position.x - power * maxDistance, transform.position.y + Mathf.Abs((Mathf.Tan(135) * maxDistance * power) / 4));
             }
             else
             {
                 angle = 180;
-                targetThrow.position = new Vector2(transform.position.x - power * maxDistance, transform.position.y);
+                //targetThrow.position = new Vector2(transform.position.x - power * maxDistance, transform.position.y);
             }
         }
         else if (angle < 0 && angle > -45)
@@ -233,12 +243,12 @@ public class ControllCoffin : MonoBehaviour {
             if (Mathf.Abs(0 - angle) < Mathf.Abs(-45 - angle))
             {
                 angle = 0;
-                targetThrow.position = new Vector2(transform.position.x + power * maxDistance, transform.position.y);
+                //targetThrow.position = new Vector2(transform.position.x + power * maxDistance, transform.position.y);
             }
             else
             {
                 angle = -45;
-                targetThrow.position = new Vector2(transform.position.x + power * maxDistance, transform.position.y + (Mathf.Tan(135) * maxDistance * power) / 4);
+                //targetThrow.position = new Vector2(transform.position.x + power * maxDistance, transform.position.y + (Mathf.Tan(135) * maxDistance * power) / 4);
             }
         }
         else if (angle < -45 && angle > -135)
@@ -246,12 +256,12 @@ public class ControllCoffin : MonoBehaviour {
             if (Mathf.Abs(-45 - angle) < Mathf.Abs(-135 - angle))
             {
                 angle = -45;
-                targetThrow.position = new Vector2(transform.position.x + power * maxDistance, transform.position.y + (Mathf.Tan(-45) * maxDistance * power) / 4);
+                //targetThrow.position = new Vector2(transform.position.x + power * maxDistance, transform.position.y + (Mathf.Tan(-45) * maxDistance * power) / 4);
             }
             else
             {
                 angle = -135;
-                targetThrow.position = new Vector2(transform.position.x - power * maxDistance, transform.position.y - (Mathf.Tan(-135) * maxDistance * power) / 4);
+                //targetThrow.position = new Vector2(transform.position.x - power * maxDistance, transform.position.y - (Mathf.Tan(-135) * maxDistance * power) / 4);
             }
         }
         else if (angle < -135 && angle > -180)
@@ -259,14 +269,14 @@ public class ControllCoffin : MonoBehaviour {
             if (Mathf.Abs(-135 - angle) < Mathf.Abs(-180 - angle))
             {
                 angle = -135;
-                targetThrow.position = new Vector2(transform.position.x - power * maxDistance, transform.position.y - (Mathf.Tan(-135) * maxDistance * power) / 4);
+                //targetThrow.position = new Vector2(transform.position.x - power * maxDistance, transform.position.y - (Mathf.Tan(-135) * maxDistance * power) / 4);
             }
             else
             {
                 angle = -180;
-                targetThrow.position = new Vector2(transform.position.x - power * maxDistance, transform.position.y);
+                //targetThrow.position = new Vector2(transform.position.x - power * maxDistance, transform.position.y);
             }
-        }
+        }*/
     }
 
     void calculatePower()
@@ -279,36 +289,13 @@ public class ControllCoffin : MonoBehaviour {
         {
             power = (mouseDistance / maxDistance);
         }
-        h = maxH * power;
     }
 
     public void Throw()
     {
         calculatePower(); calculateAngle();
-        Physics.gravity = Vector3.up * gravity;
-        rb.velocity = CalculateLaunchData().initialVelocity;
+        Vector3 dir = Quaternion.AngleAxis(angle, Vector3.forward) * Vector3.right;
+        rb.AddForce(dir * (force*power));
     }
 
-    LaunchData CalculateLaunchData()
-    {
-        float displacementY = targetThrow.position.y - rb.position.y;
-        Vector3 displacementX = new Vector2(targetThrow.position.x - rb.position.x, 0);
-        float time = Mathf.Sqrt(-2 * h / gravity) + Mathf.Sqrt(2 * (displacementY - h) / gravity);
-        Vector2 velocityY = Vector2.up * Mathf.Sqrt(-2 * gravity * h);
-        Vector2 velocityX = displacementX / time;
-
-        return new LaunchData(velocityX + velocityY * -Mathf.Sign(gravity), time);
-    }
-
-    struct LaunchData
-    {
-        public readonly Vector2 initialVelocity;
-        public readonly float timeToTarget;
-
-        public LaunchData(Vector2 initialVelocity, float timeToTarget)
-        {
-            this.initialVelocity = initialVelocity;
-            this.timeToTarget = timeToTarget;
-        }
-    }
 }
