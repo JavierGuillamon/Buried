@@ -8,7 +8,7 @@ public class PendulumDetect : MonoBehaviour {
 
     [Header("Draw box gizmos")]
     public BoxCollider2D col;
-    public Vector2 pos;
+    public Vector2 offset;
     public Vector2 size;
     public Color color= new Color(1, 0, 0, .5f);
 	// Use this for initialization
@@ -43,7 +43,7 @@ public class PendulumDetect : MonoBehaviour {
     void OnDrawGizmos()
     {
         Gizmos.color = color;
-        Gizmos.DrawCube(pos,size);
+        Gizmos.DrawCube((Vector2)transform.position+offset,size);
     }
 
 }

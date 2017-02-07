@@ -79,6 +79,7 @@
     <Compile Include="Assets\Scripts\ControlManager.cs" />
     <Compile Include="Assets\Scripts\ControllCoffin.cs" />
     <Compile Include="Assets\Scripts\Controller2D.cs" />
+    <Compile Include="Assets\Scripts\Escalar.cs" />
     <Compile Include="Assets\Scripts\PendulumDetect.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
@@ -87,6 +88,8 @@
     <Compile Include="Assets\Scripts\Pruebas--NOBUENO\StretchSprite.cs" />
     <Compile Include="Assets\Scripts\Pruebas--NOBUENO\Throw.cs" />
     <Compile Include="Assets\Scripts\Pruebas--NOBUENO\TileSprite.cs" />
+    <Compile Include="Assets\Scripts\climb\coffinInPlaceDetector.cs" />
+    <Compile Include="Assets\Scripts\climb\playerClimb.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

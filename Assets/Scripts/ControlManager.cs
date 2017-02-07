@@ -7,10 +7,9 @@ public class ControlManager : MonoBehaviour {
     public bool resize;
     public Chain chainScript;
     public Rigidbody2D rb2d;
- 
-	void Start () {
-		
-	}
+
+    public bool coffinInPlace=false;
+    public bool playerInPlace=false;
 	
 	void Update () {
         //moving
@@ -29,6 +28,14 @@ public class ControlManager : MonoBehaviour {
             GetComponent<Player>().enabled = false;
             GetComponent<PlayerController>().enabled = true;
         }
+        if (coffinInPlace && playerInPlace)
+        {
+            GetComponent<Player>().enabled = false;
+        }
+        else
+        {
+            GetComponent<Player>().enabled = true;
+        }
 	}
 
 
@@ -36,5 +43,24 @@ public class ControlManager : MonoBehaviour {
     public void setResize(bool aux)
     {
         resize = aux;
+    }
+
+    public void setCoffinInPlace(bool aux)
+    {
+        coffinInPlace = aux;
+    }
+
+    public void setPlayerInPlace(bool aux)
+    {
+        playerInPlace = aux;
+    }
+
+    public bool canClimb()
+    {
+       // Debug.Log(playerInPlace + " " + coffinInPlace);
+        if ((playerInPlace == true) && (coffinInPlace == true))
+            return true;
+        else
+            return false;
     }
 }
