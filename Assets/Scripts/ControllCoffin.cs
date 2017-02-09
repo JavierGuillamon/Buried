@@ -42,11 +42,9 @@ public class ControllCoffin : MonoBehaviour {
     private Vector3 targetPosition;
     Rigidbody2D rb;
 
-    [Header("THROWWW")]
+    [Header("THROW")]
     [SerializeField]
     private KeyCode throwCoffin;
-    [SerializeField]
-    private float maxDistance;
     [SerializeField]
     private float force;
     Vector2 mousePos;
@@ -54,9 +52,14 @@ public class ControllCoffin : MonoBehaviour {
     float power;
     float angle;
 
+    [Header("Chain distance detectors")]
+    public CircleCollider2D areaMovNormal;
+    public CircleCollider2D areaMovSlow;
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody2D>();
+        areaMovNormal.radius = distance;
+        areaMovSlow.radius = MaxDistance;
     }
 	
 	// Update is called once per frame
@@ -67,48 +70,17 @@ public class ControllCoffin : MonoBehaviour {
         mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
         mousePos = Camera.main.ScreenToWorldPoint(mousePos);
         mouseDistance = Vector2.Distance(mousePos, transform.position);
-        detectAndMove();
+       // detectAndMove();
     }
 
-    void detectAndMove()
+  /*  void detectAndMove()
     {
         targetPosition = new Vector3(target.position.x,target.position.y-0.25f,0);
         dist = Vector3.Distance(target.position, transform.position);
-       // Debug.Log("Dist OUT: " + dist);
         if (dist > distance)
         {
             control.setMoveSpeed(speedOut);
-          //  Debug.Log("Dist aa: " + dist);
-            /* if (rb.velocity.x > 0 || rb.velocity.y > 0)
-             {
-                // distAlterada = true;
-                // target.position = Vector3.MoveTowards(target.position, transform.position, speedMovCoffin*Time.deltaTime);
-                 Debug.Log("Dist IN: " + dist);
-               //  joint.distance = distance+1f;*/
-            if (dist > MaxDistance)
-            {
-                if (transform.position.x < target.position.x)
-                {
-                    // Debug.Log("derecha");
-                    control.freezeRight();
-                }
-                if (transform.position.x > target.position.x)
-                {
-                    //Debug.Log("left: "+transform.position.x+" "+target.position.x);
-                    control.freezeLeft();
-                }
-                // rb.AddForce(transform.up * -1000);
-                rb.constraints = RigidbodyConstraints2D.FreezePosition;
-                // target.position = Vector3.MoveTowards(target.position, transform.position, speedMovCoffin * Time.deltaTime);
-            }
-           // }
-           /* else
-            {
-                Debug.Log("Dist: " + dist);
-                if(distAlterada)
-                    joint.distance = distance; 
-                
-            }*/
+           
         }
         else
         {
@@ -123,15 +95,45 @@ public class ControllCoffin : MonoBehaviour {
                 rb.constraints = RigidbodyConstraints2D.FreezeRotation;
             }
         }
+    }*/
+    //true = left, false = right
+    public bool leftOrRight()
+    {
+        bool aux=true;
+        if (transform.position.x < target.position.x)
+        {
+            aux = false;    
+            
+        }
+        if (transform.position.x > target.position.x)
+        {
+            aux = true;
+        }
+        rb.constraints = RigidbodyConstraints2D.FreezePosition;
+        
+        return aux;
+    }
+    public float getSpeedOut()
+    {
+        return speedOut;
     }
 
-    private void reset()
+    public void reset()
     {
         control.resetFreeze();
         control.resetSpeed();
         control.resetJumpHeight();
         control.resetTimeJump();
         rb.constraints = RigidbodyConstraints2D.None;
+        if (coffinTaken)
+        {
+            manager.setResize(true);
+            transform.position = new Vector3(target.position.x, target.position.y + 0.75f, 0);
+            control.setMoveSpeed(moveSpeedWithCoffin);
+            control.setJumpHeight(jumpHeightWithCoffin);
+            control.setTimeJump(timeJumpWithCoffin);
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        }
     }
 
     public void TakeCoffin()
@@ -178,7 +180,6 @@ public class ControllCoffin : MonoBehaviour {
                 
         }
     }
-
 
     void calculateAngle()
     {
@@ -281,13 +282,13 @@ public class ControllCoffin : MonoBehaviour {
 
     void calculatePower()
     {
-        if (mouseDistance >= maxDistance)
+        if (mouseDistance >= MaxDistance)
         {
             power = 1;
         }
         else
         {
-            power = (mouseDistance / maxDistance);
+            power = (mouseDistance / MaxDistance);
         }
     }
 

@@ -32,7 +32,6 @@ public class playerClimb : MonoBehaviour {
     {
         if (other.tag == "Player")
         {
-            Debug.Log("DENTRO");
             manager.setPlayerInPlace(true);
         }
     }
