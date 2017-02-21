@@ -85,6 +85,7 @@
     <Compile Include="Assets\Scripts\Escalar.cs" />
     <Compile Include="Assets\Scripts\Fuego\Fuego.cs" />
     <Compile Include="Assets\Scripts\Fuego\FuegoCoffin.cs" />
+    <Compile Include="Assets\Scripts\Fuego\detectorFuego.cs" />
     <Compile Include="Assets\Scripts\PendulumDetect.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
