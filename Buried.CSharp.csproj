@@ -83,6 +83,8 @@
     <Compile Include="Assets\Scripts\ControllCoffin.cs" />
     <Compile Include="Assets\Scripts\Controller2D.cs" />
     <Compile Include="Assets\Scripts\Escalar.cs" />
+    <Compile Include="Assets\Scripts\Fuego\Fuego.cs" />
+    <Compile Include="Assets\Scripts\Fuego\FuegoCoffin.cs" />
     <Compile Include="Assets\Scripts\PendulumDetect.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
@@ -91,6 +93,8 @@
     <Compile Include="Assets\Scripts\Pruebas--NOBUENO\StretchSprite.cs" />
     <Compile Include="Assets\Scripts\Pruebas--NOBUENO\Throw.cs" />
     <Compile Include="Assets\Scripts\Pruebas--NOBUENO\TileSprite.cs" />
+    <Compile Include="Assets\Scripts\Sombra\SombraDetect.cs" />
+    <Compile Include="Assets\Scripts\Sombra\SombraMov.cs" />
     <Compile Include="Assets\Scripts\climb\coffinInPlaceDetector.cs" />
     <Compile Include="Assets\Scripts\climb\playerClimb.cs" />
   </ItemGroup>

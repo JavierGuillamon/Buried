@@ -185,7 +185,7 @@ public class ControllCoffin : MonoBehaviour {
     {
         Vector2 v2 = mousePos - (Vector2)transform.position;
         angle = Mathf.Atan2(v2.y, v2.x) * Mathf.Rad2Deg;
-        /*
+        
         if (angle >= 0 && angle < 45)
         {
             if (Mathf.Abs(0 - angle) < Mathf.Abs(45 - angle))
@@ -277,7 +277,7 @@ public class ControllCoffin : MonoBehaviour {
                 angle = -180;
                 //targetThrow.position = new Vector2(transform.position.x - power * maxDistance, transform.position.y);
             }
-        }*/
+        }
     }
 
     void calculatePower()
