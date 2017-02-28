@@ -73,9 +73,9 @@ public class Fuego : MonoBehaviour {
     private IEnumerator vibrate()
     {
         gameObject.transform.position += new Vector3(0.00001f,0,0);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.01f);
         gameObject.transform.position -= new Vector3(0.00001f, 0, 0);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.01f);
     }
 
     public void setOnFire(bool set)

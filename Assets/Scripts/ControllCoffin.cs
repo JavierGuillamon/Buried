@@ -49,9 +49,9 @@ public class ControllCoffin : MonoBehaviour {
     private float force;
     Vector2 mousePos;
     float mouseDistance;
-    float power;
+    public float power = 1;
     float angle;
-
+    public float Vo, g;
     [Header("Chain distance detectors")]
     public CircleCollider2D areaMovNormal;
     public CircleCollider2D areaMovSlow;
@@ -66,11 +66,9 @@ public class ControllCoffin : MonoBehaviour {
 	void Update () {
         TakeCoffin();
         ThrowCoffin();
-
         mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
         mousePos = Camera.main.ScreenToWorldPoint(mousePos);
         mouseDistance = Vector2.Distance(mousePos, transform.position);
-       // detectAndMove();
     }
 
   /*  void detectAndMove()
@@ -113,6 +111,7 @@ public class ControllCoffin : MonoBehaviour {
         
         return aux;
     }
+
     public float getSpeedOut()
     {
         return speedOut;
@@ -174,129 +173,58 @@ public class ControllCoffin : MonoBehaviour {
             if (Input.GetKeyDown(throwCoffin))
             {
                 coffinTaken = false;
-                Throw();
-                
+                ThrowAux();
             }
-                
+            Vector3 vel = GetForceFrom(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            float angle = Mathf.Atan2(vel.y, vel.x) * Mathf.Rad2Deg;
+            transform.eulerAngles = new Vector3(0, 0, angle);
         }
     }
+    /*
+        void calculateAngle()
+        { 
+            Vector2 v2 = mousePos - (Vector2)transform.position;
+            v2 = transform.InverseTransformDirection(v2);
+            angle = Mathf.Atan2(v2.y, v2.x) * Mathf.Rad2Deg;
 
-    void calculateAngle()
-    {
-        Vector2 v2 = mousePos - (Vector2)transform.position;
-        angle = Mathf.Atan2(v2.y, v2.x) * Mathf.Rad2Deg;
+            //transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        }
+
+        void calculatePower()
+        {
+            if (mouseDistance >= MaxDistance)
+            {
+                power = 1;
+            }
+            else
+            {
+                power = (mouseDistance / MaxDistance);
+            }
+        }
         
-        if (angle >= 0 && angle < 45)
-        {
-            if (Mathf.Abs(0 - angle) < Mathf.Abs(45 - angle))
-            {
-                angle = 0;
-               // targetThrow.position = new Vector2(transform.position.x + power * maxDistance, transform.position.y);
-            }
-            else
-            {
-                angle = 45;
-               // targetThrow.position = new Vector2(transform.position.x + power * maxDistance, transform.position.y + (Mathf.Tan(45) * maxDistance * power) / 4);
-
-            }
-        }
-        else if (angle >= 45 && angle < 90)
-        {
-            if (Mathf.Abs(45 - angle) < Mathf.Abs(90 - angle))
-            {
-                angle = 45;
-               // targetThrow.position = new Vector2(transform.position.x + power * maxDistance, transform.position.y + (Mathf.Tan(45) * maxDistance * power) / 4);
-            }
-            else
-            {
-                angle = 90;
-                //targetThrow.position = new Vector2(transform.position.x, transform.position.y + power * maxH);
-            }
-        }
-        else if (angle >= 90 && angle < 135)
-        {
-            if (Mathf.Abs(90 - angle) < Mathf.Abs(135 - angle))
-            {
-                angle = 90;
-                //targetThrow.position = new Vector2(transform.position.x, transform.position.y + power * maxH);
-            }
-            else
-            {
-                angle = 135;
-                //targetThrow.position = new Vector2(transform.position.x - power * maxDistance, transform.position.y + Mathf.Abs((Mathf.Tan(135) * maxDistance * power) / 4));
-            }
-        }
-        else if (angle >= 135 && angle < 180)
-        {
-            if (Mathf.Abs(135 - angle) < Mathf.Abs(180 - angle))
-            {
-                angle = 135;
-                //targetThrow.position = new Vector2(transform.position.x - power * maxDistance, transform.position.y + Mathf.Abs((Mathf.Tan(135) * maxDistance * power) / 4));
-            }
-            else
-            {
-                angle = 180;
-                //targetThrow.position = new Vector2(transform.position.x - power * maxDistance, transform.position.y);
-            }
-        }
-        else if (angle < 0 && angle > -45)
-        {
-            if (Mathf.Abs(0 - angle) < Mathf.Abs(-45 - angle))
-            {
-                angle = 0;
-                //targetThrow.position = new Vector2(transform.position.x + power * maxDistance, transform.position.y);
-            }
-            else
-            {
-                angle = -45;
-                //targetThrow.position = new Vector2(transform.position.x + power * maxDistance, transform.position.y + (Mathf.Tan(135) * maxDistance * power) / 4);
-            }
-        }
-        else if (angle < -45 && angle > -135)
-        {
-            if (Mathf.Abs(-45 - angle) < Mathf.Abs(-135 - angle))
-            {
-                angle = -45;
-                //targetThrow.position = new Vector2(transform.position.x + power * maxDistance, transform.position.y + (Mathf.Tan(-45) * maxDistance * power) / 4);
-            }
-            else
-            {
-                angle = -135;
-                //targetThrow.position = new Vector2(transform.position.x - power * maxDistance, transform.position.y - (Mathf.Tan(-135) * maxDistance * power) / 4);
-            }
-        }
-        else if (angle < -135 && angle > -180)
-        {
-            if (Mathf.Abs(-135 - angle) < Mathf.Abs(-180 - angle))
-            {
-                angle = -135;
-                //targetThrow.position = new Vector2(transform.position.x - power * maxDistance, transform.position.y - (Mathf.Tan(-135) * maxDistance * power) / 4);
-            }
-            else
-            {
-                angle = -180;
-                //targetThrow.position = new Vector2(transform.position.x - power * maxDistance, transform.position.y);
-            }
-        }
-    }
-
-    void calculatePower()
-    {
-        if (mouseDistance >= MaxDistance)
-        {
-            power = 1;
-        }
-        else
-        {
-            power = (mouseDistance / MaxDistance);
-        }
-    }
 
     public void Throw()
     {
         calculatePower(); calculateAngle();
         Vector3 dir = Quaternion.AngleAxis(angle, Vector3.forward) * Vector3.right;
-        rb.AddForce(dir * (force*power));
+        // Debug.Log("Power: " +power+" Dir: "+dir);
+        //Vector3 dir = Quaternion.AngleAxis(Quaternion.Angle(transform.rotation, Quaternion.identity), Vector3.forward)*Vector3.right;
+        rb.AddForce(dir * (force * power));
+        //rb.AddForce(dir * (force*power));
+    }*/
+
+    
+    //-------------Pruebas Tiro parabolico
+   
+
+    private void ThrowAux()
+    {
+        rb.AddForce(GetForceFrom(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition)), ForceMode2D.Impulse);
     }
+    private Vector2 GetForceFrom(Vector3 fromPos, Vector3 toPos)
+    {
+        return (new Vector2(toPos.x, toPos.y) - new Vector2(fromPos.x, fromPos.y)) * power;
+    }
+    
 
 }
