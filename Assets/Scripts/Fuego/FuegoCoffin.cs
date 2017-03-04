@@ -34,6 +34,11 @@ public class FuegoCoffin : MonoBehaviour {
         }
     }
 	
+    public void doFuego(float cooldown)
+    {
+        fireCoolDown = cooldown;
+        onFire = true;
+    }
 
     public void setOnFire(bool set)
     {

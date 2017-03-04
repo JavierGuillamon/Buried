@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class ControlManager : MonoBehaviour {
 
-    public bool resize;
+    public bool moving;
+    public bool sombra;
+    public bool swing;
     public Chain chainScript;
     public Rigidbody2D rb2d;
 
@@ -13,7 +15,7 @@ public class ControlManager : MonoBehaviour {
 	
 	void Update () {
         //moving
-        if (resize)
+        if (moving)
         {
             chainScript.setResize(true);
             rb2d.isKinematic = true;
@@ -21,29 +23,56 @@ public class ControlManager : MonoBehaviour {
             GetComponent<PlayerController>().enabled = false;
         }
         //swing
-        else
+        if(swing)
         {
             chainScript.setResize(false);
             rb2d.isKinematic = false;
             GetComponent<Player>().enabled = false;
             GetComponent<PlayerController>().enabled = true;
         }
+
+        if (sombra)
+        {
+            chainScript.setResize(false);
+            rb2d.isKinematic = false;
+            GetComponent<Player>().enabled = false;
+            GetComponent<PlayerController>().enabled = false;
+        }
+
         if (coffinInPlace && playerInPlace)
         {
             GetComponent<Player>().enabled = false;
         }
         else
         {
-            GetComponent<Player>().enabled = true;
+            //GetComponent<Player>().enabled = true;
         }
 	}
 
 
     //GETTERS && SETTERS
-    public void setResize(bool aux)
+    public void setMoving(bool aux)
     {
-        resize = aux;
+        moving = aux;
+        swing = !aux;
+        sombra = !aux;
     }
+
+    public void setSwing(bool aux)
+    {
+        swing = aux;
+        moving = !aux;
+        sombra = !aux;
+    }
+
+    public void setSombra(bool aux)
+    {
+        sombra = aux;
+        swing = !aux;
+        moving = !aux;
+
+    }
+
 
     public void setCoffinInPlace(bool aux)
     {
@@ -57,7 +86,6 @@ public class ControlManager : MonoBehaviour {
 
     public bool canClimb()
     {
-       // Debug.Log(playerInPlace + " " + coffinInPlace);
         if ((playerInPlace == true) && (coffinInPlace == true))
             return true;
         else

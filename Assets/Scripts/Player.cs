@@ -61,7 +61,7 @@ public class Player : MonoBehaviour
         auxJumpHeight = jumpHeight;
         auxTimeJump = timeJump;
 
-        manager.setResize(true);
+        manager.setMoving(true);
     }
 
     void Update()

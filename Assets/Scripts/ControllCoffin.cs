@@ -126,7 +126,7 @@ public class ControllCoffin : MonoBehaviour {
         rb.constraints = RigidbodyConstraints2D.None;
         if (coffinTaken)
         {
-            manager.setResize(true);
+            manager.setMoving(true);
             transform.position = new Vector3(target.position.x, target.position.y + 0.75f, 0);
             control.setMoveSpeed(moveSpeedWithCoffin);
             control.setJumpHeight(jumpHeightWithCoffin);

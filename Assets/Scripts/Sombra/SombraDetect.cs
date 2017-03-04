@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class SombraDetect : MonoBehaviour {
     public SombraMov sombramov;
-    public Player player;
-    //public ControlManager control;
+    public ControlManager control;
+    public Rigidbody2D playerrb;
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Coffin")
         {
-            player.enabled = false;
-            //control.setResize(false);
+            other.gameObject.layer = LayerMask.NameToLayer("sombraCoffin");
+            control.setSombra(true);
             sombramov.enabled = true;
         }
     }
@@ -19,10 +19,11 @@ public class SombraDetect : MonoBehaviour {
     {
         if (other.tag == "Coffin")
         {
-            player.enabled = true;
-            //control.setResize(true);
+            other.gameObject.layer = LayerMask.NameToLayer("coffin");
+            control.setMoving(true);
             sombramov.enabled = false;
-
+            playerrb.velocity = Vector2.zero;
+            playerrb.angularVelocity = 0;
         }
     }
 }
