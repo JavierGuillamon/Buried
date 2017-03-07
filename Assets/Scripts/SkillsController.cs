@@ -16,6 +16,9 @@ public class SkillsController : MonoBehaviour {
 
     [Header("Hielo")]
     public KeyCode hieloKeyCode;
+    public KeyCode hieloActivateKeyCode;
+    public Hielo hielo;
+    public float timeOnAir;
     public float cooldownHielo;
     public float manaHielo;
     [Header("Sombra")]
@@ -24,6 +27,7 @@ public class SkillsController : MonoBehaviour {
     public float cooldownSombra;
     public float manaSombra;
 
+    private bool hieloActivo = false;
     // Use this for initialization
     void Start () {
 		
@@ -39,6 +43,8 @@ public class SkillsController : MonoBehaviour {
         if (Input.GetKeyDown(hieloKeyCode))
         {
             //HIELO
+            hieloActivo = true;
+            hielo.activateHielo();
         }
         if (Input.GetKeyDown(sombraKeyCode))
         {
@@ -47,6 +53,14 @@ public class SkillsController : MonoBehaviour {
             {
                 Coffin.layer = LayerMask.NameToLayer("sombra");
                 
+            }
+        }
+
+        if (Input.GetKeyDown(hieloActivateKeyCode))
+        {
+            if (hieloActivo)
+            {
+                hielo.HieloExplode(timeOnAir);
             }
         }
 	}
