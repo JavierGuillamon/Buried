@@ -74,6 +74,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Agua\Agua.cs" />
     <Compile Include="Assets\Scripts\Chain\Chain.cs" />
     <Compile Include="Assets\Scripts\Chain\ControlChainSpeed.cs" />
     <Compile Include="Assets\Scripts\Chain\areaMovNormal.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="Assets\Scripts\Fuego\FuegoCoffin.cs" />
     <Compile Include="Assets\Scripts\Fuego\detectorFuego.cs" />
     <Compile Include="Assets\Scripts\Hielo\Hielo.cs" />
+    <Compile Include="Assets\Scripts\Morir.cs" />
     <Compile Include="Assets\Scripts\PendulumDetect.cs" />
     <Compile Include="Assets\Scripts\Plataformas\PlatformController.cs" />
     <Compile Include="Assets\Scripts\Plataformas\RaycastController.cs" />

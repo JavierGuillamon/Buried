@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Fuego : MonoBehaviour {
-    public float timeToDestroyWithCoffin;
     public float timeToDestroy;
+    public float timeToPassFire;
     public Material mat;
     public bool onFire = false, coffin=false;
 
@@ -24,42 +24,45 @@ public class Fuego : MonoBehaviour {
             if (other.GetComponent<FuegoCoffin>().getOnFire())
             {
                 onFire = true;
-                coffin = true;
-                StartCoroutine(waitAndDestroy(timeToDestroyWithCoffin));
             }
                 
         }
         if (other.tag == "flammable")
         {
             if (onFire) {
-                StartCoroutine(waitAndcall(timeToDestroy, other));
+                StartCoroutine(waitAndcall(timeToPassFire, other));
             }
         }
     }
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.tag == "coffinFire")
-        {
-            if (other.GetComponent<FuegoCoffin>().getOnFire())
-            {
-                onFire = true;
-                //StartCoroutine(waitAndDestroy(5000));
-            }
 
-        }
-        if (other.tag == "flammable")
+    /*void OnTriggerEnter2D(Collider2D other)
         {
-            // Debug.Log(onFire+" "+gameObject.name);
-            if (onFire)
+            if (other.tag == "coffinFire")
             {
-                other.gameObject.GetComponent<Fuego>().setOnFire(true);
+                if (other.GetComponent<FuegoCoffin>().getOnFire())
+                {
+                    onFire = true;
+                }
+
             }
-        }
-    }
+            if (other.tag == "flammable")
+            {
+                if (onFire)
+                {
+                    if(other!=null)
+                        other.gameObject.GetComponent<Fuego>().setOnFire(true);
+                }
+            }
+        }*/
+        
+    
+    
+    #region IEnumerators
     private IEnumerator waitAndcall(float time, Collider2D other)
     {
         yield return new WaitForSeconds(time);
-        other.gameObject.GetComponent<Fuego>().setOnFire(true);
+        if(other!= null)
+            other.gameObject.GetComponent<Fuego>().setOnFire(true);
     }
 
     private IEnumerator waitAndDestroy(float time)
@@ -77,7 +80,7 @@ public class Fuego : MonoBehaviour {
         gameObject.transform.position -= new Vector3(0.00001f, 0, 0);
         yield return new WaitForSeconds(0.01f);
     }
-
+    #endregion
     public void setOnFire(bool set)
     {
         onFire = set;

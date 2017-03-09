@@ -7,13 +7,14 @@ public class FuegoCoffin : MonoBehaviour {
     private bool onFire = false;
     public float fireCoolDown;
     public MeshRenderer rend;
-  
 
+    private IEnumerator coroutine;
     void Update()
     {
         if (onFire)
         {
-            StartCoroutine(fireCD(fireCoolDown));
+            coroutine = fireCD(fireCoolDown);
+            StartCoroutine(coroutine);
         }
     }
 
@@ -28,12 +29,20 @@ public class FuegoCoffin : MonoBehaviour {
 
     void OnTriggerStay2D(Collider2D other)
     {
-        if (other.tag =="fire")
+        if (other.tag == "fire")
         {
             setOnFire(true);
         }
+        else if (other.tag == "agua" && onFire)
+        {
+            StopCoroutine(coroutine);
+            setOnFire(false);
+            rend.sharedMaterial = matNormal;
+        }
+        else if (other.tag == "hielo" && onFire)
+            other.GetComponent<Agua>().unFreeze();
     }
-	
+    
     public void doFuego(float cooldown)
     {
         fireCoolDown = cooldown;

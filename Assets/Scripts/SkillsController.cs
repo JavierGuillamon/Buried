@@ -37,18 +37,21 @@ public class SkillsController : MonoBehaviour {
 	void Update () {
         if (Input.GetKeyDown(fuegoKeyCode))
         {
-           fuego.doFuego(cooldownFuego);
+            hieloActivo = false;
+            fuego.doFuego(cooldownFuego);
             
         }
         if (Input.GetKeyDown(hieloKeyCode))
         {
             //HIELO
             hieloActivo = true;
+            Coffin.layer = LayerMask.NameToLayer("hielo");
             hielo.activateHielo();
         }
         if (Input.GetKeyDown(sombraKeyCode))
         {
             //SOMBRA
+            hieloActivo = false;
             if (sombraDetect.canUseSombra())
             {
                 Coffin.layer = LayerMask.NameToLayer("sombra");
