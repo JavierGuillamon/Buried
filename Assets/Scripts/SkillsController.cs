@@ -44,10 +44,18 @@ public class SkillsController : MonoBehaviour {
         }
         if (Input.GetKeyDown(hieloKeyCode))
         {
-            //HIELO
-            hieloActivo = true;
-            Coffin.layer = LayerMask.NameToLayer("hielo");
-            hielo.activateHielo();
+            if (sombraActiva)
+            {
+                sombraActiva = !sombraActiva;
+                Coffin.GetComponent<SombraMov>().Reject();
+            }
+            else
+            {
+                //HIELO
+                hieloActivo = true;
+                Coffin.layer = LayerMask.NameToLayer("hielo");
+                hielo.activateHielo();
+            }
         }
         if (Input.GetKeyDown(sombraKeyCode))
         {

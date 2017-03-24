@@ -7,17 +7,18 @@ public class ControlChainSpeed : MonoBehaviour {
     private Player controlPlayer;
     [SerializeField]
     private ControllCoffin controlCoffin;
-
-    private bool inNormalDetect=true;
-    private bool inSlowDetect=true;
-
-	
-	// Update is called once per frame
+    [SerializeField]
+    private Transform Player;
+    public float distanceNorm;
+    public float distSlow;
+    
 	void Update () {
-        if (inNormalDetect)
+        if (Vector2.Distance(transform.position, Player.position) <= distanceNorm)
+        {
             controlCoffin.reset();
-        else if (inSlowDetect)
+        }else if(Vector2.Distance(transform.position, Player.position) <= distSlow){
             controlPlayer.setMoveSpeed(controlCoffin.getSpeedOut());
+        }
         else
         {
             if (controlCoffin.leftOrRight())
@@ -26,14 +27,4 @@ public class ControlChainSpeed : MonoBehaviour {
                 controlPlayer.freezeRight();
         }
 	}
-
-    public void setInNormalDetect(bool aux)
-    {
-        inNormalDetect = aux;
-    }
-
-    public void setInSlowDetect(bool aux)
-    {
-        inSlowDetect = aux;
-    }
 }

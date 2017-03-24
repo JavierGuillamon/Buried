@@ -31,7 +31,7 @@ public class Chain : MonoBehaviour {
         lr = GetComponent<LineRenderer>();
         lastLink = transform.gameObject;
         Links.Add(transform.gameObject);
-        maxDistance = controlCoffin.MaxDistance;
+        //maxDistance = controlCoffin.MaxDistance;
     }
 	
 	// Update is called once per frame

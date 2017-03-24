@@ -4,10 +4,6 @@ using System.Collections;
 public class ControllCoffin : MonoBehaviour {
 
     [SerializeField]
-    private float distance;
-    [SerializeField]
-    public float MaxDistance;
-    [SerializeField]
     private Transform target;
     [SerializeField]
     private float speedOut;
@@ -52,14 +48,9 @@ public class ControllCoffin : MonoBehaviour {
     public float power = 1;
     float angle;
     public float Vo, g;
-    [Header("Chain distance detectors")]
-    public CircleCollider2D areaMovNormal;
-    public CircleCollider2D areaMovSlow;
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody2D>();
-        areaMovNormal.radius = distance;
-        areaMovSlow.radius = MaxDistance;
     }
 	
 	// Update is called once per frame

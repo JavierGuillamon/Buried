@@ -77,8 +77,6 @@
     <Compile Include="Assets\Scripts\Agua\Agua.cs" />
     <Compile Include="Assets\Scripts\Chain\Chain.cs" />
     <Compile Include="Assets\Scripts\Chain\ControlChainSpeed.cs" />
-    <Compile Include="Assets\Scripts\Chain\areaMovNormal.cs" />
-    <Compile Include="Assets\Scripts\Chain\areaMovSlow.cs" />
     <Compile Include="Assets\Scripts\ControlCamera.cs" />
     <Compile Include="Assets\Scripts\ControlManager.cs" />
     <Compile Include="Assets\Scripts\ControllCoffin.cs" />

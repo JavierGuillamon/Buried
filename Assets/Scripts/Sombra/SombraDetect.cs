@@ -13,6 +13,7 @@ public class SombraDetect : MonoBehaviour {
         {
             other.gameObject.layer = LayerMask.NameToLayer("sombraCoffin");
             scale = other.GetComponent<Transform>().localScale;
+            other.GetComponent<ControlChainSpeed>().enabled = false;
             other.GetComponent<Transform>().localScale = new Vector3(1, 1, 0);
             other.GetComponent<Rigidbody2D>().gravityScale = 0;
            // other.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
@@ -25,6 +26,7 @@ public class SombraDetect : MonoBehaviour {
         if (other.tag == "Coffin")
         {
             other.gameObject.layer = LayerMask.NameToLayer("coffin");
+            other.GetComponent<ControlChainSpeed>().enabled = true;
             other.GetComponent<Transform>().localScale = scale;
             other.GetComponent<Rigidbody2D>().gravityScale = 1;
             control.setMoving(true);
