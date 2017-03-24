@@ -27,6 +27,7 @@ public class SkillsController : MonoBehaviour {
     public float cooldownSombra;
     public float manaSombra;
 
+    private bool sombraActiva = false;
     private bool hieloActivo = false;
     // Use this for initialization
     void Start () {
@@ -51,11 +52,15 @@ public class SkillsController : MonoBehaviour {
         if (Input.GetKeyDown(sombraKeyCode))
         {
             //SOMBRA
-            hieloActivo = false;
-            if (sombraDetect.canUseSombra())
+            if (!sombraActiva) {
+                sombraActiva = !sombraActiva;
+                hieloActivo = false;
+                if (sombraDetect.canUseSombra()) Coffin.layer = LayerMask.NameToLayer("sombra");
+            }
+            else
             {
-                Coffin.layer = LayerMask.NameToLayer("sombra");
-                
+                sombraActiva = !sombraActiva;
+                Coffin.GetComponent<SombraMov>().Reject();
             }
         }
 

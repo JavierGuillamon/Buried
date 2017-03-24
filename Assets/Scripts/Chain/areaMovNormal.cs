@@ -7,11 +7,13 @@ public class areaMovNormal : MonoBehaviour {
     [SerializeField]
     private ControlChainSpeed control;
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerStay2D(Collider2D other)
     {
         if (other.tag == "Player")
         {
             control.setInNormalDetect(true);
+
+            Debug.Log("dentro");
         }
     }
     void OnTriggerExit2D(Collider2D other)
@@ -19,6 +21,8 @@ public class areaMovNormal : MonoBehaviour {
         if (other.tag == "Player")
         {
             control.setInNormalDetect(false);
+
+            Debug.Log("fuera");
         }
     }
 }

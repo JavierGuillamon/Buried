@@ -104,6 +104,8 @@
     <Compile Include="Assets\Scripts\Sombra\SombraCoffinDetect.cs" />
     <Compile Include="Assets\Scripts\Sombra\SombraDetect.cs" />
     <Compile Include="Assets\Scripts\Sombra\SombraMov.cs" />
+    <Compile Include="Assets\Scripts\Sombra\SombraNearPoint.cs" />
+    <Compile Include="Assets\Scripts\Sombra\SombraOnRails.cs" />
     <Compile Include="Assets\Scripts\climb\coffinInPlaceDetector.cs" />
     <Compile Include="Assets\Scripts\climb\playerClimb.cs" />
   </ItemGroup>
