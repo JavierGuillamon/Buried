@@ -97,6 +97,7 @@
     <Compile Include="Assets\Scripts\Pruebas--NOBUENO\StretchSprite.cs" />
     <Compile Include="Assets\Scripts\Pruebas--NOBUENO\Throw.cs" />
     <Compile Include="Assets\Scripts\Pruebas--NOBUENO\TileSprite.cs" />
+    <Compile Include="Assets\Scripts\RecogerAtaud\RecogerAtaudDetector.cs" />
     <Compile Include="Assets\Scripts\SkillsController.cs" />
     <Compile Include="Assets\Scripts\Sombra\Sensores\sombraSensor.cs" />
     <Compile Include="Assets\Scripts\Sombra\SombraCoffinDetect.cs" />

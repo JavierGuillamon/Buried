@@ -48,6 +48,7 @@ public class ControllCoffin : MonoBehaviour {
     public float power = 1;
     float angle;
     public float Vo, g;
+    private bool recogerAtaud;
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody2D>();
@@ -126,17 +127,19 @@ public class ControllCoffin : MonoBehaviour {
         }
     }
 
+    public void setRecogerAtaud(bool aux)
+    {
+        recogerAtaud = aux;
+    }
+
     public void TakeCoffin()
     {
+        if (transform.position.y - target.position.y < 0 && recogerAtaud) GetComponent<Rigidbody2D>().gravityScale = 0;
+        else GetComponent<Rigidbody2D>().gravityScale = 1;
         if (Input.GetKey(takeCoffin))
         {
             if (Vector3.Distance(target.position, transform.position) <= distanceToTakeCoffin)
             {
-               /* coffinTaken = !coffinTaken;
-                if (coffinTaken == false)
-                {
-                    transform.position = new Vector3(target.position.x + 0.75f, target.position.y, 0);
-                }*/
             }
             else
             {
