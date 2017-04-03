@@ -26,13 +26,13 @@ public class Player : MonoBehaviour
     private float acceletarionTimeGrounded = .1f;
 
 
-    [Header("Inputs de movimiento")]
+    /*[Header("Inputs de movimiento")]
     [Tooltip("Input de movimiento en el eje X")]
     [SerializeField]
     private string inputX;
     [Tooltip("Input de movimiento en el eje Y")]
     [SerializeField]
-    private string inputY;
+    private string inputY;*/
 
     [Header("Referencias Scripts")]
     [SerializeField]
@@ -81,11 +81,11 @@ public class Player : MonoBehaviour
             velocity.y = 0;
         }
 
-        input = new Vector2(Input.GetAxisRaw(inputX), Input.GetAxisRaw(inputY));
-        if (!canMoveLeft && Input.GetAxisRaw(inputX) < 0)
-            input = new Vector2(0, Input.GetAxisRaw(inputY));
-        else if (!canMoveRight && Input.GetAxisRaw(inputX) > 0)
-            input = new Vector2(0, Input.GetAxisRaw(inputY));
+        input = new Vector2(InputManager.MainHorizontal(), InputManager.MainVertical());
+        if (!canMoveLeft && InputManager.MainHorizontal() < 0)
+            input = new Vector2(0, InputManager.MainVertical());
+        else if (!canMoveRight && InputManager.MainHorizontal() > 0)
+            input = new Vector2(0, InputManager.MainVertical());
 
         if (input.y > 0 && controller.collisions.below)
         {

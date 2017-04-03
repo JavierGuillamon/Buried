@@ -36,13 +36,13 @@ public class SkillsController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown(fuegoKeyCode))
+        if (InputManager.AButton())
         {
             hieloActivo = false;
             fuego.doFuego(cooldownFuego);
             
         }
-        if (Input.GetKeyDown(hieloKeyCode))
+        if (InputManager.BButton())
         {
             if (sombraActiva)
             {
@@ -57,22 +57,22 @@ public class SkillsController : MonoBehaviour {
                 hielo.activateHielo();
             }
         }
-        if (Input.GetKeyDown(sombraKeyCode))
+        if (InputManager.XButton())
         {
             //SOMBRA
             if (!sombraActiva) {
-                sombraActiva = !sombraActiva;
+                sombraActiva = true;
                 hieloActivo = false;
                 if (sombraDetect.canUseSombra()) Coffin.layer = LayerMask.NameToLayer("sombra");
             }
             else
             {
-                sombraActiva = !sombraActiva;
+                sombraActiva = false;
                 Coffin.GetComponent<SombraMov>().Reject();
             }
         }
 
-        if (Input.GetKeyDown(hieloActivateKeyCode))
+        if (InputManager.BButton())
         {
             if (hieloActivo)
             {

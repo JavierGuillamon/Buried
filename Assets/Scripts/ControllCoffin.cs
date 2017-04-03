@@ -49,6 +49,7 @@ public class ControllCoffin : MonoBehaviour {
     float angle;
     public float Vo, g;
     private bool recogerAtaud;
+    private bool onSombra;
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody2D>();
@@ -131,11 +132,14 @@ public class ControllCoffin : MonoBehaviour {
     {
         recogerAtaud = aux;
     }
-
+     public void setOnSombra(bool aux)
+    {
+        onSombra = aux;
+    }
     public void TakeCoffin()
     {
         if (transform.position.y - target.position.y < 0 && recogerAtaud) GetComponent<Rigidbody2D>().gravityScale = 0;
-        else GetComponent<Rigidbody2D>().gravityScale = 1;
+        else if(!onSombra) GetComponent<Rigidbody2D>().gravityScale = 1;
         if (Input.GetKey(takeCoffin))
         {
             if (Vector3.Distance(target.position, transform.position) <= distanceToTakeCoffin)

@@ -7,13 +7,13 @@ public class PlayerController : MonoBehaviour {
     float speed;
     Rigidbody2D rb2d;
 
-    [Header("Inputs de movimiento")]
+   /* [Header("Inputs de movimiento")]
     [Tooltip("Input de movimiento en el eje X")]
     [SerializeField]
     private string StringInputX;
     [Tooltip("Input de movimiento en el eje Y")]
     [SerializeField]
-    private string StringInputY;
+    private string StringInputY;*/
 
     float inputX, inputY;
     // Use this for initialization
@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () { 
-        inputX = Input.GetAxisRaw(StringInputX);
+        inputX = InputManager.MainHorizontal();
         Move(inputX);
 	}
 
