@@ -140,7 +140,7 @@ public class ControllCoffin : MonoBehaviour {
     {
         if (transform.position.y - target.position.y < 0 && recogerAtaud) GetComponent<Rigidbody2D>().gravityScale = 0;
         else if(!onSombra) GetComponent<Rigidbody2D>().gravityScale = 1;
-        if (Input.GetKey(takeCoffin))
+        if (InputManager.LeftTrigger1())
         {
             if (Vector3.Distance(target.position, transform.position) <= distanceToTakeCoffin)
             {
@@ -151,7 +151,7 @@ public class ControllCoffin : MonoBehaviour {
             }       
         }
 
-        if (Input.GetKeyDown(takeCoffin))
+        if (InputManager.LeftTrigger())
         {
             if (Vector3.Distance(target.position, transform.position) <= distanceToTakeCoffin)
             {
@@ -168,7 +168,7 @@ public class ControllCoffin : MonoBehaviour {
     {
         if (coffinTaken)
         {
-            if (Input.GetKeyDown(throwCoffin))
+            if (InputManager.RightTrigger())
             {
                 coffinTaken = false;
                 ThrowAux();

@@ -23,7 +23,22 @@ public static class InputManager {
     {
         return new Vector3(MainHorizontal(), 0, MainVertical());
     }
-
+    public static bool LeftTrigger1()
+    {
+        return Input.GetButton("J_lftTrigger");
+    }
+    public static bool LeftTrigger()
+    {
+        return Input.GetButtonDown("J_lftTrigger");
+    }
+    public static bool RightTrigger1()
+    {
+        return Input.GetButton("J_rgtTrigger");
+    }
+    public static bool RightTrigger()
+    {
+        return Input.GetButtonDown("J_rgtTrigger");
+    }
     public static bool AButton()
     {
         return Input.GetButtonDown("A_Button");
