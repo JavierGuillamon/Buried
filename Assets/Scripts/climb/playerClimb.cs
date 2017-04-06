@@ -39,7 +39,6 @@ public class playerClimb : MonoBehaviour {
     {
         if(other.tag == "Player")
         {
-            Debug.Log("FUERA");
             manager.setPlayerInPlace(false);
         }
     }
