@@ -188,7 +188,7 @@ public class ControllCoffin : MonoBehaviour {
             if (tmp.sqrMagnitude > deadZone)
                 dir = tmp;
 
-            Debug.Log("DIR: " + dir+" MOUSE: "+ Input.mousePosition);          
+            //Debug.Log("DIR: " + dir+" MOUSE: "+ Input.mousePosition);          
             //Vector3 vel = GetForceFrom(transform.position, transform.position+dir);
             //float angle = Mathf.Atan2(vel.y, vel.x) * Mathf.Rad2Deg;
             //transform.eulerAngles = new Vector3(0, 0, angle);
@@ -239,7 +239,7 @@ public class ControllCoffin : MonoBehaviour {
     }
     private Vector2 GetForceFrom(Vector3 fromPos, Vector3 toPos)
     {
-        Debug.Log("From: " + fromPos + " to: " + toPos);
+       // Debug.Log("From: " + fromPos + " to: " + toPos);
         return (new Vector2(toPos.x, toPos.y) - new Vector2(fromPos.x, fromPos.y)) * power;
     }
     

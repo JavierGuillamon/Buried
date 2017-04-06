@@ -54,22 +54,21 @@ public class ControlManager : MonoBehaviour {
     public void setMoving(bool aux)
     {
         moving = aux;
-        swing = !aux;
-        sombra = !aux;
+        //swing = !aux;
+        //sombra = !aux;
     }
 
     public void setSwing(bool aux)
     {
         swing = aux;
         moving = !aux;
-        sombra = !aux;
     }
 
     public void setSombra(bool aux)
     {
         sombra = aux;
-        swing = !aux;
-        moving = !aux;
+       // swing = !aux;
+       // moving = !aux;
 
     }
 
