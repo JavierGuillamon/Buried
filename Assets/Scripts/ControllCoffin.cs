@@ -50,6 +50,10 @@ public class ControllCoffin : MonoBehaviour {
     public float Vo, g;
     private bool recogerAtaud;
     private bool onSombra;
+
+   /* Vector3 vel;
+    float angle;
+    bool canVel = false;*/
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody2D>();
@@ -62,6 +66,11 @@ public class ControllCoffin : MonoBehaviour {
         mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
         mousePos = Camera.main.ScreenToWorldPoint(mousePos);
         mouseDistance = Vector2.Distance(mousePos, transform.position);
+       /* if (canVel)
+        {
+            vel = GetForceFrom(transform.position, InputManager.AuxJoystic());
+            angle = Mathf.Atan2(vel.y, vel.x) * Mathf.Rad2Deg;
+        }*/
     }
 
   /*  void detectAndMove()
@@ -138,27 +147,30 @@ public class ControllCoffin : MonoBehaviour {
     }
     public void TakeCoffin()
     {
-        if (transform.position.y - target.position.y < 0 && recogerAtaud) GetComponent<Rigidbody2D>().gravityScale = 0;
-        else if(!onSombra) GetComponent<Rigidbody2D>().gravityScale = 1;
-        if (InputManager.LeftTrigger1())
+        if (InputManager.MainHorizontal() == 0)
         {
-            if (Vector3.Distance(target.position, transform.position) <= distanceToTakeCoffin)
+            if (transform.position.y - target.position.y < 0 && recogerAtaud) GetComponent<Rigidbody2D>().gravityScale = 0;
+            else if (!onSombra) GetComponent<Rigidbody2D>().gravityScale = 1;
+            if (InputManager.LeftTrigger1())
             {
-            }
-            else
-            {
-               transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speedTakeCoffin * Time.deltaTime);
-            }       
-        }
-
-        if (InputManager.LeftTrigger())
-        {
-            if (Vector3.Distance(target.position, transform.position) <= distanceToTakeCoffin)
-            {
-                coffinTaken = !coffinTaken;
-                if (coffinTaken == false)
+                if (Vector3.Distance(target.position, transform.position) <= distanceToTakeCoffin)
                 {
-                    transform.position = new Vector3(target.position.x + 0.75f, target.position.y, 0);
+                }
+                else
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speedTakeCoffin * Time.deltaTime);
+                }
+            }
+
+            if (InputManager.LeftTrigger())
+            {
+                if (Vector3.Distance(target.position, transform.position) <= distanceToTakeCoffin)
+                {
+                    coffinTaken = !coffinTaken;
+                    if (coffinTaken == false)
+                    {
+                        transform.position = new Vector3(target.position.x + 0.75f, target.position.y, 0);
+                    }
                 }
             }
         }
@@ -172,9 +184,13 @@ public class ControllCoffin : MonoBehaviour {
             {
                 coffinTaken = false;
                 ThrowAux();
+               // canVel = false;
             }
-            Vector3 vel = GetForceFrom(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            // Vector3 vel = GetForceFrom(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            Vector3 vel = GetForceFrom(transform.position, InputManager.AuxJoystic());
+            //canVel = true;
             float angle = Mathf.Atan2(vel.y, vel.x) * Mathf.Rad2Deg;
+           // float angle = Mathf.Atan2(GetForceFrom(transform.position, InputManager.AuxJoystic()).y, GetForceFrom(transform.position, InputManager.AuxJoystic()).x) * Mathf.Rad2Deg;
             transform.eulerAngles = new Vector3(0, 0, angle);
         }
     }

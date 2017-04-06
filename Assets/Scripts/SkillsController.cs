@@ -36,7 +36,7 @@ public class SkillsController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (InputManager.AButton())
+        if (InputManager.XButton())
         {
             hieloActivo = false;
             fuego.doFuego(cooldownFuego);
@@ -54,10 +54,10 @@ public class SkillsController : MonoBehaviour {
                 //HIELO
                 hieloActivo = true;
                 Coffin.layer = LayerMask.NameToLayer("hielo");
-                hielo.activateHielo();
+                hielo.HieloExplode(timeOnAir);
             }
         }
-        if (InputManager.XButton())
+        if (InputManager.YButton())
         {
             //SOMBRA
             if (!sombraActiva) {
@@ -72,12 +72,6 @@ public class SkillsController : MonoBehaviour {
             }
         }
 
-        if (InputManager.BButton())
-        {
-            if (hieloActivo)
-            {
-                hielo.HieloExplode(timeOnAir);
-            }
-        }
+        
 	}
 }

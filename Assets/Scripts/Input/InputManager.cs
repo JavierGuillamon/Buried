@@ -18,26 +18,67 @@ public static class InputManager {
         r += Input.GetAxis("K_MainVertical");
         return Mathf.Clamp(r, -1.0f, 1.0f);
     }
-
-    public static Vector3 MainJoystic()
+    public static float AuxHorizontal()
     {
-        return new Vector3(MainHorizontal(), 0, MainVertical());
+        float r = 0.0f;
+        r += Input.GetAxis("J_AuxHorizontal");
+        r += Input.GetAxis("Mouse X");
+        return Mathf.Clamp(r, -1.0f, 1.0f);
     }
+    public static float AuxVertical()
+    {
+        float r = 0.0f;
+        r += Input.GetAxis("J_AuxVertical");
+        r += Input.GetAxis("Mouse Y");
+        return Mathf.Clamp(r, -1.0f, 1.0f);
+    }
+    
+    public static Vector2 MainJoystic()
+    {
+        return new Vector3(MainHorizontal(), MainVertical());
+    }
+    public static Vector2 AuxJoystic()
+    {
+        return new Vector2(AuxHorizontal(), AuxVertical());
+    }
+
     public static bool LeftTrigger1()
     {
-        return Input.GetButton("J_lftTrigger");
+        int r = 0;
+        r += (int)Input.GetAxis("J_lftTrigger");
+        r += System.Convert.ToInt32(Input.GetMouseButton(0));
+        if(r>0)
+            return true;
+        return false;
     }
     public static bool LeftTrigger()
     {
-        return Input.GetButtonDown("J_lftTrigger");
+        int r = 0;
+        r += (int)Input.GetAxis("J_lftTrigger");
+        r += System.Convert.ToInt32(Input.GetMouseButtonDown(0));
+        if (r > 0)
+            return true;
+        return false;
     }
     public static bool RightTrigger1()
     {
-        return Input.GetButton("J_rgtTrigger");
+        int r = 0;
+        r += (int)Input.GetAxis("J_rgtTrigger");
+        r += System.Convert.ToInt32(Input.GetMouseButton(1));
+        if (r > 0)
+            return true;
+        return false;
+        //return Input.GetButton("J_rgtTrigger");
     }
     public static bool RightTrigger()
     {
-        return Input.GetButtonDown("J_rgtTrigger");
+        int r = 0;
+        r += (int)Input.GetAxis("J_rgtTrigger");
+        r += System.Convert.ToInt32(Input.GetMouseButtonDown(1));
+        if (r > 0)
+            return true;
+        return false;
+        //return Input.GetButtonDown("J_rgtTrigger");
     }
     public static bool AButton()
     {

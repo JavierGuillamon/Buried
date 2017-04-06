@@ -81,11 +81,11 @@ public class Player : MonoBehaviour
             velocity.y = 0;
         }
 
-        input = new Vector2(InputManager.MainHorizontal(), InputManager.MainVertical());
+        input = new Vector2(InputManager.MainHorizontal(), System.Convert.ToInt32(InputManager.AButton()));
         if (!canMoveLeft && InputManager.MainHorizontal() < 0)
-            input = new Vector2(0, InputManager.MainVertical());
+            input = new Vector2(0, System.Convert.ToInt32(InputManager.AButton()));
         else if (!canMoveRight && InputManager.MainHorizontal() > 0)
-            input = new Vector2(0, InputManager.MainVertical());
+            input = new Vector2(0, System.Convert.ToInt32(InputManager.AButton()));
 
         if (input.y > 0 && controller.collisions.below)
         {

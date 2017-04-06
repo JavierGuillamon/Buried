@@ -8,22 +8,25 @@ public class Hielo : MonoBehaviour {
     public Rigidbody2D coffinRB;
     public float timePlataformStop;
     public float timeWaterFrezze;
-    private bool canFreeze = true;
+    private bool canFreeze = false;
 
-    void Start()
-    {
-        canFreeze = false;
-    }
+    private IEnumerator coroutine;
+    
 
-    public void activateHielo()
+    private IEnumerator hieloCD(float time)
     {
         rend.sharedMaterial = matHielo;
+        yield return new WaitForSeconds(time);
+        canFreeze = false;
+        rend.sharedMaterial = matNormal;
     }
 
+   
     public void HieloExplode(float timeInAir)
     {
-
         canFreeze = true;
+        coroutine = hieloCD(timeInAir);
+        StartCoroutine(coroutine);
         StartCoroutine(waitOnAir(timeInAir));
     }
 
@@ -49,17 +52,7 @@ public class Hielo : MonoBehaviour {
             }
         }
     }
-    /*private IEnumerator freezeWater(float time, GameObject other)
-    {
-        other.layer = LayerMask.NameToLayer("scenery");
-        other.tag = "hielo";
-        other.gameObject.GetComponent<MeshRenderer>().sharedMaterial = aguaHielo;
-        yield return new WaitForSeconds(time);
-        other.layer = LayerMask.NameToLayer("Water");
-        other.tag = "agua";
-        other.gameObject.GetComponent<MeshRenderer>().sharedMaterial = agua;
-    }
-    */
+
     private IEnumerator freeze(float time, Collider2D other) {
         other.transform.GetComponent<PlatformController>().enabled = false;
         yield return new WaitForSeconds(time);
