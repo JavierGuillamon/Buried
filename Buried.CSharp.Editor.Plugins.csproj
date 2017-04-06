@@ -5,16 +5,16 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{26593110-210D-16A0-A764-A7D494C1AF3B}</ProjectGuid>
+    <ProjectGuid>{5EDA47FD-F058-9869-EB4F-D5D026FCD54C}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AssemblyName>Assembly-CSharp</AssemblyName>
+    <AssemblyName>Assembly-CSharp-Editor-firstpass</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
     <CompilerResponseFile></CompilerResponseFile>
-    <UnityProjectType>Game:1</UnityProjectType>
+    <UnityProjectType>EditorPlugins:7</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.5.0f3</UnityVersion>
     <RootNamespace></RootNamespace>
@@ -51,63 +51,79 @@
     <Reference Include="UnityEngine">
       <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEditor">
+      <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.Advertisements">
+      <HintPath>Library\UnityAssemblies\UnityEditor.Advertisements.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>Library\UnityAssemblies\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.EditorTestsRunner">
+      <HintPath>Library\UnityAssemblies\UnityEditor.EditorTestsRunner.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.UI">
+      <HintPath>Library\UnityAssemblies\UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEditor.Networking">
+      <HintPath>Library\UnityAssemblies\UnityEditor.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.PlaymodeTestsRunner">
+      <HintPath>Library\UnityAssemblies\UnityEditor.PlaymodeTestsRunner.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.PlaymodeTestsRunner">
       <HintPath>Library\UnityAssemblies\UnityEngine.PlaymodeTestsRunner.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.TreeEditor">
+      <HintPath>Library\UnityAssemblies\UnityEditor.TreeEditor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Analytics">
       <HintPath>Library\UnityAssemblies\UnityEngine.Analytics.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEditor.Analytics">
+      <HintPath>Library\UnityAssemblies\UnityEditor.Analytics.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.HoloLens">
+      <HintPath>Library\UnityAssemblies\UnityEditor.HoloLens.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.HoloLens">
       <HintPath>Library\UnityAssemblies\UnityEngine.HoloLens.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.VR">
+      <HintPath>Library\UnityAssemblies\UnityEditor.VR.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.VR">
       <HintPath>Library\UnityAssemblies\UnityEngine.VR.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor">
-      <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
+    <Reference Include="UnityEditor.Graphs">
+      <HintPath>Library\UnityAssemblies\UnityEditor.Graphs.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.WindowsStandalone.Extensions">
+      <HintPath>Library\UnityAssemblies\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
+      <HintPath>Library\UnityAssemblies\SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Agua\Agua.cs" />
-    <Compile Include="Assets\Scripts\Chain\Chain.cs" />
-    <Compile Include="Assets\Scripts\Chain\ControlChainSpeed.cs" />
-    <Compile Include="Assets\Scripts\ControlCamera.cs" />
-    <Compile Include="Assets\Scripts\ControlManager.cs" />
-    <Compile Include="Assets\Scripts\ControllCoffin.cs" />
-    <Compile Include="Assets\Scripts\Controller2D.cs" />
-    <Compile Include="Assets\Scripts\Escalar.cs" />
-    <Compile Include="Assets\Scripts\Fuego\Fuego.cs" />
-    <Compile Include="Assets\Scripts\Fuego\FuegoCoffin.cs" />
-    <Compile Include="Assets\Scripts\Fuego\detectorFuego.cs" />
-    <Compile Include="Assets\Scripts\Hielo\Hielo.cs" />
-    <Compile Include="Assets\Scripts\Input\InputManager.cs" />
-    <Compile Include="Assets\Scripts\Morir.cs" />
-    <Compile Include="Assets\Scripts\PendulumDetect.cs" />
-    <Compile Include="Assets\Scripts\Plataformas\PlatformController.cs" />
-    <Compile Include="Assets\Scripts\Plataformas\RaycastController.cs" />
-    <Compile Include="Assets\Scripts\Player.cs" />
-    <Compile Include="Assets\Scripts\PlayerController.cs" />
-    <Compile Include="Assets\Scripts\Pruebas--NOBUENO\Player2.cs" />
-    <Compile Include="Assets\Scripts\Pruebas--NOBUENO\PrintChain.cs" />
-    <Compile Include="Assets\Scripts\Pruebas--NOBUENO\StretchSprite.cs" />
-    <Compile Include="Assets\Scripts\Pruebas--NOBUENO\Throw.cs" />
-    <Compile Include="Assets\Scripts\Pruebas--NOBUENO\TileSprite.cs" />
-    <Compile Include="Assets\Scripts\RecogerAtaud\RecogerAtaudDetector.cs" />
-    <Compile Include="Assets\Scripts\SkillsController.cs" />
-    <Compile Include="Assets\Scripts\Sombra\Sensores\sombraSensor.cs" />
-    <Compile Include="Assets\Scripts\Sombra\SombraCoffinDetect.cs" />
-    <Compile Include="Assets\Scripts\Sombra\SombraDetect.cs" />
-    <Compile Include="Assets\Scripts\Sombra\SombraMov.cs" />
-    <Compile Include="Assets\Scripts\Sombra\SombraNearPoint.cs" />
-    <Compile Include="Assets\Scripts\Sombra\SombraOnRails.cs" />
-    <Compile Include="Assets\Scripts\climb\coffinInPlaceDetector.cs" />
-    <Compile Include="Assets\Scripts\climb\playerClimb.cs" />
+    <ProjectReference Include="Buried.CSharp.Plugins.csproj">
+      <Project>{F1277DAC-C546-58E4-579E-D60906958BC0}</Project>
+      <Name>Buried.CSharp.Plugins</Name>
+    </ProjectReference>
+    <ProjectReference Include="Buried.CSharp.csproj">
+      <Project>{26593110-210D-16A0-A764-A7D494C1AF3B}</Project>
+      <Name>Buried.CSharp</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Standard Assets\Editor\CrossPlatformInput\CrossPlatformInputInitialize.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

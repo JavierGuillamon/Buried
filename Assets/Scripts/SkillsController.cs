@@ -61,9 +61,12 @@ public class SkillsController : MonoBehaviour {
         {
             //SOMBRA
             if (!sombraActiva) {
-                sombraActiva = true;
-                hieloActivo = false;
-                if (sombraDetect.canUseSombra()) Coffin.layer = LayerMask.NameToLayer("sombra");
+                if (sombraDetect.canUseSombra())
+                {
+                    sombraActiva = true;
+                    hieloActivo = false;
+                    Coffin.layer = LayerMask.NameToLayer("sombra");
+                }
             }
             else
             {

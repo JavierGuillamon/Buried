@@ -5,16 +5,16 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{26593110-210D-16A0-A764-A7D494C1AF3B}</ProjectGuid>
+    <ProjectGuid>{F1277DAC-C546-58E4-579E-D60906958BC0}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AssemblyName>Assembly-CSharp</AssemblyName>
+    <AssemblyName>Assembly-CSharp-firstpass</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
     <CompilerResponseFile></CompilerResponseFile>
-    <UnityProjectType>Game:1</UnityProjectType>
+    <UnityProjectType>GamePlugins:3</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.5.0f3</UnityVersion>
     <RootNamespace></RootNamespace>
@@ -74,40 +74,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Agua\Agua.cs" />
-    <Compile Include="Assets\Scripts\Chain\Chain.cs" />
-    <Compile Include="Assets\Scripts\Chain\ControlChainSpeed.cs" />
-    <Compile Include="Assets\Scripts\ControlCamera.cs" />
-    <Compile Include="Assets\Scripts\ControlManager.cs" />
-    <Compile Include="Assets\Scripts\ControllCoffin.cs" />
-    <Compile Include="Assets\Scripts\Controller2D.cs" />
-    <Compile Include="Assets\Scripts\Escalar.cs" />
-    <Compile Include="Assets\Scripts\Fuego\Fuego.cs" />
-    <Compile Include="Assets\Scripts\Fuego\FuegoCoffin.cs" />
-    <Compile Include="Assets\Scripts\Fuego\detectorFuego.cs" />
-    <Compile Include="Assets\Scripts\Hielo\Hielo.cs" />
-    <Compile Include="Assets\Scripts\Input\InputManager.cs" />
-    <Compile Include="Assets\Scripts\Morir.cs" />
-    <Compile Include="Assets\Scripts\PendulumDetect.cs" />
-    <Compile Include="Assets\Scripts\Plataformas\PlatformController.cs" />
-    <Compile Include="Assets\Scripts\Plataformas\RaycastController.cs" />
-    <Compile Include="Assets\Scripts\Player.cs" />
-    <Compile Include="Assets\Scripts\PlayerController.cs" />
-    <Compile Include="Assets\Scripts\Pruebas--NOBUENO\Player2.cs" />
-    <Compile Include="Assets\Scripts\Pruebas--NOBUENO\PrintChain.cs" />
-    <Compile Include="Assets\Scripts\Pruebas--NOBUENO\StretchSprite.cs" />
-    <Compile Include="Assets\Scripts\Pruebas--NOBUENO\Throw.cs" />
-    <Compile Include="Assets\Scripts\Pruebas--NOBUENO\TileSprite.cs" />
-    <Compile Include="Assets\Scripts\RecogerAtaud\RecogerAtaudDetector.cs" />
-    <Compile Include="Assets\Scripts\SkillsController.cs" />
-    <Compile Include="Assets\Scripts\Sombra\Sensores\sombraSensor.cs" />
-    <Compile Include="Assets\Scripts\Sombra\SombraCoffinDetect.cs" />
-    <Compile Include="Assets\Scripts\Sombra\SombraDetect.cs" />
-    <Compile Include="Assets\Scripts\Sombra\SombraMov.cs" />
-    <Compile Include="Assets\Scripts\Sombra\SombraNearPoint.cs" />
-    <Compile Include="Assets\Scripts\Sombra\SombraOnRails.cs" />
-    <Compile Include="Assets\Scripts\climb\coffinInPlaceDetector.cs" />
-    <Compile Include="Assets\Scripts\climb\playerClimb.cs" />
+    <Compile Include="Assets\Standard Assets\CrossPlatformInput\Scripts\AxisTouchButton.cs" />
+    <Compile Include="Assets\Standard Assets\CrossPlatformInput\Scripts\ButtonHandler.cs" />
+    <Compile Include="Assets\Standard Assets\CrossPlatformInput\Scripts\CrossPlatformInputManager.cs" />
+    <Compile Include="Assets\Standard Assets\CrossPlatformInput\Scripts\InputAxisScrollbar.cs" />
+    <Compile Include="Assets\Standard Assets\CrossPlatformInput\Scripts\Joystick.cs" />
+    <Compile Include="Assets\Standard Assets\CrossPlatformInput\Scripts\MobileControlRig.cs" />
+    <Compile Include="Assets\Standard Assets\CrossPlatformInput\Scripts\PlatformSpecific\MobileInput.cs" />
+    <Compile Include="Assets\Standard Assets\CrossPlatformInput\Scripts\PlatformSpecific\StandaloneInput.cs" />
+    <Compile Include="Assets\Standard Assets\CrossPlatformInput\Scripts\TiltInput.cs" />
+    <Compile Include="Assets\Standard Assets\CrossPlatformInput\Scripts\TouchPad.cs" />
+    <Compile Include="Assets\Standard Assets\CrossPlatformInput\Scripts\VirtualInput.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

@@ -51,9 +51,8 @@ public class ControllCoffin : MonoBehaviour {
     private bool recogerAtaud;
     private bool onSombra;
 
-   /* Vector3 vel;
-    float angle;
-    bool canVel = false;*/
+    float deadZone = 0.2f;
+    Vector3 dir;
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody2D>();
@@ -66,11 +65,7 @@ public class ControllCoffin : MonoBehaviour {
         mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
         mousePos = Camera.main.ScreenToWorldPoint(mousePos);
         mouseDistance = Vector2.Distance(mousePos, transform.position);
-       /* if (canVel)
-        {
-            vel = GetForceFrom(transform.position, InputManager.AuxJoystic());
-            angle = Mathf.Atan2(vel.y, vel.x) * Mathf.Rad2Deg;
-        }*/
+       
     }
 
   /*  void detectAndMove()
@@ -182,16 +177,23 @@ public class ControllCoffin : MonoBehaviour {
         {
             if (InputManager.RightTrigger())
             {
-                coffinTaken = false;
                 ThrowAux();
-               // canVel = false;
+                coffinTaken = false;
             }
-            // Vector3 vel = GetForceFrom(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            Vector3 vel = GetForceFrom(transform.position, InputManager.AuxJoystic());
-            //canVel = true;
-            float angle = Mathf.Atan2(vel.y, vel.x) * Mathf.Rad2Deg;
-           // float angle = Mathf.Atan2(GetForceFrom(transform.position, InputManager.AuxJoystic()).y, GetForceFrom(transform.position, InputManager.AuxJoystic()).x) * Mathf.Rad2Deg;
-            transform.eulerAngles = new Vector3(0, 0, angle);
+            //Vector3 vel = GetForceFrom(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            
+            float jHoriz = InputManager.AuxHorizontal();
+            float jVert = InputManager.AuxVertical();
+            Vector3 tmp = new Vector3(jHoriz, jVert, 0);
+            if (tmp.sqrMagnitude > deadZone)
+                dir = tmp;
+
+            Debug.Log("DIR: " + dir+" MOUSE: "+ Input.mousePosition);          
+            //Vector3 vel = GetForceFrom(transform.position, transform.position+dir);
+            //float angle = Mathf.Atan2(vel.y, vel.x) * Mathf.Rad2Deg;
+            //transform.eulerAngles = new Vector3(0, 0, angle);
+
+            
         }
     }
     /*
@@ -227,16 +229,17 @@ public class ControllCoffin : MonoBehaviour {
         //rb.AddForce(dir * (force*power));
     }*/
 
-    
-    //-------------Pruebas Tiro parabolico
-   
 
     private void ThrowAux()
     {
-        rb.AddForce(GetForceFrom(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition)), ForceMode2D.Impulse);
+        // rb.AddForce(GetForceFrom(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition)), ForceMode2D.Impulse);
+
+        rb.AddForce(GetForceFrom(transform.position, new Vector3(transform.position.x +dir.x*20,transform.position.y+dir.y*20,0)), ForceMode2D.Impulse);
+        
     }
     private Vector2 GetForceFrom(Vector3 fromPos, Vector3 toPos)
     {
+        Debug.Log("From: " + fromPos + " to: " + toPos);
         return (new Vector2(toPos.x, toPos.y) - new Vector2(fromPos.x, fromPos.y)) * power;
     }
     

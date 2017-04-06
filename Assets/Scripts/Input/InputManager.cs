@@ -35,7 +35,7 @@ public static class InputManager {
     
     public static Vector2 MainJoystic()
     {
-        return new Vector3(MainHorizontal(), MainVertical());
+        return new Vector2(MainHorizontal(), MainVertical());
     }
     public static Vector2 AuxJoystic()
     {
