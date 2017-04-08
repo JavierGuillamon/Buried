@@ -51,9 +51,6 @@
     <Reference Include="UnityEngine">
       <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Advertisements">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Advertisements.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
@@ -69,9 +66,6 @@
     <Reference Include="UnityEngine.HoloLens">
       <HintPath>Library\UnityAssemblies\UnityEngine.HoloLens.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Purchasing">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Purchasing.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.VR">
       <HintPath>Library\UnityAssemblies\UnityEngine.VR.dll</HintPath>
     </Reference>
@@ -81,6 +75,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Agua\Agua.cs" />
+    <Compile Include="Assets\Scripts\Anclado\DetectCollisionsBelow.cs" />
+    <Compile Include="Assets\Scripts\Anclado\PlayerCoffinPositionManager.cs" />
     <Compile Include="Assets\Scripts\Chain\Chain.cs" />
     <Compile Include="Assets\Scripts\Chain\ControlChainSpeed.cs" />
     <Compile Include="Assets\Scripts\ControlCamera.cs" />

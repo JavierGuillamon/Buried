@@ -1,0 +1,10 @@
+diff a/Assets/Scripts/ControllCoffin.cs b/Assets/Scripts/ControllCoffin.cs	(rejected hunks)
+@@ -140,7 +140,7 @@
+     {
+         if (transform.position.y - target.position.y < 0 && recogerAtaud) GetComponent<Rigidbody2D>().gravityScale = 0;
+         else if(!onSombra) GetComponent<Rigidbody2D>().gravityScale = 1;
+-        if (Input.GetKey(takeCoffin))
++        if (InputManager.LeftTrigger1())
+         {
+             if (Vector3.Distance(target.position, transform.position) <= distanceToTakeCoffin)
+             {

@@ -53,12 +53,11 @@ public class ControllCoffin : MonoBehaviour {
 
     float deadZone = 0.2f;
     Vector3 dir;
-    // Use this for initialization
+
     void Start () {
         rb = GetComponent<Rigidbody2D>();
     }
 	
-	// Update is called once per frame
 	void Update () {
         TakeCoffin();
         ThrowCoffin();
@@ -153,7 +152,7 @@ public class ControllCoffin : MonoBehaviour {
                 }
                 else
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speedTakeCoffin * Time.deltaTime);
+                   transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speedTakeCoffin * Time.deltaTime);
                 }
             }
 
@@ -229,12 +228,11 @@ public class ControllCoffin : MonoBehaviour {
         //rb.AddForce(dir * (force*power));
     }*/
 
-
     private void ThrowAux()
     {
         // rb.AddForce(GetForceFrom(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition)), ForceMode2D.Impulse);
-
-        rb.AddForce(GetForceFrom(transform.position, new Vector3(transform.position.x +dir.x*20,transform.position.y+dir.y*20,0)), ForceMode2D.Impulse);
+        //controller.Move(GetForceFrom(transform.position, new Vector3(transform.position.x + dir.x * 20, transform.position.y + dir.y * 20, 0)) * Time.deltaTime);
+       rb.AddForce(GetForceFrom(transform.position, new Vector3(transform.position.x +dir.x*20,transform.position.y+dir.y*20,0)), ForceMode2D.Impulse);
         
     }
     private Vector2 GetForceFrom(Vector3 fromPos, Vector3 toPos)
