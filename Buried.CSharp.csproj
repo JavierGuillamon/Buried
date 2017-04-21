@@ -84,6 +84,7 @@
     <Compile Include="Assets\Scripts\ControllCoffin.cs" />
     <Compile Include="Assets\Scripts\Controller2D.cs" />
     <Compile Include="Assets\Scripts\Escalar.cs" />
+    <Compile Include="Assets\Scripts\Feel\ParticleActivator.cs" />
     <Compile Include="Assets\Scripts\Fuego\Fuego.cs" />
     <Compile Include="Assets\Scripts\Fuego\FuegoCoffin.cs" />
     <Compile Include="Assets\Scripts\Fuego\detectorFuego.cs" />

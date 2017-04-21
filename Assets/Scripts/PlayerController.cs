@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour {
     void Move(float horizontalInput)
     {
         Vector2 moveVelocity = rb2d.velocity;
-        moveVelocity.x = horizontalInput * speed;
+        moveVelocity = Vector2.right *  horizontalInput * speed;
         rb2d.AddForce(moveVelocity);
     }
 

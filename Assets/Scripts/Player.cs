@@ -50,7 +50,6 @@ public class Player : MonoBehaviour
     private float velocityXSmoothing;
     private bool canMoveLeft = true, canMoveRight = true;
     private Controller2D controller;
-    
     void Start()
     {
         controller = GetComponent<Controller2D>();
@@ -66,11 +65,15 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        Move();
+        if (!InputManager.RightTrigger1())
+        {
+            Move();
+        }
     }
-
+    
     private void Move()
     {
+
         gravity = -(2 * jumpHeight) / Mathf.Pow(timeJump, 2);
         jumpVelocity = Mathf.Abs(gravity) * timeJump;
 
@@ -80,7 +83,6 @@ public class Player : MonoBehaviour
         {
             velocity.y = 0;
         }
-
         input = new Vector2(InputManager.MainHorizontal(), System.Convert.ToInt32(InputManager.AButton()));
         if (!canMoveLeft && InputManager.MainHorizontal() < 0)
             input = new Vector2(0, System.Convert.ToInt32(InputManager.AButton()));

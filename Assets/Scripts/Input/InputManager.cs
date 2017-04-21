@@ -60,6 +60,15 @@ public static class InputManager {
             return true;
         return false;
     }
+    //ASi sabemos cuando se deja de pulsar el boton
+    public static bool LeftTriggerUp()
+    {
+        int r = 0;
+        r += (int) Input.GetAxis("J_lftTrigger");
+        r += System.Convert.ToInt32(!Input.GetMouseButtonUp(0));
+        if (r == 0) return true;
+        return false;
+    }
     public static bool RightTrigger1()
     {
         int r = 0;
@@ -68,7 +77,6 @@ public static class InputManager {
         if (r > 0)
             return true;
         return false;
-        //return Input.GetButton("J_rgtTrigger");
     }
     public static bool RightTrigger()
     {
@@ -78,7 +86,15 @@ public static class InputManager {
         if (r > 0)
             return true;
         return false;
-        //return Input.GetButtonDown("J_rgtTrigger");
+    }
+    public static bool RightTriggerUp()
+    {
+        int r = 0;
+        r += (int)Input.GetAxis("J_rgtTrigger");
+        r += System.Convert.ToInt32(!Input.GetMouseButtonUp(1));
+        if (r == 0)
+            return true;
+        return false;
     }
     public static bool AButton()
     {

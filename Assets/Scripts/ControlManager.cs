@@ -7,6 +7,8 @@ public class ControlManager : MonoBehaviour {
     public bool moving;
     public bool sombra;
     public bool swing;
+    public bool climb;
+    public bool resize;
     public Chain chainScript;
     public Rigidbody2D rb2d;
 
@@ -15,9 +17,14 @@ public class ControlManager : MonoBehaviour {
 	
 	void Update () {
         //moving
+        if(resize)
+            chainScript.setResize(true);
+        else
+            chainScript.setResize(false);
         if (moving)
         {
-            chainScript.setResize(true);
+            //chainScript.setResize(true);
+            resize = true;
             rb2d.isKinematic = true;
             GetComponent<Player>().enabled = true;
             GetComponent<PlayerController>().enabled = false;
@@ -25,7 +32,8 @@ public class ControlManager : MonoBehaviour {
         //swing
         if(swing)
         {
-            chainScript.setResize(false);
+            //chainScript.setResize(false);
+            resize = false;
             rb2d.isKinematic = false;
             GetComponent<Player>().enabled = false;
             GetComponent<PlayerController>().enabled = true;
@@ -33,10 +41,19 @@ public class ControlManager : MonoBehaviour {
 
         if (sombra)
         {
-            chainScript.setResize(false);
+            //chainScript.setResize(false);
+            resize = false;
             rb2d.isKinematic = false;
             GetComponent<Player>().enabled = false;
             GetComponent<PlayerController>().enabled = false;
+        }
+
+        if (climb)
+        {
+            //chainScript.setResize(true);
+            rb2d.isKinematic = false;
+            GetComponent<Player>().enabled = false;
+            GetComponent<PlayerController>().enabled = true;
         }
 
         if (coffinInPlace && playerInPlace)
@@ -70,6 +87,17 @@ public class ControlManager : MonoBehaviour {
        // swing = !aux;
        // moving = !aux;
 
+    }
+
+    public void setClimb(bool aux)
+    {
+        climb = aux;
+        moving = !aux;
+    }
+
+    public void setResize(bool aux)
+    {
+        resize = aux;
     }
 
 

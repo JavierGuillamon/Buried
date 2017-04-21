@@ -13,4 +13,8 @@ public class DetectCollisionsBelow : MonoBehaviour {
     {
         pcpm.setCoffinGround(false);
     }
+    void OnTriggerStay2D()
+    {
+        pcpm.setCoffinGround(true);
+    }
 }

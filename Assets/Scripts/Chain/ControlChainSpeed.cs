@@ -16,15 +16,15 @@ public class ControlChainSpeed : MonoBehaviour {
         if (Vector2.Distance(transform.position, Player.position) <= distanceNorm)
         {
             controlCoffin.reset();
-        }else if(Vector2.Distance(transform.position, Player.position) <= distSlow){
+        }else /*if(Vector2.Distance(transform.position, Player.position) <= distSlow)*/{
             controlPlayer.setMoveSpeed(controlCoffin.getSpeedOut());
-        }
+        }/*
         else
         {
             if (controlCoffin.leftOrRight())
                 controlPlayer.freezeLeft();
             else
                 controlPlayer.freezeRight();
-        }
+        }*/
 	}
 }

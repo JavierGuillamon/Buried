@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ControllCoffin : MonoBehaviour {
 
@@ -54,9 +55,19 @@ public class ControllCoffin : MonoBehaviour {
     float deadZone = 0.2f;
     Vector3 dir;
 
+    public float takeIntervalSec;
+    private IEnumerator coroutine;
+    private bool playingCoroutine;
+
+    private bool canTake;
+
     void Start () {
         rb = GetComponent<Rigidbody2D>();
+        playingCoroutine = false;
     }
+
+    [SerializeField]
+    Collider2D coffinCollider;
 	
 	void Update () {
         TakeCoffin();
@@ -64,6 +75,14 @@ public class ControllCoffin : MonoBehaviour {
         mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
         mousePos = Camera.main.ScreenToWorldPoint(mousePos);
         mouseDistance = Vector2.Distance(mousePos, transform.position);
+        if (coffinTaken)
+        {
+            coffinCollider.enabled = false;
+        }
+        else
+        {
+            coffinCollider.enabled = true;
+        }
        
     }
 
@@ -123,7 +142,7 @@ public class ControllCoffin : MonoBehaviour {
         if (coffinTaken)
         {
             manager.setMoving(true);
-            transform.position = new Vector3(target.position.x, target.position.y + 0.75f, 0);
+            //transform.position = new Vector3(target.position.x, target.position.y + 0.75f, 0);
             control.setMoveSpeed(moveSpeedWithCoffin);
             control.setJumpHeight(jumpHeightWithCoffin);
             control.setTimeJump(timeJumpWithCoffin);
@@ -131,31 +150,60 @@ public class ControllCoffin : MonoBehaviour {
         }
     }
 
-    public void setRecogerAtaud(bool aux)
+    public AnimationCurve curvaRecogerCadena;
+    float tiempoRecogerCadena;
+
+    [SerializeField]
+    Rigidbody2D body;
+    [SerializeField]
+    Animator anim;
+
+
+    [SerializeField]
+    float upGrav;
+
+    [SerializeField]
+    float downGrav;
+
+    List<Vector2> trajectoryPoints;
+
+    void FixedUpdate()
     {
-        recogerAtaud = aux;
+        if (!coffinTaken)
+        {
+            float g = upGrav;
+            if (body.velocity.y < 0)
+                g = downGrav;
+            body.velocity = body.velocity.x * Vector2.right + body.velocity.y * Vector2.up - Vector2.up * g * Time.deltaTime;
+            Debug.Log(body.velocity);
+        }
     }
-     public void setOnSombra(bool aux)
-    {
-        onSombra = aux;
-    }
+
     public void TakeCoffin()
     {
-        if (InputManager.MainHorizontal() == 0)
+        if (InputManager.MainHorizontal() == 0 && canTake)
         {
-            if (transform.position.y - target.position.y < 0 && recogerAtaud) GetComponent<Rigidbody2D>().gravityScale = 0;
-            else if (!onSombra) GetComponent<Rigidbody2D>().gravityScale = 1;
             if (InputManager.LeftTrigger1())
             {
-                if (Vector3.Distance(target.position, transform.position) <= distanceToTakeCoffin)
+                if (Vector3.Distance(target.position, transform.position) > distanceToTakeCoffin)
                 {
-                }
-                else
-                {
-                   transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speedTakeCoffin * Time.deltaTime);
+
+                    tiempoRecogerCadena += Time.deltaTime;
+                    Vector3 dir = target.transform.position - transform.position;
+                    dir = new Vector3(dir.x,0,0);
+                    body.velocity = dir.normalized * speedTakeCoffin * curvaRecogerCadena.Evaluate(tiempoRecogerCadena);
+                    //transform.position = Vector3.MoveTowards(transform.position, new Vector3(target.transform.position.x, transform.position.y, transform.position.z),  * Time.deltaTime);
+                   // if (!playingCoroutine)
+                   // {
+                      //  coroutine = takeCoff(takeIntervalSec);
+                     //   StartCoroutine(coroutine);
+                   // }
                 }
             }
-
+            else
+            {
+                tiempoRecogerCadena = 0;
+            }
             if (InputManager.LeftTrigger())
             {
                 if (Vector3.Distance(target.position, transform.position) <= distanceToTakeCoffin)
@@ -163,21 +211,66 @@ public class ControllCoffin : MonoBehaviour {
                     coffinTaken = !coffinTaken;
                     if (coffinTaken == false)
                     {
+                        //StopCoroutine(coroutine);
+                       // playingCoroutine = false;
                         transform.position = new Vector3(target.position.x + 0.75f, target.position.y, 0);
                     }
                 }
             }
+            if (InputManager.LeftTriggerUp())
+            {
+                //StopCoroutine(coroutine);
+                //playingCoroutine = false;
+                recogerAtaud = false;
+            }
         }
+        anim.SetFloat("Vel",Mathf.Abs(body.velocity.x));
     }
-
+    
+    [SerializeField]
+    AnimationCurve throwCurve;
+    [SerializeField]
+    float throwCoffinTimeMax = 2;
+    [SerializeField]
+    float throwMaxStrength = 10;
+    float throwForce;
     public void ThrowCoffin()
     {
         if (coffinTaken)
         {
-            if (InputManager.RightTrigger())
+            if (InputManager.RightTrigger1())
+            {
+
+                Vector2 apuntar = InputManager.MainHorizontal() * Vector2.right + InputManager.MainVertical() * Vector2.up;
+                throwForce += Time.deltaTime;
+
+                trajectoryPoints = new List<Vector2>();
+                Vector3 currenpoint = transform.position;
+                Vector3 currentVel = apuntar.normalized * throwCurve.Evaluate(Mathf.Clamp01(throwForce / throwCoffinTimeMax)) * throwMaxStrength;
+                for (int i = 0; i < 100; i++)
+                {
+                    trajectoryPoints.Add(currenpoint);
+                    currenpoint += currentVel * Time.fixedDeltaTime;
+                    float g = upGrav;
+                    if (currentVel.y < 0)
+                        g = downGrav;
+                    currentVel = currentVel.x * Vector2.right + currentVel.y * Vector2.up  - Vector2.up * g * Time.fixedDeltaTime;
+                }
+                for (int i = 1; i < trajectoryPoints.Count; i++)
+                {
+                    Debug.DrawLine(trajectoryPoints[i-1], trajectoryPoints[i]);
+                }
+
+
+                transform.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.Cross(Vector3.forward, apuntar.normalized));
+                Debug.Log(apuntar);
+
+            }
+            else if (InputManager.RightTriggerUp())
             {
                 ThrowAux();
                 coffinTaken = false;
+                throwForce = 0;
             }
             //Vector3 vel = GetForceFrom(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
             
@@ -230,16 +323,28 @@ public class ControllCoffin : MonoBehaviour {
 
     private void ThrowAux()
     {
-        // rb.AddForce(GetForceFrom(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition)), ForceMode2D.Impulse);
-        //controller.Move(GetForceFrom(transform.position, new Vector3(transform.position.x + dir.x * 20, transform.position.y + dir.y * 20, 0)) * Time.deltaTime);
-       rb.AddForce(GetForceFrom(transform.position, new Vector3(transform.position.x +dir.x*20,transform.position.y+dir.y*20,0)), ForceMode2D.Impulse);
-        
+        Vector2 apuntar = InputManager.MainHorizontal() * Vector2.right + InputManager.MainVertical() * Vector2.up;
+        body.velocity = apuntar.normalized * throwCurve.Evaluate(Mathf.Clamp01(throwForce / throwCoffinTimeMax)) * throwMaxStrength;
+        Debug.Log(body.velocity);
+        dir = new Vector3(0,0,0);
     }
     private Vector2 GetForceFrom(Vector3 fromPos, Vector3 toPos)
     {
-       // Debug.Log("From: " + fromPos + " to: " + toPos);
         return (new Vector2(toPos.x, toPos.y) - new Vector2(fromPos.x, fromPos.y)) * power;
     }
-    
+
+    public void setRecogerAtaud(bool aux)
+    {
+        recogerAtaud = aux;
+    }
+    public void setOnSombra(bool aux)
+    {
+        onSombra = aux;
+    }
+
+    public void setCanTake(bool aux)
+    {
+        canTake = aux;
+    }
 
 }
