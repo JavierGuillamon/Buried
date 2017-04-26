@@ -61,9 +61,47 @@ public class ControllCoffin : MonoBehaviour {
 
     private bool canTake;
 
+    public AnimationCurve curvaRecogerCadena;
+    float tiempoRecogerCadena;
+
+    [SerializeField]
+    Rigidbody2D body;
+    [SerializeField]
+    Animator anim;
+
+
+    [SerializeField]
+    float upGrav;
+
+    [SerializeField]
+    float downGrav;
+
+    //List<Vector2> trajectoryPoints;
+    private List<GameObject> trajectoryPoints;
+    public int numTrajectoryPoints=100;
+    public GameObject trajectoryPrefeb;
+
+    public bool ataudColgando;
+
+    [SerializeField]
+    AnimationCurve throwCurve;
+    [SerializeField]
+    float throwCoffinTimeMax = 2;
+    [SerializeField]
+    float throwMaxStrength = 10;
+    float throwForce;
+
     void Start () {
         rb = GetComponent<Rigidbody2D>();
         playingCoroutine = false;
+
+        trajectoryPoints = new List<GameObject>();
+        for(int i = 0; i < numTrajectoryPoints; i++)
+        {
+            GameObject dot = Instantiate(trajectoryPrefeb);
+            dot.GetComponent<Renderer>().enabled = false;
+            trajectoryPoints.Insert(i, dot);
+        }
     }
 
     [SerializeField]
@@ -142,30 +180,13 @@ public class ControllCoffin : MonoBehaviour {
         if (coffinTaken)
         {
             manager.setMoving(true);
-            //transform.position = new Vector3(target.position.x, target.position.y + 0.75f, 0);
+            transform.position = new Vector3(target.position.x, target.position.y + 0.75f, 0);
             control.setMoveSpeed(moveSpeedWithCoffin);
             control.setJumpHeight(jumpHeightWithCoffin);
             control.setTimeJump(timeJumpWithCoffin);
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
     }
-
-    public AnimationCurve curvaRecogerCadena;
-    float tiempoRecogerCadena;
-
-    [SerializeField]
-    Rigidbody2D body;
-    [SerializeField]
-    Animator anim;
-
-
-    [SerializeField]
-    float upGrav;
-
-    [SerializeField]
-    float downGrav;
-
-    List<Vector2> trajectoryPoints;
 
     void FixedUpdate()
     {
@@ -174,8 +195,13 @@ public class ControllCoffin : MonoBehaviour {
             float g = upGrav;
             if (body.velocity.y < 0)
                 g = downGrav;
+            if (ataudColgando)
+            {
+                //Debug.Log("aaaaa");
+                g = 0;
+            }
             body.velocity = body.velocity.x * Vector2.right + body.velocity.y * Vector2.up - Vector2.up * g * Time.deltaTime;
-            Debug.Log(body.velocity);
+            //Debug.Log(body.velocity);
         }
     }
 
@@ -191,13 +217,7 @@ public class ControllCoffin : MonoBehaviour {
                     tiempoRecogerCadena += Time.deltaTime;
                     Vector3 dir = target.transform.position - transform.position;
                     dir = new Vector3(dir.x,0,0);
-                    body.velocity = dir.normalized * speedTakeCoffin * curvaRecogerCadena.Evaluate(tiempoRecogerCadena);
-                    //transform.position = Vector3.MoveTowards(transform.position, new Vector3(target.transform.position.x, transform.position.y, transform.position.z),  * Time.deltaTime);
-                   // if (!playingCoroutine)
-                   // {
-                      //  coroutine = takeCoff(takeIntervalSec);
-                     //   StartCoroutine(coroutine);
-                   // }
+                    body.velocity = dir.normalized * speedTakeCoffin * curvaRecogerCadena.Evaluate(tiempoRecogerCadena);                 
                 }
             }
             else
@@ -211,29 +231,18 @@ public class ControllCoffin : MonoBehaviour {
                     coffinTaken = !coffinTaken;
                     if (coffinTaken == false)
                     {
-                        //StopCoroutine(coroutine);
-                       // playingCoroutine = false;
                         transform.position = new Vector3(target.position.x + 0.75f, target.position.y, 0);
                     }
                 }
             }
             if (InputManager.LeftTriggerUp())
             {
-                //StopCoroutine(coroutine);
-                //playingCoroutine = false;
                 recogerAtaud = false;
             }
         }
         anim.SetFloat("Vel",Mathf.Abs(body.velocity.x));
     }
-    
-    [SerializeField]
-    AnimationCurve throwCurve;
-    [SerializeField]
-    float throwCoffinTimeMax = 2;
-    [SerializeField]
-    float throwMaxStrength = 10;
-    float throwForce;
+      
     public void ThrowCoffin()
     {
         if (coffinTaken)
@@ -244,12 +253,16 @@ public class ControllCoffin : MonoBehaviour {
                 Vector2 apuntar = InputManager.MainHorizontal() * Vector2.right + InputManager.MainVertical() * Vector2.up;
                 throwForce += Time.deltaTime;
 
-                trajectoryPoints = new List<Vector2>();
+                // trajectoryPoints = new List<Vector2>();
+               
+              
                 Vector3 currenpoint = transform.position;
                 Vector3 currentVel = apuntar.normalized * throwCurve.Evaluate(Mathf.Clamp01(throwForce / throwCoffinTimeMax)) * throwMaxStrength;
                 for (int i = 0; i < 100; i++)
                 {
-                    trajectoryPoints.Add(currenpoint);
+                    // trajectoryPoints.Add(currenpoint);
+                    trajectoryPoints[i].transform.position = currenpoint;
+
                     currenpoint += currentVel * Time.fixedDeltaTime;
                     float g = upGrav;
                     if (currentVel.y < 0)
@@ -258,19 +271,28 @@ public class ControllCoffin : MonoBehaviour {
                 }
                 for (int i = 1; i < trajectoryPoints.Count; i++)
                 {
-                    Debug.DrawLine(trajectoryPoints[i-1], trajectoryPoints[i]);
+                    // Debug.DrawLine(trajectoryPoints[i-1], trajectoryPoints[i]);
+                    trajectoryPoints[i].GetComponent<Renderer>().enabled = true;
+                    RaycastHit2D hitInformation = Physics2D.Raycast(trajectoryPoints[i].transform.position, Camera.main.transform.forward);
+                    if (hitInformation.collider != null)
+                    {
+                        GameObject touchedObject = hitInformation.transform.gameObject;
+                        if (touchedObject.layer == 8)
+                            break;
+                    }
+
                 }
 
 
-                transform.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.Cross(Vector3.forward, apuntar.normalized));
-                Debug.Log(apuntar);
-
+                transform.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.Cross(Vector3.forward, apuntar.normalized));              
             }
             else if (InputManager.RightTriggerUp())
             {
                 ThrowAux();
                 coffinTaken = false;
                 throwForce = 0;
+                for (int i = 0; i < numTrajectoryPoints; i++)
+                    trajectoryPoints[i].GetComponent<Renderer>().enabled = false;
             }
             //Vector3 vel = GetForceFrom(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
             
@@ -325,13 +347,14 @@ public class ControllCoffin : MonoBehaviour {
     {
         Vector2 apuntar = InputManager.MainHorizontal() * Vector2.right + InputManager.MainVertical() * Vector2.up;
         body.velocity = apuntar.normalized * throwCurve.Evaluate(Mathf.Clamp01(throwForce / throwCoffinTimeMax)) * throwMaxStrength;
-        Debug.Log(body.velocity);
+       // Debug.Log(body.velocity);
         dir = new Vector3(0,0,0);
     }
     private Vector2 GetForceFrom(Vector3 fromPos, Vector3 toPos)
     {
         return (new Vector2(toPos.x, toPos.y) - new Vector2(fromPos.x, fromPos.y)) * power;
     }
+
 
     public void setRecogerAtaud(bool aux)
     {
