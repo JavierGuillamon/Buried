@@ -42,7 +42,7 @@ public static class InputManager {
         return new Vector2(AuxHorizontal(), AuxVertical());
     }
 
-    public static bool LeftTrigger1()
+    public static bool LeftTrigger()
     {
         int r = 0;
         r += (int)Input.GetAxis("J_lftTrigger");
@@ -51,7 +51,7 @@ public static class InputManager {
             return true;
         return false;
     }
-    public static bool LeftTrigger()
+    public static bool LeftTriggerDown()
     {
         int r = 0;
         r += (int)Input.GetAxis("J_lftTrigger");
@@ -60,7 +60,6 @@ public static class InputManager {
             return true;
         return false;
     }
-    //ASi sabemos cuando se deja de pulsar el boton
     public static bool LeftTriggerUp()
     {
         int r = 0;
@@ -69,7 +68,7 @@ public static class InputManager {
         if (r == 0) return true;
         return false;
     }
-    public static bool RightTrigger1()
+    public static bool RightTrigger()
     {
         int r = 0;
         r += (int)Input.GetAxis("J_rgtTrigger");
@@ -78,7 +77,7 @@ public static class InputManager {
             return true;
         return false;
     }
-    public static bool RightTrigger()
+    public static bool RightTriggerDown()
     {
         int r = 0;
         r += (int)Input.GetAxis("J_rgtTrigger");

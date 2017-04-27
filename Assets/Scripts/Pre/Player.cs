@@ -65,7 +65,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (!InputManager.RightTrigger1())
+        if (!InputManager.RightTrigger())
         {
             Move();
         }

@@ -12,7 +12,7 @@ public class PlayerCoffinPositionManager : MonoBehaviour {
     public float deadZone;
     [SerializeField]
     private float speedTakeCoffin = 10;
-    private Vector3 velocity;
+   // private Vector3 velocity;
     private Controller2D controller;
     private Player pj;
 
@@ -58,7 +58,7 @@ public class PlayerCoffinPositionManager : MonoBehaviour {
             control.setClimb(false);
             //atraer
             controlCoffin.setCanTake(true);
-            if (InputManager.LeftTrigger1())
+            if (InputManager.LeftTrigger())
             {
                 controlCoffin.setRecogerAtaud(true);
             }
@@ -76,7 +76,7 @@ public class PlayerCoffinPositionManager : MonoBehaviour {
                 //jugador en el suelo ataud por debajo
                 //atraer
                 controlCoffin.setCanTake(true);
-                if (InputManager.LeftTrigger1())
+                if (InputManager.LeftTrigger())
                 {
                     controlCoffin.setRecogerAtaud(true);
                 }
@@ -120,7 +120,7 @@ public class PlayerCoffinPositionManager : MonoBehaviour {
     void escalar()
     {
         control.setSwing(true);
-        if (InputManager.LeftTrigger1())
+        if (InputManager.LeftTrigger())
         {
            // rb2d.gravityScale = 0;
             control.setClimb(true);

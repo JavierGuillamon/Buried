@@ -209,7 +209,7 @@ public class ControllCoffin : MonoBehaviour {
     {
         if (InputManager.MainHorizontal() == 0 && canTake)
         {
-            if (InputManager.LeftTrigger1())
+            if (InputManager.LeftTrigger())
             {
                 if (Vector3.Distance(target.position, transform.position) > distanceToTakeCoffin)
                 {
@@ -224,7 +224,7 @@ public class ControllCoffin : MonoBehaviour {
             {
                 tiempoRecogerCadena = 0;
             }
-            if (InputManager.LeftTrigger())
+            if (InputManager.LeftTriggerDown())
             {
                 if (Vector3.Distance(target.position, transform.position) <= distanceToTakeCoffin)
                 {
@@ -247,7 +247,7 @@ public class ControllCoffin : MonoBehaviour {
     {
         if (coffinTaken)
         {
-            if (InputManager.RightTrigger1())
+            if (InputManager.RightTrigger())
             {
 
                 Vector2 apuntar = InputManager.MainHorizontal() * Vector2.right + InputManager.MainVertical() * Vector2.up;
@@ -273,14 +273,22 @@ public class ControllCoffin : MonoBehaviour {
                 {
                     // Debug.DrawLine(trajectoryPoints[i-1], trajectoryPoints[i]);
                     trajectoryPoints[i].GetComponent<Renderer>().enabled = true;
-                    RaycastHit2D hitInformation = Physics2D.Raycast(trajectoryPoints[i].transform.position, Camera.main.transform.forward);
+                    RaycastHit2D hitInformation = Physics2D.Raycast(trajectoryPoints[i].transform.position, Camera.main.transform.forward,1);
                     if (hitInformation.collider != null)
                     {
                         GameObject touchedObject = hitInformation.transform.gameObject;
                         if (touchedObject.layer == 8)
                             break;
                     }
-
+                   /* RaycastHit2D hitInformationUp = Physics2D.Raycast(trajectoryPoints[i].transform.position, Vector2.up, 1, 8);
+                    RaycastHit2D hitInformationDown = Physics2D.Raycast(trajectoryPoints[i].transform.position, Vector2.down, 1, 8);
+                    RaycastHit2D hitInformationLeft = Physics2D.Raycast(trajectoryPoints[i].transform.position, Vector2.left, 1, 8);
+                    RaycastHit2D hitInformationRight = Physics2D.Raycast(trajectoryPoints[i].transform.position, Vector2.right, 1, 8);
+                    if(hitInformationUp.collider!=null||hitInformationDown.collider!=null|| hitInformationLeft.collider!=null|| hitInformationRight.collider != null)
+                    {
+                        break;
+                    }*/
+                    
                 }
 
 
