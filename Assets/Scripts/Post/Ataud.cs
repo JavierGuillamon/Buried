@@ -46,15 +46,11 @@ public class Ataud : MonoBehaviour {
     Collider2D coffinCollider;
     //end
 
-    //Control Chain speed
-    [SerializeField]
-    private Jugador controlPlayer;
-   
+    //Control Chain speed 
     public float distanceNorm;
     public float distSlow;
     //end
-
-    // Use this for initialization
+    
     void Start () {
         canTake = true;
         rb2d = GetComponent<Rigidbody2D>();
@@ -68,7 +64,6 @@ public class Ataud : MonoBehaviour {
         }
     }
 	
-	// Update is called once per frame
 	void Update () {
         TakeCoffin();
         if (coffinTaken)
@@ -80,10 +75,18 @@ public class Ataud : MonoBehaviour {
         {
             Reset();
         }
-        else 
+        else if (Vector2.Distance(transform.position, playerTr.position) <= distSlow)
         {
-            controlPlayer.setMoveSpeed(speedOut);
+            player.setMoveSpeed(speedOut);
         }
+        else
+        {
+            if (leftOrRight())
+                player.freezeLeft();
+            else
+                player.freezeRight();
+        }
+        
     }
 
     void FixedUpdate()
@@ -92,12 +95,13 @@ public class Ataud : MonoBehaviour {
         if (!coffinTaken)
         {
             float g = upGrav;
-            if (rb2d.velocity.y < 0)
+            if (rb2d.velocity.y < 0.1)
                 g = downGrav;
             if (ataudColgando)
             {
                 g = 0;
             }
+            //Debug.Log("G:: " + g+ " vel:"+ rb2d.velocity.y);
             rb2d.velocity = rb2d.velocity.x * Vector2.right + rb2d.velocity.y * Vector2.up - Vector2.up * g * Time.deltaTime;
         }
     }
@@ -113,8 +117,9 @@ public class Ataud : MonoBehaviour {
 
                     tiempoRecogerCadena += Time.deltaTime;
                     Vector3 dir = playerTr.transform.position - transform.position;
-                    dir = new Vector3(dir.x, 0, 0);
+                    //dir = new Vector3(dir.x, 0, 0);
                     rb2d.velocity = dir.normalized * speedTakeCoffin * curvaRecogerCadena.Evaluate(tiempoRecogerCadena);
+                    //Debug.Log("VEL::" + rb2d.velocity+" DIR: "+dir.normalized);
                 }
             }
             else
@@ -147,14 +152,13 @@ public class Ataud : MonoBehaviour {
         {
             if (InputManager.RightTrigger())
             {
-                rb2d.constraints = RigidbodyConstraints2D.FreezeAll;
+                //rb2d.constraints = RigidbodyConstraints2D.FreezeAll;
                 Vector2 apuntar = InputManager.MainHorizontal() * Vector2.right + InputManager.MainVertical() * Vector2.up;
                 throwForce += Time.deltaTime;
-
-                Debug.Log(transform.position);
+                
                 Vector3 currenpoint = transform.position;
                 Vector3 currentVel = apuntar.normalized * throwCurve.Evaluate(Mathf.Clamp01(throwForce / throwCoffinTimeMax)) * throwMaxStrength;
-                for (int i = 0; i < 100; i++)
+                for (int i = 0; i < numTrajectoryPoints; i++)
                 {
                     trajectoryPoints[i].transform.position = currenpoint;
                     currenpoint += currentVel * Time.fixedDeltaTime;
@@ -173,12 +177,15 @@ public class Ataud : MonoBehaviour {
                         if (touchedObject.layer == 8)
                             break;
                     }
+                    //Debug.Log("aaa:: " + Vector3.Distance(trajectoryPoints[i].transform.position, playerTr.position));
+                    
+                       
                 }
                 transform.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.Cross(Vector3.forward, apuntar.normalized));
             }
             else if (InputManager.RightTriggerUp())
             {
-                rb2d.constraints = RigidbodyConstraints2D.None;
+                //rb2d.constraints = RigidbodyConstraints2D.None;
                 ThrowAux();
                 coffinTaken = false;
                 player.setCoffinTaken(coffinTaken);
@@ -210,6 +217,23 @@ public class Ataud : MonoBehaviour {
             transform.position = new Vector3(playerTr.position.x, playerTr.position.y + 0.75f, 0);
             rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
+    }
+
+    public bool leftOrRight()
+    {
+        bool aux = true;
+        if (transform.position.x < playerTr.position.x)
+        {
+            aux = false;
+
+        }
+        if (transform.position.x > playerTr.position.x)
+        {
+            aux = true;
+        }
+        rb2d.constraints = RigidbodyConstraints2D.FreezePosition;
+
+        return aux;
     }
 
     public void setCanTake(bool aux)

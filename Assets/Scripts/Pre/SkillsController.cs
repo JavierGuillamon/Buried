@@ -4,28 +4,28 @@ using UnityEngine;
 
 public class SkillsController : MonoBehaviour {
     public GameObject Coffin;
-    [SerializeField]
+   /* [SerializeField]
     private float mana;
     [SerializeField]
-    private float manaRegenRate;
+    private float manaRegenRate;*/
     [Header("Fuego")]
     public FuegoCoffin fuego;
-    public KeyCode fuegoKeyCode;
+    //public KeyCode fuegoKeyCode;
     public float cooldownFuego;
-    public float manaFuego;
+    //public float manaFuego;
 
     [Header("Hielo")]
-    public KeyCode hieloKeyCode;
-    public KeyCode hieloActivateKeyCode;
+    /*public KeyCode hieloKeyCode;
+    public KeyCode hieloActivateKeyCode;*/
     public Hielo hielo;
     public float timeOnAir;
-    public float cooldownHielo;
-    public float manaHielo;
+    /*public float cooldownHielo;
+    public float manaHielo;*/
     [Header("Sombra")]
     public SombraCoffinDetect sombraDetect;
-    public KeyCode sombraKeyCode;
+   /* public KeyCode sombraKeyCode;
     public float cooldownSombra;
-    public float manaSombra;
+    public float manaSombra;*/
 
     private bool sombraActiva = false;
     private bool hieloActivo = false;

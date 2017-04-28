@@ -5,11 +5,11 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Jugador : MonoBehaviour {
     //controlMannager
-    private bool moving;
-    private bool sombra;
-    private bool swing;
-    private bool climb;
-    private bool resize;
+    public bool moving;
+    public bool sombra;
+    public bool swing;
+    public bool climb;
+    public bool resize;
     public Chain chainScript;
     public Rigidbody2D rb2d;
     //end
@@ -48,7 +48,7 @@ public class Jugador : MonoBehaviour {
     //end
 
     //PlayerCoffinPositionManager
-    public Transform player;
+    //public Transform player;
     public Transform coffin;
     public bool coffinUp;
     public bool playerGround;
@@ -65,6 +65,7 @@ public class Jugador : MonoBehaviour {
     public Ataud controlCoffin;
     [SerializeField]
     DistanceJoint2D joint;
+    public float maxJointSize;
     //end
     [Tooltip("Velocidad de movimiento cogiendo el ataud")]
     [SerializeField]
@@ -73,7 +74,10 @@ public class Jugador : MonoBehaviour {
     private float jumpHeightWithCoffin;
     [SerializeField]
     private float timeJumpWithCoffin;
-
+    [SerializeField]
+    private float distanciaMaximaJugadorCoffinAlEscalar;
+    private float distanciaJugadorCoffin;
+    public Collider2D AtaudCollider;
 
     void Start () {
         rb2d = GetComponent<Rigidbody2D>();
@@ -91,9 +95,6 @@ public class Jugador : MonoBehaviour {
 	void Update () {
         if (!InputManager.RightTrigger())
         {
-
-
-
             //moving
             if (resize)
                 chainScript.setResize(true);
@@ -108,7 +109,7 @@ public class Jugador : MonoBehaviour {
                 rb2d.isKinematic = true;
                 Move();
             }
-            if (swing)
+             if (swing)
             {
                 resize = false;
                 rb2d.isKinematic = false;
@@ -119,12 +120,13 @@ public class Jugador : MonoBehaviour {
             {
                 resize = false;
                 rb2d.isKinematic = false;
-                GetComponent<Player>().enabled = false;
-                GetComponent<PlayerController>().enabled = false;
+                //GetComponent<Player>().enabled = false;
+                //GetComponent<PlayerController>().enabled = false;
             }
 
-            if (climb)
+             if (climb)
             {
+                moving = false;
                 rb2d.isKinematic = false;
                 MoveSwing();
             }
@@ -133,10 +135,11 @@ public class Jugador : MonoBehaviour {
 
     void FixedUpdate()
     {
-        distanciaJugadorAtaud = player.position - coffin.position;
+        distanciaJugadorAtaud = transform.position - coffin.position;
+        distanciaJugadorCoffin = Vector3.Distance(transform.position, coffin.position);
         if (distanciaJugadorAtaud.y < deadZone) coffinUp = true;
         else coffinUp = false;
-        playerGround = player.GetComponent<Controller2D>().collisions.below;
+        playerGround = GetComponent<Controller2D>().collisions.below;
         React();
     }
 
@@ -179,11 +182,13 @@ public class Jugador : MonoBehaviour {
         {
             rb2dc.mass = 1;
             rb2dc.constraints = RigidbodyConstraints2D.FreezeRotation;
+            if (!coffinUp)
+                controlCoffin.ataudColgando = true;
+            else controlCoffin.ataudColgando = false;
 
-            controlCoffin.ataudColgando = false;
             rb2d.mass = 1;
-            swing = false;
-            climb = false;
+            setSwing(false);
+            setClimb(false);
             //atraer
             controlCoffin.setCanTake(true);
             if (InputManager.LeftTrigger())
@@ -197,8 +202,8 @@ public class Jugador : MonoBehaviour {
             rb2dc.constraints = RigidbodyConstraints2D.None;
             controlCoffin.ataudColgando = true;
             rb2d.mass = 100;
-            swing = false;
-            climb = false;
+            setSwing(false);
+            setClimb(false);
             if (!coffinUp)
             {
                 //jugador en el suelo ataud por debajo
@@ -225,6 +230,7 @@ public class Jugador : MonoBehaviour {
                 //ataud en el suelo por encima del jugador
                 //escalar
                 controlCoffin.setCanTake(false);
+               // Debug.Log("dist: " + distanciaJugadorCoffin + " dist max: "+distanciaMaximaJugadorCoffinAlEscalar);
                 Escalar();
             }
         }
@@ -242,27 +248,48 @@ public class Jugador : MonoBehaviour {
 
     private void Escalar()
     {
-        swing = true;
-        if (InputManager.LeftTrigger())
+        if (Input.GetButton("Jump"))
         {
-            climb = true;
-            resize = true;
-            joint.distance -= speedTakeCoffin * Time.deltaTime;
-            click = true;
-        }
-        else if (InputManager.LeftTriggerUp() && click)
-        {
-            climb = false;
-            resize = false;
-            click = false;
+            AtaudCollider.enabled = false;
         }
         else
         {
-            climb = true;
-            resize = true;
-            joint.distance += speedTakeCoffin * Time.deltaTime;
-            joint.distance = Mathf.Clamp(joint.distance, 0, 15);
-            click = true;
+            setSwing(true);
+
+            /*if (InputManager.AuxHorizontal()!=0 || InputManager.AuxVertical() != 0)
+            {
+                resize = false;
+                setClimb(false);
+            }*/
+            if (InputManager.LeftTrigger() && distanciaJugadorCoffin > distanciaMaximaJugadorCoffinAlEscalar)
+            {
+                setClimb(true);
+                resize = true;
+                joint.distance -= speedTakeCoffin * Time.fixedDeltaTime;
+                click = true;
+            }
+            else if (InputManager.LeftTrigger() && distanciaJugadorCoffin < distanciaMaximaJugadorCoffinAlEscalar + 0.1 && click == false)
+            {
+                setClimb(true);
+                resize = true;
+                joint.distance += speedTakeCoffin * Time.fixedDeltaTime;
+                joint.distance = Mathf.Clamp(joint.distance, 0, maxJointSize);
+                click = true;
+            }
+            else if (InputManager.LeftTriggerUp() && click)
+            {
+                setClimb(false);
+                resize = false;
+                click = false;
+            }
+            else if (!InputManager.LeftTrigger())
+            {
+                resize = true;
+                joint.distance += speedTakeCoffin * Time.fixedDeltaTime;
+                joint.distance = Mathf.Clamp(joint.distance, 0, maxJointSize);
+                if (distanciaJugadorCoffin >= maxJointSize - 0.15) resize = false;
+                click = true;
+            }
         }
     }
 
@@ -296,4 +323,41 @@ public class Jugador : MonoBehaviour {
     {
         coffinGround = aux;
     }
+
+    public void freezeLeft()
+    {
+        canMoveLeft = false;
+    }
+
+    public void freezeRight()
+    {
+        canMoveRight = false;
+    }
+
+    public void setMoving(bool aux)
+    {
+        moving = aux;
+    }
+
+    public void setSwing(bool aux)
+    {
+        
+        swing = aux;
+        moving = !aux;
+        if(!aux) rb2d.velocity = Vector2.zero;
+    }
+
+    public void setSombra(bool aux)
+    {
+        sombra = aux;
+    }
+
+    public void setClimb(bool aux)
+    {
+        climb = aux;
+        moving = !aux;
+        if (!aux)
+            joint.distance = maxJointSize;
+    }
+
 }
