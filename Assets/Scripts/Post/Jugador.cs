@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(Controller2D))]
 [RequireComponent(typeof(Rigidbody2D))]
 public class Jugador : MonoBehaviour {
     //controlMannager
@@ -35,7 +34,8 @@ public class Jugador : MonoBehaviour {
     [SerializeField]
     private float acceletarionTimeGrounded = .1f;
     private float gravity;
-    private float jumpVelocity;
+    [SerializeField]
+     float jumpVelocity;
     private Vector3 velocity;
     private float velocityXSmoothing;
     private bool canMoveLeft = true, canMoveRight = true;
@@ -53,6 +53,9 @@ public class Jugador : MonoBehaviour {
     public bool coffinUp;
     public bool playerGround;
     public bool coffinGround;
+    public bool CoffinGround {
+        get { return coffinGround; }
+    }
     public Vector2 distanciaJugadorAtaud;
     public float deadZone;
     [SerializeField]
@@ -63,9 +66,6 @@ public class Jugador : MonoBehaviour {
     private bool coffinTaken;
     private bool click = false;
     public Ataud controlCoffin;
-    [SerializeField]
-    DistanceJoint2D joint;
-    public float maxJointSize;
     //end
     [Tooltip("Velocidad de movimiento cogiendo el ataud")]
     [SerializeField]
@@ -79,12 +79,14 @@ public class Jugador : MonoBehaviour {
     private float distanciaJugadorCoffin;
     public Collider2D AtaudCollider;
 
+    bool lookingRight = true;
+    public bool LookingRight { get { return lookingRight; } }
+
     void Start () {
         rb2d = GetComponent<Rigidbody2D>();
         controller = GetComponent<Controller2D>();
 
         gravity = -(2 * jumpHeight) / Mathf.Pow(timeJump, 2);
-        jumpVelocity = Mathf.Abs(gravity) * timeJump;
         auxMoveSpeed = moveSpeed;
         auxJumpHeight = jumpHeight;
         auxTimeJump = timeJump;
@@ -92,7 +94,23 @@ public class Jugador : MonoBehaviour {
         moving = true;
     }
 	
-	void Update () {
+	void FixedUpdate ()
+    {
+
+        distanciaJugadorAtaud = transform.position - coffin.position;
+        distanciaJugadorCoffin = Vector3.Distance(transform.position, coffin.position);
+        if (distanciaJugadorAtaud.y < deadZone) coffinUp = true;
+        else coffinUp = false;
+        Debug.Log(groundTrigger.IsTouchingLayers(groundMask));
+        React();
+
+        playerGround = groundTrigger.IsTouchingLayers(groundMask); /* GetComponent<Controller2D>().collisions.below;*/
+
+        if (InputManager.MainHorizontal() > 0)
+            lookingRight = true;
+        else if(InputManager.MainHorizontal() < 0)
+            lookingRight = false;
+
         if (!InputManager.RightTrigger())
         {
             //moving
@@ -103,23 +121,21 @@ public class Jugador : MonoBehaviour {
 
 
             //SI se puede mover y no se esta preprarando para lanzar
+
             if (moving)
             {
                 resize = true;
-                rb2d.isKinematic = true;
                 Move();
             }
              if (swing)
             {
                 resize = false;
-                rb2d.isKinematic = false;
                 MoveSwing();
             }
 
             if (sombra)
             {
                 resize = false;
-                rb2d.isKinematic = false;
                 //GetComponent<Player>().enabled = false;
                 //GetComponent<PlayerController>().enabled = false;
             }
@@ -127,46 +143,62 @@ public class Jugador : MonoBehaviour {
              if (climb)
             {
                 moving = false;
-                rb2d.isKinematic = false;
                 MoveSwing();
             }
         }
     }
 
-    void FixedUpdate()
+    [SerializeField]
+
+    Collider2D groundTrigger;
+    [SerializeField]
+    LayerMask groundMask;
+
+    void Update()
     {
-        distanciaJugadorAtaud = transform.position - coffin.position;
-        distanciaJugadorCoffin = Vector3.Distance(transform.position, coffin.position);
-        if (distanciaJugadorAtaud.y < deadZone) coffinUp = true;
-        else coffinUp = false;
-        playerGround = GetComponent<Controller2D>().collisions.below;
-        React();
     }
+
+    [SerializeField]
+    float maxVelocityX;
+    [SerializeField]
+    float frictionX;
+    [SerializeField]
+    float accelerationX;
+    [SerializeField]
+    float gravityUp;
+    [SerializeField]
+    float gravityDown;
+
+    public bool jumped = false;
+
+    Vector2 Velocity;
 
     private void Move()
     {
-        gravity = -(2 * jumpHeight) / Mathf.Pow(timeJump, 2);
-        jumpVelocity = Mathf.Abs(gravity) * timeJump;
-
         Vector2 input;
-        if (controller.collisions.above || controller.collisions.below)
-        {
-            velocity.y = 0;
-        }
         input = new Vector2(InputManager.MainHorizontal(), System.Convert.ToInt32(InputManager.AButton()));
-        if (!canMoveLeft && InputManager.MainHorizontal() < 0)
-            input = new Vector2(0, System.Convert.ToInt32(InputManager.AButton()));
-        else if (!canMoveRight && InputManager.MainHorizontal() > 0)
-            input = new Vector2(0, System.Convert.ToInt32(InputManager.AButton()));
 
-        if (input.y > 0 && controller.collisions.below)
+        Vector2 velx = rb2d.velocity.x * Vector2.right;
+        velx += input.x * Time.deltaTime * accelerationX * Vector2.right;
+        if (Mathf.Abs(input.x) < 0.2f)
+            velx *= Mathf.Clamp01(1 - frictionX * Time.deltaTime);
+
+        Vector2 vely = rb2d.velocity.y * Vector2.up;
+        if (rb2d.velocity.y >= 0)
+            vely -= gravityUp * Time.deltaTime * Vector2.up;
+        else
+            vely -= gravityDown * Time.deltaTime * Vector2.up;
+        if (input.y > 0 && playerGround)
         {
-            velocity.y = jumpVelocity;
+            vely = jumpVelocity * Vector2.up;
+            jumped = true;
         }
-        float targetVelocityX = input.x * moveSpeed;
-        velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? acceletarionTimeGrounded : accelerationTimeAirborne);
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+        
+
+        rb2d.velocity = velx + vely;
+
+        
+        //controller.Move(velocity * Time.deltaTime);
     }
 
     private void MoveSwing()
@@ -180,13 +212,11 @@ public class Jugador : MonoBehaviour {
     {
         if (playerGround && coffinGround)
         {
-            rb2dc.mass = 1;
             rb2dc.constraints = RigidbodyConstraints2D.FreezeRotation;
             if (!coffinUp)
                 controlCoffin.ataudColgando = true;
             else controlCoffin.ataudColgando = false;
-
-            rb2d.mass = 1;
+            
             setSwing(false);
             setClimb(false);
             //atraer
@@ -198,10 +228,8 @@ public class Jugador : MonoBehaviour {
         }
         else if (playerGround && !coffinGround)
         {
-            rb2dc.mass = 1;
-            rb2dc.constraints = RigidbodyConstraints2D.None;
+            //rb2dc.constraints = RigidbodyConstraints2D.None;
             controlCoffin.ataudColgando = true;
-            rb2d.mass = 100;
             setSwing(false);
             setClimb(false);
             if (!coffinUp)
@@ -221,10 +249,8 @@ public class Jugador : MonoBehaviour {
         }
         else if (!playerGround && coffinGround)
         {
-            rb2dc.mass = 100;
             rb2dc.constraints = RigidbodyConstraints2D.FreezeRotation;
             controlCoffin.ataudColgando = false;
-            rb2d.mass = 1;
             if (coffinUp)
             {
                 //ataud en el suelo por encima del jugador
@@ -236,10 +262,8 @@ public class Jugador : MonoBehaviour {
         }
         else if (!playerGround && !coffinGround)
         {
-            rb2dc.mass = 1;
             controlCoffin.ataudColgando = false;
-            rb2dc.constraints = RigidbodyConstraints2D.None;
-            rb2d.mass = 1;
+            //rb2dc.constraints = RigidbodyConstraints2D.None;
             swing = false;
             climb = false;
             moving = true;
@@ -255,41 +279,6 @@ public class Jugador : MonoBehaviour {
         else
         {
             setSwing(true);
-
-            /*if (InputManager.AuxHorizontal()!=0 || InputManager.AuxVertical() != 0)
-            {
-                resize = false;
-                setClimb(false);
-            }*/
-            if (InputManager.LeftTrigger() && distanciaJugadorCoffin > distanciaMaximaJugadorCoffinAlEscalar)
-            {
-                setClimb(true);
-                resize = true;
-                joint.distance -= speedTakeCoffin * Time.fixedDeltaTime;
-                click = true;
-            }
-            else if (InputManager.LeftTrigger() && distanciaJugadorCoffin < distanciaMaximaJugadorCoffinAlEscalar + 0.1 && click == false)
-            {
-                setClimb(true);
-                resize = true;
-                joint.distance += speedTakeCoffin * Time.fixedDeltaTime;
-                joint.distance = Mathf.Clamp(joint.distance, 0, maxJointSize);
-                click = true;
-            }
-            else if (InputManager.LeftTriggerUp() && click)
-            {
-                setClimb(false);
-                resize = false;
-                click = false;
-            }
-            else if (!InputManager.LeftTrigger())
-            {
-                resize = true;
-                joint.distance += speedTakeCoffin * Time.fixedDeltaTime;
-                joint.distance = Mathf.Clamp(joint.distance, 0, maxJointSize);
-                if (distanciaJugadorCoffin >= maxJointSize - 0.15) resize = false;
-                click = true;
-            }
         }
     }
 
@@ -344,7 +333,6 @@ public class Jugador : MonoBehaviour {
         
         swing = aux;
         moving = !aux;
-        if(!aux) rb2d.velocity = Vector2.zero;
     }
 
     public void setSombra(bool aux)
@@ -356,8 +344,6 @@ public class Jugador : MonoBehaviour {
     {
         climb = aux;
         moving = !aux;
-        if (!aux)
-            joint.distance = maxJointSize;
     }
 
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ControlCamera : MonoBehaviour {
 
-    public Controller2D target;
+    public GameObject target;
     public float verticalOffset;
     public float lookAheadDstX;
     public float lookSmoothTimeX;
@@ -23,12 +23,12 @@ public class ControlCamera : MonoBehaviour {
 
     void Start()
     {
-        focusArea = new FocusArea(target.collider.bounds, focusAreaSize);
+        //focusArea = new FocusArea(target.collider.bounds, focusAreaSize);
         
     }
     void LateUpdate()
     {
-        focusArea.Update(target.collider.bounds);
+        //focusArea.Update(target.collider.bounds);
         Vector2 focusPosition = focusArea.center + Vector2.up * verticalOffset;
         if(focusArea.velocity.x != 0)
         {
