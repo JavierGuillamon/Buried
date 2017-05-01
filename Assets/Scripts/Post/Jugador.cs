@@ -101,7 +101,7 @@ public class Jugador : MonoBehaviour {
         distanciaJugadorCoffin = Vector3.Distance(transform.position, coffin.position);
         if (distanciaJugadorAtaud.y < deadZone) coffinUp = true;
         else coffinUp = false;
-        Debug.Log(groundTrigger.IsTouchingLayers(groundMask));
+        //Debug.Log(groundTrigger.IsTouchingLayers(groundMask));
         React();
 
         playerGround = groundTrigger.IsTouchingLayers(groundMask); /* GetComponent<Controller2D>().collisions.below;*/
@@ -153,13 +153,13 @@ public class Jugador : MonoBehaviour {
     Collider2D groundTrigger;
     [SerializeField]
     LayerMask groundMask;
-
+    Vector2 input;
+   
     void Update()
     {
+        input = new Vector2(InputManager.MainHorizontal(), System.Convert.ToInt32(InputManager.AButton()));
     }
-
-    [SerializeField]
-    float maxVelocityX;
+    
     [SerializeField]
     float frictionX;
     [SerializeField]
@@ -170,18 +170,10 @@ public class Jugador : MonoBehaviour {
     float gravityDown;
 
     public bool jumped = false;
-
-    Vector2 Velocity;
+    public float maxSpeed;
 
     private void Move()
     {
-        Vector2 input;
-        input = new Vector2(InputManager.MainHorizontal(), System.Convert.ToInt32(InputManager.AButton()));
-
-        Vector2 velx = rb2d.velocity.x * Vector2.right;
-        velx += input.x * Time.deltaTime * accelerationX * Vector2.right;
-        if (Mathf.Abs(input.x) < 0.2f)
-            velx *= Mathf.Clamp01(1 - frictionX * Time.deltaTime);
 
         Vector2 vely = rb2d.velocity.y * Vector2.up;
         if (rb2d.velocity.y >= 0)
@@ -193,10 +185,32 @@ public class Jugador : MonoBehaviour {
             vely = jumpVelocity * Vector2.up;
             jumped = true;
         }
-        
+
+        Vector2 velx = rb2d.velocity.x * Vector2.right;
+        velx += input.x * Time.deltaTime * accelerationX * Vector2.right;
+        if (Mathf.Abs(input.x) < 0.2f)
+            velx *= Mathf.Clamp01(1 - frictionX * Time.deltaTime);
+        if (Mathf.Abs(velx.x) > maxSpeed)
+            velx.x = maxSpeed*input.x;
+            
+       
+        //slope
+       // RaycastHit2D hit = Physics2D.Raycast(transform.position, -Vector2.up, 2f, groundMask);
+
+      
+
+
 
         rb2d.velocity = velx + vely;
-
+  /*Debug.Log("AAA:: " + hit.collider);
+        if (hit.collider != null && Mathf.Abs(hit.normal.x) > .1f)
+        {
+            Debug.Log("AAA");
+            rb2d.velocity = new Vector2(rb2d.velocity.x - (hit.normal.x * slopeFriction), rb2d.velocity.y);
+            Vector3 pos = transform.position;
+            pos.y += -hit.normal.x * Mathf.Abs(rb2d.velocity.x) * Time.deltaTime * (rb2d.velocity.x - hit.normal.x > 0 ? 1 : -1);
+            transform.position = pos;
+        }*/
         
         //controller.Move(velocity * Time.deltaTime);
     }
