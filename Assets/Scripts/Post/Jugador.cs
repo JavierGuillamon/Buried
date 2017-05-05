@@ -35,7 +35,7 @@ public class Jugador : MonoBehaviour {
     private float acceletarionTimeGrounded = .1f;
     private float gravity;
     [SerializeField]
-     float jumpVelocity;
+    float jumpVelocity;
     private Vector3 velocity;
     private float velocityXSmoothing;
     private bool canMoveLeft = true, canMoveRight = true;
@@ -82,6 +82,27 @@ public class Jugador : MonoBehaviour {
     bool lookingRight = true;
     public bool LookingRight { get { return lookingRight; } }
 
+    [SerializeField]
+    Collider2D groundTrigger;
+    [SerializeField]
+    LayerMask groundMask;
+    Vector2 input;
+
+    [SerializeField]
+    float frictionX;
+    [SerializeField]
+    float accelerationXNormal;
+    [SerializeField]
+    float accelerationXSlow;
+    [SerializeField]
+    float gravityUp;
+    [SerializeField]
+    float gravityDown;
+    public bool jumped = false;
+    public float maxSpeed;
+    [SerializeField]
+    float maxDistanceAtaudCofin;
+
     void Start () {
         rb2d = GetComponent<Rigidbody2D>();
         controller = GetComponent<Controller2D>();
@@ -96,7 +117,7 @@ public class Jugador : MonoBehaviour {
 	
 	void FixedUpdate ()
     {
-
+        Slope();
         distanciaJugadorAtaud = transform.position - coffin.position;
         distanciaJugadorCoffin = Vector3.Distance(transform.position, coffin.position);
         if (distanciaJugadorAtaud.y < deadZone) coffinUp = true;
@@ -147,31 +168,12 @@ public class Jugador : MonoBehaviour {
             }
         }
     }
-
-    [SerializeField]
-
-    Collider2D groundTrigger;
-    [SerializeField]
-    LayerMask groundMask;
-    Vector2 input;
    
     void Update()
     {
         input = new Vector2(InputManager.MainHorizontal(), System.Convert.ToInt32(InputManager.AButton()));
     }
     
-    [SerializeField]
-    float frictionX;
-    [SerializeField]
-    float accelerationX;
-    [SerializeField]
-    float gravityUp;
-    [SerializeField]
-    float gravityDown;
-
-    public bool jumped = false;
-    public float maxSpeed;
-
     private void Move()
     {
 
@@ -185,34 +187,29 @@ public class Jugador : MonoBehaviour {
             vely = jumpVelocity * Vector2.up;
             jumped = true;
         }
-
+        /*
         Vector2 velx = rb2d.velocity.x * Vector2.right;
         velx += input.x * Time.deltaTime * accelerationX * Vector2.right;
         if (Mathf.Abs(input.x) < 0.2f)
             velx *= Mathf.Clamp01(1 - frictionX * Time.deltaTime);
         if (Mathf.Abs(velx.x) > maxSpeed)
             velx.x = maxSpeed*input.x;
-            
-       
-        //slope
-       // RaycastHit2D hit = Physics2D.Raycast(transform.position, -Vector2.up, 2f, groundMask);
+       rb2d.velocity = velx + vely;*/
 
-      
-
-
-
-        rb2d.velocity = velx + vely;
-  /*Debug.Log("AAA:: " + hit.collider);
-        if (hit.collider != null && Mathf.Abs(hit.normal.x) > .1f)
+        //Debug.Log("distanciaJugadorCoffin:: " + distanciaJugadorCoffin);
+        if (distanciaJugadorCoffin > maxDistanceAtaudCofin)
         {
-            Debug.Log("AAA");
-            rb2d.velocity = new Vector2(rb2d.velocity.x - (hit.normal.x * slopeFriction), rb2d.velocity.y);
-            Vector3 pos = transform.position;
-            pos.y += -hit.normal.x * Mathf.Abs(rb2d.velocity.x) * Time.deltaTime * (rb2d.velocity.x - hit.normal.x > 0 ? 1 : -1);
-            transform.position = pos;
-        }*/
+             if (transform.position.x > coffin.position.x && InputManager.MainHorizontal() > 0)
+                 rb2d.velocity = new Vector2(input.x * Time.deltaTime * accelerationXSlow, vely.y);
+             else if (transform.position.x < coffin.position.x && InputManager.MainHorizontal() < 0)
+                 rb2d.velocity = new Vector2(input.x * Time.deltaTime * accelerationXSlow, vely.y);
+             else
+                 rb2d.velocity = new Vector2(input.x * Time.deltaTime * accelerationXNormal, vely.y);
+        }          
+        else
+            rb2d.velocity = new Vector2(input.x * Time.deltaTime * accelerationXNormal, vely.y);  
         
-        //controller.Move(velocity * Time.deltaTime);
+            
     }
 
     private void MoveSwing()
@@ -220,6 +217,25 @@ public class Jugador : MonoBehaviour {
         Vector2 moveVelocity = rb2d.velocity;
         moveVelocity = Vector2.right * InputManager.MainHorizontal() * speed;
         rb2d.AddForce(moveVelocity);
+    }
+
+    /*[SerializeField]
+    float slopeFriction;*/
+    private void Slope()
+    {
+        if (playerGround)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, -Vector2.up,Mathf.Infinity, groundMask);
+            if(hit.collider!=null && Mathf.Abs(hit.normal.x) > 0.1f){
+                /*Debug.Log("AAA hit noraml:: " + hit.normal.x);
+                rb2d.velocity = new Vector2(rb2d.velocity.x- hit.normal.x * rb2d.velocity.x,rb2d.velocity.y);              
+                transform.position = new Vector2(transform.position.x,transform.position.y+ -hit.normal.x*Mathf.Abs(rb2d.velocity.x)*Time.deltaTime*(rb2d.velocity.x-hit.normal.x>0?1:-1));
+                */
+                rb2d.gravityScale = 0;
+            }
+            
+        }
+        else rb2d.gravityScale = 10;
     }
 
     private void React()

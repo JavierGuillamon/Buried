@@ -68,6 +68,7 @@ public class Ataud : MonoBehaviour {
     Transform coffinVisual;
 
 	void Update () {
+        ImprimirCadena();
         TakeCoffin();
         if (coffinTaken)
             coffinCollider.enabled = false;      
@@ -203,8 +204,30 @@ public class Ataud : MonoBehaviour {
     List<DistanceJoint2D> joints;
     [SerializeField]
     float duracionRecogerCadena =5;
+    [SerializeField]
+    float achorDistance;
+    [SerializeField]
+    float jointDistance;
+    [SerializeField]
+    List<GameObject> links;
+    [SerializeField]
+    LineRenderer lineRenderer;
 
     bool taking = false;
+
+    private void ImprimirCadena()
+    {
+        lineRenderer.numPositions=links.Count;
+        for (int i = 0; i < links.Count; i++)
+        {
+            Vector3 pos;
+            if (i == links.Count - 1) pos= playerTr.position;
+            else if (i == 0)pos=transform.position;
+            else pos=links[i].transform.position;
+            pos.z += 10;
+            lineRenderer.SetPosition(i, pos);
+        }
+    }
 
     private void TakeCoffin()
     {
@@ -215,13 +238,13 @@ public class Ataud : MonoBehaviour {
                 if (Vector3.Distance(playerTr.position, transform.position) > distanceToTakeCoffin)
                 {
 
-                    tiempoRecogerCadena += Time.deltaTime/ duracionRecogerCadena;
+                    tiempoRecogerCadena += Time.deltaTime / duracionRecogerCadena;
                     tiempoRecogerCadena = Mathf.Clamp01(tiempoRecogerCadena);
-                    foreach(DistanceJoint2D j in joints)
+                    foreach (DistanceJoint2D j in joints)
                     {
-                        j.anchor = new Vector2( Mathf.Lerp(-0.4f,0.4f,tiempoRecogerCadena) , 0);
-
-                    }
+                        j.anchor = new Vector2(Mathf.Lerp(-achorDistance, achorDistance, tiempoRecogerCadena), 0);
+                        j.distance = 0.001f;
+                    }                   
                     /*
                     Vector3 dir = playerTr.transform.position - transform.position;
                     //dir = new Vector3(dir.x, 0, 0);
@@ -237,8 +260,8 @@ public class Ataud : MonoBehaviour {
                 tiempoRecogerCadena = Mathf.Clamp01(tiempoRecogerCadena);
                 foreach (DistanceJoint2D j in joints)
                 {
-                    j.anchor = new Vector2(Mathf.Lerp(-0.4f, 0.4f, tiempoRecogerCadena), 0);
-
+                    j.anchor = new Vector2(Mathf.Lerp(-achorDistance, achorDistance, tiempoRecogerCadena), 0);
+                    j.distance = jointDistance;
                 }
             }
             if (InputManager.LeftTriggerDown())
