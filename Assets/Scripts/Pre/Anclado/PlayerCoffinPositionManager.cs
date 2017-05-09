@@ -49,11 +49,9 @@ public class PlayerCoffinPositionManager : MonoBehaviour {
     {       
         if (playerGround && coffinGround)
         {
-            rb2dc.mass = 1;
             rb2dc.constraints = RigidbodyConstraints2D.FreezeRotation;
 
             controlCoffin.ataudColgando = false;
-            rb2d.mass = 1;
             control.setSwing(false);
             control.setClimb(false);
             //atraer
@@ -65,10 +63,8 @@ public class PlayerCoffinPositionManager : MonoBehaviour {
         }
         else if(playerGround && !coffinGround)
         {
-            rb2dc.mass = 1;
             rb2dc.constraints = RigidbodyConstraints2D.None;
             controlCoffin.ataudColgando = true;
-            rb2d.mass = 100;
             control.setSwing(false);
             control.setClimb(false);
             if (!coffinUp)
@@ -88,11 +84,9 @@ public class PlayerCoffinPositionManager : MonoBehaviour {
         }
         else if(!playerGround && coffinGround)
         {
-            rb2dc.mass = 100;
             rb2dc.constraints = RigidbodyConstraints2D.FreezeRotation;
 
             controlCoffin.ataudColgando = false;
-            rb2d.mass = 1;
             if (coffinUp)
             {
                 //ataud en el suelo por encima del jugador
@@ -102,11 +96,9 @@ public class PlayerCoffinPositionManager : MonoBehaviour {
             }
         }else if(!playerGround && !coffinGround)
         {
-            rb2dc.mass = 1;
 
             controlCoffin.ataudColgando = false;
             rb2dc.constraints = RigidbodyConstraints2D.None;
-            rb2d.mass = 1;
             control.setClimb(false);
             control.setSwing(false);
             control.setMoving(true);

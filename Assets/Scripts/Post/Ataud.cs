@@ -16,7 +16,14 @@ public class Ataud : MonoBehaviour {
     private float speedTakeCoffin = 10;
     private bool coffinTaken;
     Rigidbody2D rb2d;
+    [SerializeField]
+    Rigidbody2D kinematicBody;
+    [SerializeField]
+    Rigidbody2D kinematicBodyPlayer;
+    bool coffinThrown = false;
     [Header("THROW")]
+    [SerializeField]
+    float verticalCoffinThrowOffset = 0;
     public float power = 1;
     private bool recogerAtaud;
     private bool onSombra;
@@ -45,12 +52,49 @@ public class Ataud : MonoBehaviour {
     [SerializeField]
     Collider2D coffinCollider;
     //end
-
     //Control Chain speed 
     public float distanceNorm;
     public float distSlow;
     //end
-    
+    //CoffinVisual
+    [SerializeField]
+    Transform coffinVisual;
+    float timetimerotate;
+    //end
+    //checkKinematics
+    [SerializeField]
+    float massInterpolationSpeed;
+    [SerializeField]
+    float maxMass;
+    [SerializeField]
+    float massChangeDistance = 10;
+    [SerializeField]
+    float maxDistancePull = 10;
+    [SerializeField]
+    DistanceJoint2D jointPlayer;
+    [SerializeField]
+    DistanceJoint2D jointCoffin;
+    //end
+    //imprimir cadena
+    [SerializeField]
+    List<HingeJoint2D> joints;
+    [SerializeField]
+    float duracionRecogerCadena = 5;
+    [SerializeField]
+    float achorDistance;
+    [SerializeField]
+    float jointDistance;
+    [SerializeField]
+    List<GameObject> links;
+    [SerializeField]
+    LineRenderer lineRenderer;
+    bool taking = false;
+
+    float maxDistanceCadena = 15;
+    float maxDistanceCadenaAux;
+    bool tick = true;
+    //end
+
     void Start () {
         canTake = true;
         rb2d = GetComponent<Rigidbody2D>();
@@ -64,9 +108,6 @@ public class Ataud : MonoBehaviour {
         }
     }
 
-    [SerializeField]
-    Transform coffinVisual;
-
 	void Update () {
         ImprimirCadena();
         TakeCoffin();
@@ -74,7 +115,9 @@ public class Ataud : MonoBehaviour {
             coffinCollider.enabled = false;      
         else
             coffinCollider.enabled = true;
-        
+
+        Vector2 direction = Vector2.up;
+
         if (Vector2.Distance(transform.position, playerTr.position) <= distanceNorm)
         {
             Reset();
@@ -85,21 +128,18 @@ public class Ataud : MonoBehaviour {
         }
         if (!coffinTaken)
         {
-            if (player.coffinGround)
+            if (!player.coffinGround && rb2d.velocity.magnitude > 0)
             {
-                coffinVisual.localRotation = Quaternion.LookRotation(Vector3.forward, Vector3.up);
-            }
-            else if (rb2d.velocity.magnitude > 0)
-            {
+                 direction = Vector3.Cross(rb2d.velocity, Vector3.forward);
                 coffinVisual.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.Cross(rb2d.velocity, Vector3.forward));
 
             }
             else if (ataudColgando)
             {
                 if (transform.position.x > playerTr.position.x)
-                    coffinVisual.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.right);
+                    direction = Vector3.right;
                 else
-                    coffinVisual.rotation = Quaternion.LookRotation(Vector3.forward, -Vector3.right);
+                    direction = -Vector3.right;
             }
         }
         else {
@@ -112,70 +152,56 @@ public class Ataud : MonoBehaviour {
                 else
                     apuntar = -playerTr.right;
             }
-            if (Mathf.Abs(InputManager.MainVertical()) < 0.2f)
+            if (InputManager.MainVertical() > -0.2f )
                 apuntar += Vector2.up * verticalCoffinThrowOffset;
-            coffinVisual.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.Cross(Vector3.forward, apuntar.normalized));
+            direction = Vector3.Cross(Vector3.forward, apuntar.normalized);
         }
-        
+
+        coffinVisual.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.Lerp(coffinVisual.up, direction, Time.deltaTime*10) );
     }
 
     void CheckKinematics() {
+
+        rb2d.mass = Mathf.Lerp(rb2d.mass, 1 , Time.deltaTime * massInterpolationSpeed);
+        player.rb2d.mass = Mathf.Lerp(rb2d.mass, 1, Time.deltaTime * massInterpolationSpeed);
+
         if (player.playerGround && player.coffinGround)
         {
             if (taking)
             {
-                firstJoint.connectedBody = rb2d;
-                lastJoint.connectedBody = kinematicBodyPlayer;
+                jointCoffin.connectedBody = rb2d;
+                jointPlayer.connectedBody = kinematicBodyPlayer;
             }
             else
             {
-                firstJoint.connectedBody = rb2d;
-                lastJoint.connectedBody = kinematicBodyPlayer;
+                    jointCoffin.connectedBody = rb2d;
+                    jointPlayer.connectedBody = kinematicBodyPlayer;
             }
-            coffinThrown = false;/*
-            if (player.jumped && player.rb2d.velocity.y <= 0)
-                player.jumped = false;*/
+            coffinThrown = false;
         }
         else if (!player.playerGround && player.coffinGround)
         {
-            if (player.jumped)
-            {
-                firstJoint.connectedBody = rb2d;
-                lastJoint.connectedBody = kinematicBodyPlayer;
-            }
-            else
-            {
-                firstJoint.connectedBody = kinematicBody;
-                lastJoint.connectedBody = player.rb2d;
-            }
-
-            if (Vector2.Distance(rb2d.position, player.rb2d.position) > 10)
+            jointCoffin.connectedBody = kinematicBody;
+            jointPlayer.connectedBody = player.rb2d;
+            if (Vector2.Distance(rb2d.position, player.rb2d.position) > massChangeDistance)
             {
                 player.jumped = false;
+                player.rb2d.mass = maxMass;
             }
             coffinThrown = false;
         }
         else if (player.playerGround && !player.coffinGround)
         {
-            if (!coffinThrown)
-            {
-                firstJoint.connectedBody = rb2d;
-                lastJoint.connectedBody = kinematicBodyPlayer;
-            }
-            if (rb2d.velocity.y <= 0 || Vector2.Distance(rb2d.position,player.rb2d.position) > 10)
-            {
-                firstJoint.connectedBody = rb2d;
-                coffinThrown = false;
-            }
+            jointCoffin.connectedBody = rb2d;
+            jointPlayer.connectedBody = kinematicBodyPlayer;
             if (player.jumped && player.rb2d.velocity.y <= 0)
                 player.jumped = false;
         }
         else
         {
-            firstJoint.connectedBody = rb2d;
-            lastJoint.connectedBody = player.rb2d;
+            jointCoffin.connectedBody = rb2d;
+            jointPlayer.connectedBody = player.rb2d;
         }
-
     }
 
     void FixedUpdate()
@@ -185,36 +211,16 @@ public class Ataud : MonoBehaviour {
         if (!coffinTaken)
         {
             float g = upGrav;
-            if (rb2d.velocity.y < 0.1)
+            if (rb2d.velocity.y < 0)
                 g = downGrav;
-            if (ataudColgando)
+            if (ataudColgando && ! coffinThrown)
             {
-                g = 0;
+                g = Mathf.Lerp(g, 1, Time.deltaTime * massInterpolationSpeed);
             }
-            //Debug.Log("G:: " + g+ " vel:"+ rb2d.velocity.y);
             rb2d.velocity = rb2d.velocity.x * Vector2.right + rb2d.velocity.y * Vector2.up - Vector2.up * g * Time.deltaTime;
         }
     }
-
-    [SerializeField]
-    DistanceJoint2D firstJoint;
-    [SerializeField]
-    DistanceJoint2D lastJoint;
-    [SerializeField]
-    List<DistanceJoint2D> joints;
-    [SerializeField]
-    float duracionRecogerCadena =5;
-    [SerializeField]
-    float achorDistance;
-    [SerializeField]
-    float jointDistance;
-    [SerializeField]
-    List<GameObject> links;
-    [SerializeField]
-    LineRenderer lineRenderer;
-
-    bool taking = false;
-
+    
     private void ImprimirCadena()
     {
         lineRenderer.numPositions=links.Count;
@@ -231,38 +237,38 @@ public class Ataud : MonoBehaviour {
 
     private void TakeCoffin()
     {
-        if (InputManager.MainHorizontal() == 0 /*&& canTake*/)
+        if (InputManager.MainHorizontal() == 0)
         {
             if (InputManager.LeftTrigger())
             {
                 if (Vector3.Distance(playerTr.position, transform.position) > distanceToTakeCoffin)
                 {
-
-                    tiempoRecogerCadena += Time.deltaTime / duracionRecogerCadena;
-                    tiempoRecogerCadena = Mathf.Clamp01(tiempoRecogerCadena);
-                    foreach (DistanceJoint2D j in joints)
+                    if (tick)
+                    {
+                        maxDistanceCadenaAux = maxDistanceCadena;
+                        maxDistanceCadena = Vector3.Distance(playerTr.position, transform.position);
+                    }
+                    tick = false;
+                   
+                    tiempoRecogerCadena += speedTakeCoffin * Time.deltaTime;
+                    tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena, 0, duracionRecogerCadena);
+                    foreach (HingeJoint2D j in joints)
                     {
                         j.anchor = new Vector2(Mathf.Lerp(-achorDistance, achorDistance, tiempoRecogerCadena), 0);
-                        j.distance = 0.001f;
-                    }                   
-                    /*
-                    Vector3 dir = playerTr.transform.position - transform.position;
-                    //dir = new Vector3(dir.x, 0, 0);
-                    rb2d.velocity = dir.normalized * speedTakeCoffin * curvaRecogerCadena.Evaluate(tiempoRecogerCadena);
-                    //Debug.Log("VEL::" + rb2d.velocity+" DIR: "+dir.normalized);*/
+                    }
                 }
-                taking = true;
+                taking = true;              
             }
             else
             {
                 taking = false;
-                tiempoRecogerCadena -= Time.deltaTime / duracionRecogerCadena;
-                tiempoRecogerCadena = Mathf.Clamp01(tiempoRecogerCadena);
-                foreach (DistanceJoint2D j in joints)
+                tiempoRecogerCadena -= speedTakeCoffin * Time.deltaTime;
+                tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena, 0, duracionRecogerCadena);
+                foreach (HingeJoint2D j in joints)
                 {
                     j.anchor = new Vector2(Mathf.Lerp(-achorDistance, achorDistance, tiempoRecogerCadena), 0);
-                    j.distance = jointDistance;
                 }
+
             }
             if (InputManager.LeftTriggerDown())
             {
@@ -273,30 +279,31 @@ public class Ataud : MonoBehaviour {
                     if (coffinTaken == false)
                     {
                         transform.position = new Vector3(playerTr.position.x + 0.75f, playerTr.position.y, 0);
+                        tiempoRecogerCadena = 0;
                     }
                 }
             }
             if (InputManager.LeftTriggerUp())
             {
+                maxDistanceCadena=maxDistanceCadenaAux;
+                tick = true;
                 recogerAtaud = false;
             }
         }
         else
         {
-            tiempoRecogerCadena -= Time.deltaTime / duracionRecogerCadena;
-            tiempoRecogerCadena = Mathf.Clamp01(tiempoRecogerCadena);
-            foreach (DistanceJoint2D j in joints)
+            tiempoRecogerCadena -= speedTakeCoffin * Time.deltaTime ;
+            tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena,0 , duracionRecogerCadena);
+            foreach (HingeJoint2D j in joints)
             {
-                j.anchor = new Vector2(Mathf.Lerp(-0.5f, 0.5f, tiempoRecogerCadena), 0);
-
+                j.anchor = new Vector2(Mathf.Lerp(-0.5f, 0.5f, tiempoRecogerCadena / duracionRecogerCadena), 0);
             }
             taking = false;
         }
+        jointPlayer.distance = maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena));
+        jointCoffin.distance = maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena));
         anim.SetFloat("Vel", Mathf.Abs(rb2d.velocity.x));
-    }
-
-    [SerializeField]
-    float verticalCoffinThrowOffset = 0;
+    } 
 
     private void ThrowCoffin()
     {
@@ -304,7 +311,6 @@ public class Ataud : MonoBehaviour {
         {
             if (InputManager.RightTrigger())
             {
-                //rb2d.constraints = RigidbodyConstraints2D.FreezeAll;
                 Vector2 apuntar = InputManager.MainHorizontal() * Vector2.right + InputManager.MainVertical() * Vector2.up;
                 if (apuntar.magnitude < 0.2f)
                 {
@@ -315,8 +321,6 @@ public class Ataud : MonoBehaviour {
                 }
                 if (Mathf.Abs(InputManager.MainVertical()) < 0.2f)
                     apuntar += Vector2.up * verticalCoffinThrowOffset;
-
-
 
                 throwForce += Time.deltaTime;
                 
@@ -340,15 +344,11 @@ public class Ataud : MonoBehaviour {
                         GameObject touchedObject = hitInformation.transform.gameObject;
                         if (touchedObject.layer == 8)
                             break;
-                    }
-                    //Debug.Log("aaa:: " + Vector3.Distance(trajectoryPoints[i].transform.position, playerTr.position));
-                    
-                       
+                    }   
                 }
             }
             else if (InputManager.RightTriggerUp())
             {
-                //rb2d.constraints = RigidbodyConstraints2D.None;
                 ThrowAux();
                 coffinTaken = false;
                 player.setCoffinTaken(coffinTaken);
@@ -364,13 +364,6 @@ public class Ataud : MonoBehaviour {
         }
     }
 
-    [SerializeField]
-    Rigidbody2D kinematicBody;
-    [SerializeField]
-    Rigidbody2D kinematicBodyPlayer;
-
-    bool coffinThrown = false;
-
     private void ThrowAux()
     {
         Vector2 apuntar = InputManager.MainHorizontal() * Vector2.right + InputManager.MainVertical() * Vector2.up;
@@ -384,15 +377,15 @@ public class Ataud : MonoBehaviour {
         if (Mathf.Abs(InputManager.MainVertical()) < 0.2f)
             apuntar += Vector2.up * verticalCoffinThrowOffset;
         rb2d.velocity = apuntar.normalized * throwCurve.Evaluate(Mathf.Clamp01(throwForce / throwCoffinTimeMax)) * throwMaxStrength;
-        firstJoint.connectedBody = kinematicBody;
         dir = new Vector3(0, 0, 0);
+
+        rb2d.mass = maxMass;
         coffinThrown = true;
     }
 
     private void Reset()
     {
         player.Reset();
-        //rb2d.constraints = RigidbodyConstraints2D.None;
         if (coffinTaken)
         {
             transform.position = new Vector3(playerTr.position.x, playerTr.position.y + 0.75f, 0);
@@ -417,10 +410,6 @@ public class Ataud : MonoBehaviour {
         return aux;
     }
 
-    public void setCanTake(bool aux)
-    {
-        canTake = aux;
-    }
     public void setRecogerAtaud(bool aux)
     {
         recogerAtaud = aux;
