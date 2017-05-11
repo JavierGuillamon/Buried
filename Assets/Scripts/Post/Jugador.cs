@@ -82,6 +82,8 @@ public class Jugador : MonoBehaviour {
     [SerializeField]
     float maxDistanceAtaudCofin;
 
+    private bool inPlatform;
+
     void Start () {
         rb2d = GetComponent<Rigidbody2D>();
         controller = GetComponent<Controller2D>();
@@ -93,8 +95,10 @@ public class Jugador : MonoBehaviour {
         distanciaJugadorAtaud = transform.position - coffin.position;
         distanciaJugadorCoffin = Vector3.Distance(transform.position, coffin.position);
         React();
-
-        playerGround = groundTrigger.IsTouchingLayers(groundMask);
+        if (inPlatform)
+            playerGround = true;
+        else
+            playerGround = groundTrigger.IsTouchingLayers(groundMask);
 
         if (InputManager.MainHorizontal() > 0)
             lookingRight = true;
@@ -104,7 +108,7 @@ public class Jugador : MonoBehaviour {
         if (!InputManager.RightTrigger())
         {
             if (moving) Move();            
-            if (swing) MoveSwing();         
+            if (swing) MoveSwing(); 
         }
     }
    
@@ -231,5 +235,20 @@ public class Jugador : MonoBehaviour {
     public void setSombra(bool aux)
     {
         sombra = aux;
+    }
+
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if(other.gameObject.tag == "platform")
+        {
+            inPlatform = true;
+        }
+    }
+    void OnCollisionExit2D(Collision2D other)
+    {
+        if (other.gameObject.tag == "platform")
+        {
+            inPlatform = false;
+        }
     }
 }

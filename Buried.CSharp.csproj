@@ -77,6 +77,8 @@
     <Compile Include="Assets\Scripts\Post\Ataud.cs" />
     <Compile Include="Assets\Scripts\Post\AtaudDetectCollisionsBelow.cs" />
     <Compile Include="Assets\Scripts\Post\Jugador.cs" />
+    <Compile Include="Assets\Scripts\Post\MovingPlatform.cs" />
+    <Compile Include="Assets\Scripts\Post\PlatformDetector.cs" />
     <Compile Include="Assets\Scripts\Pre\Agua\Agua.cs" />
     <Compile Include="Assets\Scripts\Pre\Anclado\DetectCollisionsBelow.cs" />
     <Compile Include="Assets\Scripts\Pre\Anclado\PlayerCoffinPositionManager.cs" />
