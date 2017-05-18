@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Ataud : MonoBehaviour {
-    //Control coffin
-
-
+   
     [SerializeField]
     bool coffinThrown = false;
     [SerializeField]
@@ -20,28 +18,33 @@ public class Ataud : MonoBehaviour {
     public float DownGrav { get { return downGrav; } }
     
     public bool ataudColgando;
-    //end
+    public bool coffinTaken;
+    [SerializeField]
+    private Jugador player;
+    [SerializeField]
+    Transform coffinVisual;
+    [SerializeField]
+    private Transform playerTr;
 
-	void Update () {
-        //ImprimirCadena();
+    void Update () {
         Vector2 direction = Vector2.up;
-       /* if (!coffinTaken)
+       if (!coffinTaken)
         {
             if (!player.coffinGround && rb2d.velocity.magnitude > 0)
             {
-                 direction = Vector3.Cross(rb2d.velocity, Vector3.forward);
+                direction = Vector3.Cross(rb2d.velocity, Vector3.forward);
                 coffinVisual.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.Cross(rb2d.velocity, Vector3.forward));
-
             }
             else if (ataudColgando)
             {
                 if (transform.position.x > playerTr.position.x)
-                    direction = Vector3.right;
+                    direction = Vector3.forward;
                 else
-                    direction = -Vector3.right;
+                    direction = -Vector3.forward;
             }
         }
-        else {
+        else
+        {
             Vector2 apuntar = InputManager.MainHorizontal() * Vector2.right + InputManager.MainVertical() * Vector2.up;
             if (apuntar.magnitude < 0.2f)
             {
@@ -51,11 +54,11 @@ public class Ataud : MonoBehaviour {
                     apuntar = -playerTr.right;
             }
             if (InputManager.MainVertical() > -0.2f )
-                apuntar += Vector2.up * verticalCoffinThrowOffset;
+                apuntar += Vector2.up * player.verticalCoffinThrowOffset;
             direction = Vector3.Cross(Vector3.forward, apuntar.normalized);
         }
 
-        coffinVisual.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.Lerp(coffinVisual.up, direction, Time.deltaTime*10) );*/
+        coffinVisual.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.Lerp(coffinVisual.up, direction, Time.deltaTime*10) );
     }
 
 

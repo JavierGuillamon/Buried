@@ -185,6 +185,8 @@ public class Jugador : MonoBehaviour {
     List<GameObject> links;
     [SerializeField]
     LineRenderer lineRenderer;
+    [SerializeField]
+    float posCadenaZ = 1;
 
     //Coffin actions
     bool taking = false;
@@ -198,8 +200,7 @@ public class Jugador : MonoBehaviour {
     [SerializeField]
     float throwMaxStrength = 10;
     float throwForce;
-    [SerializeField]
-    float verticalCoffinThrowOffset = 0;
+    public float verticalCoffinThrowOffset = 0;
     private List<GameObject> trajectoryPoints;
     public int numTrajectoryPoints = 100;
     public GameObject trajectoryPrefeb;
@@ -211,7 +212,9 @@ public class Jugador : MonoBehaviour {
     public float distSlow;
     [SerializeField]
     private float speedOut;
-    
+
+    private bool throwing;
+
     void FixedUpdate ()
     {
         playerGround = groundTrigger.IsTouchingLayers(groundMask);
@@ -228,7 +231,7 @@ public class Jugador : MonoBehaviour {
 
         if (!InputManager.RightTrigger())
         {
-            if (moving) Move();
+            if (moving && !throwing) Move();
             if (swing) MoveSwing();
         }
 
@@ -312,19 +315,26 @@ public class Jugador : MonoBehaviour {
             }
 
         }
-        tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena , 0, duracionRecogerCadena * (1 - (distanciaJugadorCoffin - 0.5f) / maxDistanceCadena)) ;
+        tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena , 0, duracionRecogerCadena * (1 - (distanciaJugadorCoffin - 0.5f) / maxDistanceCadena));
+       // Debug.Log("EV::"+ curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena));
         //2 distancias minimas, una cuando sube y otra para cuando esta en el suelo, hacer clamp sobre clamp, si el jugador esta en el aire  el jugador en el suelo es 0, 2
-        Debug.Log("CLAMP::" + Mathf.Clamp(Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaJugadorCoffin - 0.05f, maxDistanceCadena), distanciaMinima, maxDistanceCadena)+" Aaa::"+(1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)));
-        jointPlayer.distance = Mathf.Clamp( Mathf.Clamp( maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaJugadorCoffin - 0.05f, maxDistanceCadena) ,distanciaMinima, maxDistanceCadena) ;
+        //Debug.Log("CLAMP::" + Mathf.Clamp(Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaJugadorCoffin - 0.05f, maxDistanceCadena), distanciaMinima, maxDistanceCadena)+" Aaa::"+(1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)));
+        jointPlayer.distance = Mathf.Clamp(Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaJugadorCoffin - 0.05f, maxDistanceCadena) ,distanciaMinima, maxDistanceCadena) ;
         jointCoffin.distance = Mathf.Clamp(Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaJugadorCoffin - 0.05f, maxDistanceCadena), distanciaMinima, maxDistanceCadena);
     }
-
-
 
     void Update()
     {
         input = new Vector2(InputManager.MainHorizontal(), System.Convert.ToInt32(InputManager.AButton()));
         ImprimirCadena();
+        if (throwing)
+        {
+            input = new Vector2(0, 0);
+            if (InputManager.MainHorizontal() <= 0.1 && InputManager.MainVertical() <= 0.1)
+                throwing = false;
+        }
+        if (taking && playerGround && !coffinTaken)
+            input = new Vector2(0, 0);
     }
 
     void CheckDistanceForSpeed()
@@ -369,6 +379,7 @@ public class Jugador : MonoBehaviour {
         {
             if (right)
             {
+                throwing = true;
                 Vector2 apuntar = Apuntar();
                 throwForce += Time.deltaTime;
                 Vector3 currenpoint = transform.position;
@@ -421,6 +432,7 @@ public class Jugador : MonoBehaviour {
     {
         throwForce = 0;
         DisableTrajectory();
+        throwing = false;
     }
 
     private void Move()
@@ -436,7 +448,7 @@ public class Jugador : MonoBehaviour {
             jumped = true;
         }
 
-        Debug.Log("distancia::"+ distanciaJugadorCoffin+ "maxDistanceAtaudCofin:"+ maxDistanceAtaudCofin);
+       // Debug.Log("distancia::"+ distanciaJugadorCoffin+ "maxDistanceAtaudCofin:"+ maxDistanceAtaudCofin);
         if (coffinTaken)
         {
             rb2d.velocity = new Vector2(input.x * Time.deltaTime * accelerationXSlow, vely.y);
@@ -498,7 +510,7 @@ public class Jugador : MonoBehaviour {
             if (i == links.Count - 1) pos= transform.position;
             else if (i == 0)pos=coffin.position;
             else pos=links[i].transform.position;
-            pos.z -= 1;
+            pos.z -= posCadenaZ;
             lineRenderer.SetPosition(i, pos);
         }
     }
