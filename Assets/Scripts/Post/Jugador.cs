@@ -14,51 +14,33 @@ public class Jugador : MonoBehaviour {
 
     //Player
     [Header("Valores de movimiento")]
-    [Tooltip("Velocidad de movimiento")]
     [SerializeField]
-    private float moveSpeed = 6;
-    private float auxMoveSpeed;
+    float accelerationXNormal;
+    [SerializeField]
+    float accelerationXSlow;
     [SerializeField]
     float jumpVelocity;
-    private Vector3 velocity;
-    private float velocityXSmoothing;
-    private bool canMoveLeft = true, canMoveRight = true;
-    private Controller2D controller;
     //end
 
     //PlayerController
     [SerializeField]
-    float speed;
+    float speedSwing;
     //end
 
     //PlayerCoffinPositionManager
-    //public Transform player;
+    [Header("PlayerCoffinPositionManager")]
     public Transform coffin;
-    public bool coffinUp;
     public bool playerGround;
     public bool coffinGround;
     public bool CoffinGround {
         get { return coffinGround; }
     }
-    public Vector2 distanciaJugadorAtaud;
-    public float deadZone;
     [SerializeField]
     private float speedTakeCoffin = 10;
     public Rigidbody2D rb2dc;
-    [SerializeField]
-    private float distanceToTakeCoffin = .75f;
-    private bool coffinTaken;
     public Ataud controlCoffin;
     //end
-    [Tooltip("Velocidad de movimiento cogiendo el ataud")]
-    [SerializeField]
-    private float moveSpeedWithCoffin;
-    [SerializeField]
-    private float jumpHeightWithCoffin;
-    [SerializeField]
-    private float timeJumpWithCoffin;
     private float distanciaJugadorCoffin;
-    public Collider2D AtaudCollider;
 
     bool lookingRight = true;
     public bool LookingRight { get { return lookingRight; } }
@@ -68,39 +50,20 @@ public class Jugador : MonoBehaviour {
     [SerializeField]
     LayerMask groundMask;
     Vector2 input;
-
-    [SerializeField]
-    float frictionX;
-    [SerializeField]
-    float accelerationXNormal;
-    [SerializeField]
-    float accelerationXSlow;
+    
     [SerializeField]
     float gravityUp;
     [SerializeField]
     float gravityDown;
-    public bool jumped = false;
-    public float maxSpeed;
     [SerializeField]
     float maxDistanceAtaudCofin;
 
-    void Start () {
-        rb2d = GetComponent<Rigidbody2D>();
-        controller = GetComponent<Controller2D>();
-        moving = true;
-        trajectoryPoints = new List<GameObject>();
-        for (int i = 0; i < numTrajectoryPoints; i++)
-            trajectoryPoints.Add(Instantiate(trajectoryPrefeb));
-        DisableTrajectory();
-    }
-
     //checkKinematics
+    [Header("Kinematics")]
     [SerializeField]
     float maxMass;
     [SerializeField]
     float massChangeDistance = 10;
-    [SerializeField]
-    float maxDistancePull = 10;
     [SerializeField]
     DistanceJoint2D jointPlayer;
     [SerializeField]
@@ -111,10 +74,74 @@ public class Jugador : MonoBehaviour {
     Rigidbody2D kinematicBodyPlayer;
     [SerializeField]
     float massInterpolationSpeed;
+    //Coffin
+    [SerializeField]
+    Ataud coffinController;
+    [SerializeField]
+    Collider2D coffinCollider;
+    [SerializeField]
+    Transform coffingTakenPos;
+
+    //Chain
+    [Header("Cadena")]
+    public AnimationCurve curvaRecogerCadena;
+    float tiempoRecogerCadena;
+    float maxDistanceCadena = 15;
+    [SerializeField]
+    float duracionRecogerCadena = 5;
+    [SerializeField]
+    List<HingeJoint2D> joints;
+    [SerializeField]
+    float achorDistance;
+    [SerializeField]
+    List<GameObject> links;
+    [SerializeField]
+    LineRenderer lineRenderer;
+    [SerializeField]
+    float posCadenaZ = 1;
+
+    //Coffin actions
+    bool taking = false;
+
+    //ThrowingCoffin
+    [Header("Lanzamiento")]
+    [SerializeField]
+    AnimationCurve throwCurve;
+    [SerializeField]
+    float throwCoffinTimeMax = 2;
+    [SerializeField]
+    float throwMaxStrength = 10;
+    float throwForce;
+    public float verticalCoffinThrowOffset = 0;
+    private List<GameObject> trajectoryPoints;
+    public int numTrajectoryPoints = 100;
+    public GameObject trajectoryPrefeb;
+    [SerializeField]
+    private float distanceToTakeCoffin = .75f;
+    private bool coffinTaken;
+
+    private bool throwing;
+    bool left = false;
+    bool leftPrevious = false;
+    bool right = false;
+    bool rightPrevious = false;
+    float distanciaMinima;
+    [SerializeField]
+    float distanciaMinimaNormal = 2;
+    [SerializeField]
+    float distanciaMinimaEscalando = 0;
+
+    void Start () {
+        rb2d = GetComponent<Rigidbody2D>();
+        moving = true;
+        trajectoryPoints = new List<GameObject>();
+        for (int i = 0; i < numTrajectoryPoints; i++)
+            trajectoryPoints.Add(Instantiate(trajectoryPrefeb));
+        DisableTrajectory();
+    }
 
     void CheckKinematics()
     {
-
         rb2dc.mass = Mathf.Lerp(rb2dc.mass, 1, Time.deltaTime * massInterpolationSpeed);
         this.rb2d.mass = Mathf.Lerp(rb2d.mass, 1, Time.deltaTime * massInterpolationSpeed);
 
@@ -135,7 +162,6 @@ public class Jugador : MonoBehaviour {
                 jointCoffin.connectedBody = rb2dc;
                 jointPlayer.connectedBody = kinematicBodyPlayer;
             }
-            coffinThrown = false;
         }
         else if (!this.playerGround && this.coffinGround)
         {
@@ -143,17 +169,13 @@ public class Jugador : MonoBehaviour {
             jointPlayer.connectedBody = this.rb2d;
             if (Vector2.Distance(rb2dc.position, this.rb2d.position) > massChangeDistance)
             {
-                this.jumped = false;
                 this.rb2d.mass = maxMass;
             }
-            coffinThrown = false;
         }
         else if (this.playerGround && !this.coffinGround)
         {
             jointCoffin.connectedBody = rb2dc;
             jointPlayer.connectedBody = kinematicBodyPlayer;
-            if (this.jumped && this.rb2d.velocity.y <= 0)
-                this.jumped = false;
         }
         else
         {
@@ -161,65 +183,11 @@ public class Jugador : MonoBehaviour {
             jointPlayer.connectedBody = kinematicBodyPlayer;
         }
     }
-
-    //Coffin
-    [SerializeField]
-    Ataud coffinController;
-    [SerializeField]
-    Collider2D coffinCollider;
-    [SerializeField]
-    Transform coffingTakenPos;
-
-    //Chain
-    public AnimationCurve curvaRecogerCadena;
-    float tiempoRecogerCadena;
-    float maxDistanceCadena = 15;
-    float maxDistanceCadenaAux;
-    [SerializeField]
-    float duracionRecogerCadena = 5;
-    [SerializeField]
-    List<HingeJoint2D> joints;
-    [SerializeField]
-    float achorDistance;
-    [SerializeField]
-    List<GameObject> links;
-    [SerializeField]
-    LineRenderer lineRenderer;
-    [SerializeField]
-    float posCadenaZ = 1;
-
-    //Coffin actions
-    bool taking = false;
-    bool coffinThrown = false;
-
-    //ThrowingCoffin
-    [SerializeField]
-    AnimationCurve throwCurve;
-    [SerializeField]
-    float throwCoffinTimeMax = 2;
-    [SerializeField]
-    float throwMaxStrength = 10;
-    float throwForce;
-    public float verticalCoffinThrowOffset = 0;
-    private List<GameObject> trajectoryPoints;
-    public int numTrajectoryPoints = 100;
-    public GameObject trajectoryPrefeb;
-
-
-
-    //Control Chain speed 
-    public float distanceNorm;
-    public float distSlow;
-    [SerializeField]
-    private float speedOut;
-
-    private bool throwing;
-
+ 
     void FixedUpdate ()
     {
         playerGround = groundTrigger.IsTouchingLayers(groundMask);
-
-        distanciaJugadorAtaud = transform.position - coffin.position;
+        
         distanciaJugadorCoffin = Vector2.Distance(transform.position, coffin.position);
 
         CheckKinematics();
@@ -240,7 +208,6 @@ public class Jugador : MonoBehaviour {
             coffinController.SetVelocity(Vector2.zero);
             coffin.position = coffingTakenPos.position;
             tiempoRecogerCadena = 0;
-            Reset();
             coffinCollider.enabled = false;
             if (playerGround)
                 CheckThrowCoffin();
@@ -248,7 +215,6 @@ public class Jugador : MonoBehaviour {
                 UnCheckThrowCoffin();
         }
         else {
-            CheckDistanceForSpeed();
             coffinCollider.enabled = true;
             coffinController.SetFreeVelocity();
             TakeCoffin();
@@ -259,13 +225,6 @@ public class Jugador : MonoBehaviour {
         
     }
 
-    bool left = false;
-    bool leftPrevious = false;
-    float distanciaMinima;
-    [SerializeField]
-    float distanciaMinimaNormal=2;
-    [SerializeField]
-    float distanciaMinimaEscalando=0;
     private void TakeCoffin()
     {
         leftPrevious = left;
@@ -337,18 +296,6 @@ public class Jugador : MonoBehaviour {
             input = new Vector2(0, 0);
     }
 
-    void CheckDistanceForSpeed()
-    {
-        if (distanciaJugadorCoffin <= distanceNorm)
-        {
-            Reset();
-        }
-        else if (distanciaJugadorCoffin <= distSlow)
-        {
-            this.setMoveSpeed(speedOut);
-        }
-    }
-
     private Vector2 Apuntar() {
 
         Vector2 apuntar = InputManager.MainHorizontal() * Vector2.right + InputManager.MainVertical() * Vector2.up;
@@ -364,10 +311,6 @@ public class Jugador : MonoBehaviour {
 
         return apuntar;
     }
-
-
-    bool right = false;
-    bool rightPrevious = false;
 
     private void CheckThrowCoffin()
     {
@@ -419,7 +362,6 @@ public class Jugador : MonoBehaviour {
         Vector2 apuntar = Apuntar();
         rb2dc.velocity = apuntar.normalized * throwCurve.Evaluate(Mathf.Clamp01(throwForce / throwCoffinTimeMax)) * throwMaxStrength;
         rb2dc.mass = maxMass;
-        coffinThrown = true;
     }
 
     private void DisableTrajectory()
@@ -445,10 +387,8 @@ public class Jugador : MonoBehaviour {
         if (input.y > 0 && playerGround && !coffinTaken)
         {
             vely = jumpVelocity * Vector2.up;
-            jumped = true;
         }
-
-       // Debug.Log("distancia::"+ distanciaJugadorCoffin+ "maxDistanceAtaudCofin:"+ maxDistanceAtaudCofin);
+        
         if (coffinTaken)
         {
             rb2d.velocity = new Vector2(input.x * Time.deltaTime * accelerationXSlow, vely.y);
@@ -469,13 +409,12 @@ public class Jugador : MonoBehaviour {
     private void MoveSwing()
     {
         Vector2 moveVelocity = rb2d.velocity;
-        moveVelocity = Vector2.right * InputManager.MainHorizontal() * speed;
+        moveVelocity = Vector2.right * InputManager.MainHorizontal() * speedSwing;
         rb2d.AddForce(moveVelocity);
     }
 
     private void React()
     {
-
         distanciaMinima = distanciaMinimaNormal;
         if (playerGround && coffinGround)
         {
@@ -490,7 +429,6 @@ public class Jugador : MonoBehaviour {
         {
             rb2dc.constraints = RigidbodyConstraints2D.FreezeRotation;
             controlCoffin.ataudColgando = false;
-            //distancias minimas  
             distanciaMinima = distanciaMinimaEscalando;
         }
         else if (!playerGround && !coffinGround)
@@ -514,37 +452,10 @@ public class Jugador : MonoBehaviour {
             lineRenderer.SetPosition(i, pos);
         }
     }
-
-    public void Reset()
-    {
-        canMoveRight = true;
-        canMoveLeft = true;
-        moveSpeed = auxMoveSpeed;
-        if (coffinTaken)
-        {
-            moving = true;
-            moveSpeed = moveSpeedWithCoffin;
-        }
-    }
-
-    public void setMoveSpeed(float newMoveSpeed)
-    {
-        moveSpeed = newMoveSpeed;
-    }
-    
+         
     public void setCoffinGround(bool aux)
     {
         coffinGround = aux;
-    }
-
-    public void freezeLeft()
-    {
-        canMoveLeft = false;
-    }
-
-    public void freezeRight()
-    {
-        canMoveRight = false;
     }
 
     public void setMoving(bool aux)
