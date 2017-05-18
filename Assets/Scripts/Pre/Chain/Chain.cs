@@ -90,7 +90,7 @@ public class Chain : MonoBehaviour {
 
     void RenderLine()
     {
-        lr.numPositions= numPositions;
+        lr.positionCount= numPositions;
         int i;
         for (i =0; i < Links.Count; i++)
         {

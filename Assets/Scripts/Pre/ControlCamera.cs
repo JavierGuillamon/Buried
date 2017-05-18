@@ -11,6 +11,7 @@ public class ControlCamera : MonoBehaviour {
     public float verticalSmoothTime;
     public Vector2 focusAreaSize;
     public Color color = new Color(1, 0, 0, .5f);
+    public float distanceZ;
 
     FocusArea focusArea;
 
@@ -38,7 +39,7 @@ public class ControlCamera : MonoBehaviour {
         currentLookAheadX = Mathf.SmoothDamp(currentLookAheadX, targetLookAheadX, ref smoothLookVelocityX, lookSmoothTimeX);
 
         focusPosition += Vector2.right * currentLookAheadX;
-        transform.position = (Vector3)focusPosition + Vector3.forward * -10;
+        transform.position = (Vector3)focusPosition + Vector3.forward * distanceZ;
     }
 
     void OnDrawGizmos()
