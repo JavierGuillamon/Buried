@@ -4,17 +4,31 @@ using UnityEngine;
 
 public class AtaudDetectCollisionsBelow : MonoBehaviour {
     public Jugador jugadorScript;
+    public float margin;
+    public Collider2D col;
+    public LayerMask layerMask;
+    public AtaudDetectCollisionsBelow otherDetector;
 
-    void OnTriggerEnter2D()
+    private bool isHitting;
+    private bool detectCollisions=true;
+    void Update()
     {
-        jugadorScript.setCoffinGround(true);
+        if (Physics2D.Raycast(transform.position, -Vector2.up, margin, layerMask))
+        {
+            jugadorScript.setCoffinGround(true);
+                isHitting = true;
+            
+        }else
+        {
+            if(!otherDetector.getHitting())
+                jugadorScript.setCoffinGround(false);
+            isHitting = false;
+        }
     }
-    void OnTriggerExit2D()
+    
+
+    public bool getHitting()
     {
-        jugadorScript.setCoffinGround(false);
-    }
-    void OnTriggerStay2D()
-    {
-        jugadorScript.setCoffinGround(true);
+        return isHitting;
     }
 }

@@ -25,14 +25,14 @@ public class Ataud : MonoBehaviour {
     [SerializeField]
     float massInterpolationSpeed;
 
-    void Update () {
+    void Update () {/*
         Vector2 direction = Vector2.up;
        if (!coffinTaken)
         {
-            if (!player.coffinGround && rb2d.velocity.magnitude > 0)
+            if (!player.coffinGround && rb2d.velocity.magnitude > 0 && coffinThrown)
             {
                 direction = Vector3.Cross(rb2d.velocity, Vector3.forward);
-                coffinVisual.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.Cross(rb2d.velocity, Vector3.forward));
+                transform.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.Cross(rb2d.velocity, Vector3.forward));
             }
             else if (ataudColgando)
             {
@@ -56,8 +56,7 @@ public class Ataud : MonoBehaviour {
                 apuntar += Vector2.up * player.verticalCoffinThrowOffset;
             direction = Vector3.Cross(Vector3.forward, apuntar.normalized);
         }
-
-        coffinVisual.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.Lerp(coffinVisual.up, direction, Time.deltaTime*10) );
+       */
     }
 
     public void SetVelocity( Vector2 vel) {
@@ -73,5 +72,21 @@ public class Ataud : MonoBehaviour {
             g = Mathf.Lerp(g, 1, Time.deltaTime * massInterpolationSpeed);
         }
         rb2d.velocity = rb2d.velocity.x * Vector2.right + rb2d.velocity.y * Vector2.up - Vector2.up * g * Time.deltaTime;
-    }  
+    }
+
+    public void CheckThrown() {
+        coffinThrown = true;
+    }
+
+    public void CheckUnThrown()
+    {
+        coffinThrown = false;
+    }
+
+    [SerializeField]
+    float maxAllowedSpeed;
+
+    void OnCollisionStay2D(Collision2D coll) {
+        rb2d.velocity = rb2d.velocity.normalized * Mathf.Clamp(rb2d.velocity.magnitude,0, maxAllowedSpeed);
+    }
 }

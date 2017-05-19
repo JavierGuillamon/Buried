@@ -190,6 +190,10 @@ public class Jugador : MonoBehaviour {
         
         distanciaJugadorCoffin = Vector2.Distance(transform.position, coffin.position);
 
+        if (distanciaJugadorCoffin > maxDistanceAtaudCofin || coffinGround) {
+            coffinController.CheckUnThrown();
+        }
+
         CheckKinematics();
 
         if (InputManager.MainHorizontal() > 0)
@@ -222,8 +226,18 @@ public class Jugador : MonoBehaviour {
 
         React();
 
-        
+        if (tirandoDeMas && !sweatParticles.isPlaying)
+        {
+            sweatParticles.Play();
+        }
+        else if (!tirandoDeMas && sweatParticles.isPlaying) {
+            sweatParticles.Stop();
+        }
     }
+    [SerializeField]
+    AtaudDetectCollisionsBelow detectCollisionsBelowLft;
+    [SerializeField]
+    AtaudDetectCollisionsBelow detectCollisionsBelowRgt;
 
     private void TakeCoffin()
     {
@@ -257,10 +271,10 @@ public class Jugador : MonoBehaviour {
             {
                 tiempoRecogerCadena += speedTakeCoffin * Time.deltaTime;
                 tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena, 0, duracionRecogerCadena);
-                foreach (HingeJoint2D j in joints)
+                /*foreach (HingeJoint2D j in joints)
                 {
                     j.anchor = new Vector2(Mathf.Lerp(-achorDistance, achorDistance, tiempoRecogerCadena), 0);
-                }
+                }*/
             }
             taking = true;
         }else
@@ -268,19 +282,33 @@ public class Jugador : MonoBehaviour {
             taking = false;
             tiempoRecogerCadena -= speedTakeCoffin * Time.deltaTime;
             tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena, 0, duracionRecogerCadena);
-            foreach (HingeJoint2D j in joints)
+            /*foreach (HingeJoint2D j in joints)
             {
                 j.anchor = new Vector2(Mathf.Lerp(-achorDistance, achorDistance, tiempoRecogerCadena), 0);
-            }
+            }*/
 
         }
-        tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena , 0, duracionRecogerCadena * (1 - (distanciaJugadorCoffin - 0.5f) / maxDistanceCadena));
-       // Debug.Log("EV::"+ curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena));
+        tirandoDeMas = tiempoRecogerCadena >= duracionRecogerCadena * (1 - (distanciaJugadorCoffin - 1f) / maxDistanceCadena);
+        if(playerGround)
+            tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena , 0, duracionRecogerCadena * (1 - (distanciaJugadorCoffin - 1f) / maxDistanceCadena));
+       
+        // Debug.Log("EV::"+ curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena));
         //2 distancias minimas, una cuando sube y otra para cuando esta en el suelo, hacer clamp sobre clamp, si el jugador esta en el aire  el jugador en el suelo es 0, 2
         //Debug.Log("CLAMP::" + Mathf.Clamp(Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaJugadorCoffin - 0.05f, maxDistanceCadena), distanciaMinima, maxDistanceCadena)+" Aaa::"+(1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)));
-        jointPlayer.distance = Mathf.Clamp(Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaJugadorCoffin - 0.05f, maxDistanceCadena) ,distanciaMinima, maxDistanceCadena) ;
-        jointCoffin.distance = Mathf.Clamp(Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaJugadorCoffin - 0.05f, maxDistanceCadena), distanciaMinima, maxDistanceCadena);
+        
+        //jointPlayer.distance = Mathf.Clamp(Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaJugadorCoffin - 0.05f, maxDistanceCadena) ,distanciaMinima, maxDistanceCadena) ;
+        //jointCoffin.distance = Mathf.Clamp(Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaJugadorCoffin - 0.05f, maxDistanceCadena), distanciaMinima, maxDistanceCadena);
+
+        jointPlayer.distance = Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaMinima, maxDistanceCadena);
+        jointCoffin.distance = Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaMinima, maxDistanceCadena);
+
     }
+    [SerializeField]
+    bool tirandoDeMas = false;
+    [SerializeField]
+    ParticleSystem sweatParticles;
+    [SerializeField]
+    ParticleSystem launchParticles;
 
     void Update()
     {
@@ -347,7 +375,9 @@ public class Jugador : MonoBehaviour {
                             break;
                     }
                 }
-            }else if(rightPrevious)
+                rb2dc.transform.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.Cross(apuntar.normalized, Vector3.forward));
+            }
+            else if(rightPrevious)
             {
                 coffinTaken = false;
                 DoThrow();
@@ -359,9 +389,12 @@ public class Jugador : MonoBehaviour {
 
     private void DoThrow()
     {
+
         Vector2 apuntar = Apuntar();
         rb2dc.velocity = apuntar.normalized * throwCurve.Evaluate(Mathf.Clamp01(throwForce / throwCoffinTimeMax)) * throwMaxStrength;
         rb2dc.mass = maxMass;
+        launchParticles.Play();
+        coffinController.CheckThrown();
     }
 
     private void DisableTrajectory()
@@ -418,7 +451,6 @@ public class Jugador : MonoBehaviour {
         distanciaMinima = distanciaMinimaNormal;
         if (playerGround && coffinGround)
         {
-            rb2dc.constraints = RigidbodyConstraints2D.FreezeRotation;
             controlCoffin.ataudColgando = false;
         }
         else if (playerGround && !coffinGround)
@@ -427,7 +459,6 @@ public class Jugador : MonoBehaviour {
         }
         else if (!playerGround && coffinGround && this.transform.position.y < coffin.position.y)
         {
-            rb2dc.constraints = RigidbodyConstraints2D.FreezeRotation;
             controlCoffin.ataudColgando = false;
             distanciaMinima = distanciaMinimaEscalando;
         }

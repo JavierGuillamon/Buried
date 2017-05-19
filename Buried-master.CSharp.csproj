@@ -135,7 +135,10 @@
     <Compile Include="Assets\Scripts\Post\MovingPlatform.cs" />
     <Compile Include="Assets\Scripts\Post\PlatformDetector.cs" />
     <Compile Include="Assets\Scripts\Post\Scr_CamMov.cs" />
+    <Compile Include="Assets\Scripts\Post\scr_CamMovement.cs" />
+    <Compile Include="Assets\Scripts\Post\scr_CameraModifier.cs" />
     <Compile Include="Assets\Scripts\Post\scr_PlacaPresion.cs" />
+    <Compile Include="Assets\Scripts\Post\scr_TriggerMuerte.cs" />
     <Compile Include="Assets\Scripts\Pre\Agua\Agua.cs" />
     <Compile Include="Assets\Scripts\Pre\Anclado\DetectCollisionsBelow.cs" />
     <Compile Include="Assets\Scripts\Pre\Anclado\PlayerCoffinPositionManager.cs" />
