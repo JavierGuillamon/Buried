@@ -5,11 +5,14 @@ using UnityEngine;
 public class scr_PlacaPresion : MonoBehaviour {
 
     public Animator anim;
-    public string targetTag;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.tag == targetTag)
+        if (collision.tag == "Player")
+        {
+            anim.SetBool("Permiso", true);
+        }
+        if (collision.tag == "Coffin")
         {
             anim.SetBool("Permiso", true);
         }
@@ -17,7 +20,11 @@ public class scr_PlacaPresion : MonoBehaviour {
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.tag == targetTag)
+        if (collision.tag == "Player")
+        {
+            anim.SetBool("Permiso", false);
+        }
+        if (collision.tag == "Coffin")
         {
             anim.SetBool("Permiso", false);
         }

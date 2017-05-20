@@ -23,15 +23,20 @@ public class scr_CamMovement : MonoBehaviour {
     private Vector3 difference;
     private Vector3 focusPoint;
     private float currentAngle;
-    
 
-    void Start () {
+
+    void Start()
+    {
         totalZ = transform.position.z;
-	}
-	
-	void Update () {
+    }
+
+    Vector3 temposition;
+
+    void Update()
+    {
         focusPoint = Vector3.Lerp(player.position, coffin.position, percent);
-        transform.position = Vector3.Lerp(transform.position, new Vector3(focusPoint.x + offsetX, focusPoint.y + offsetY, totalZ + offsetZ), Time.deltaTime * followSpeed);
+        temposition = Vector3.Lerp(temposition, new Vector3(focusPoint.x + offsetX, focusPoint.y + offsetY, totalZ + offsetZ), Time.deltaTime * followSpeed);
+        transform.position = Vector3.Lerp(transform.position, temposition, Time.deltaTime * followSpeed);
         Quaternion target = Quaternion.Euler(angleX, 0, 0);
         transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime * rotationSpeed);
     }

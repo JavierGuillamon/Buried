@@ -9,21 +9,26 @@ public class scr_CameraModifier : MonoBehaviour {
     public float newOffsetY;
     public float newOffsetZ;
     public float newAngle;
+    public float newFollowSpeed;
+    public float newRotationSpeed;
 
     private scr_CamMovement camScr;
-    private bool permiso;
     private float oldOffsetX;
     private float oldOffsetY;
     private float oldOffsetZ;
     private float oldAngle;
-    
-    void Start () {
+    private float oldFollowSpeed;
+    private float oldRotationSpeed;
+
+    void Start()
+    {
         camScr = gameCamera.GetComponent<scr_CamMovement>();
-        permiso = false;
         oldOffsetX = camScr.offsetX;
         oldOffsetY = camScr.offsetY;
         oldOffsetZ = camScr.offsetZ;
         oldAngle = gameCamera.transform.rotation.z;
+        oldFollowSpeed = camScr.followSpeed;
+        oldRotationSpeed = camScr.rotationSpeed;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -34,6 +39,8 @@ public class scr_CameraModifier : MonoBehaviour {
             camScr.offsetY = newOffsetY;
             camScr.offsetZ = newOffsetZ;
             camScr.angleX = newAngle;
+            camScr.followSpeed = newFollowSpeed;
+            camScr.rotationSpeed = newRotationSpeed;
         }
     }
 
@@ -41,11 +48,12 @@ public class scr_CameraModifier : MonoBehaviour {
     {
         if (collision.tag == "Player")
         {
-            permiso = false;
             camScr.offsetX = oldOffsetX;
             camScr.offsetY = oldOffsetY;
             camScr.offsetZ = oldOffsetZ;
             camScr.angleX = oldAngle;
+            camScr.followSpeed = oldFollowSpeed;
+            camScr.rotationSpeed = oldRotationSpeed;
         }
     }
 }

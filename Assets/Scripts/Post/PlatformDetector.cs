@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlatformDetector : MonoBehaviour {
+public class PlatformDetector : MonoBehaviour
+{
     [SerializeField]
     Transform movingPlatform;
-    void OnCollisionEnter2D(Collision2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.transform.tag!="chain")
-            other.gameObject.transform.parent = movingPlatform.transform;
+        if (other.gameObject.tag == "Player" || other.gameObject.tag == "Coffin")
+            other.transform.parent = movingPlatform.transform;
     }
-    void OnCollisionExit2D(Collision2D other)
+    void OnTriggerExit2D(Collider2D other)
     {
-        if (other.transform.tag != "chain")
-            other.gameObject.transform.parent = null;
+        if (other.gameObject.tag == "Player" || other.gameObject.tag == "Coffin")
+            other.transform.parent = null;
     }
 }

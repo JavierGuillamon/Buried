@@ -80,6 +80,10 @@ public class Jugador : MonoBehaviour {
     [SerializeField]
     Collider2D coffinCollider;
     [SerializeField]
+    Collider2D coffinCollider1;
+    [SerializeField]
+    Collider2D coffinCollider2;
+    [SerializeField]
     Transform coffingTakenPos;
 
     //Chain
@@ -213,6 +217,8 @@ public class Jugador : MonoBehaviour {
             coffin.position = coffingTakenPos.position;
             tiempoRecogerCadena = 0;
             coffinCollider.enabled = false;
+            coffinCollider1.enabled = false;
+            coffinCollider2.enabled = false;
             if (playerGround)
                 CheckThrowCoffin();
             else
@@ -220,6 +226,8 @@ public class Jugador : MonoBehaviour {
         }
         else {
             coffinCollider.enabled = true;
+            coffinCollider1.enabled = true;
+            coffinCollider2.enabled = true;
             coffinController.SetFreeVelocity();
             TakeCoffin();
         }
@@ -309,9 +317,29 @@ public class Jugador : MonoBehaviour {
     ParticleSystem sweatParticles;
     [SerializeField]
     ParticleSystem launchParticles;
+    [SerializeField]
+    ParticleSystem jumpParticles;
+    [SerializeField]
+    ParticleSystem runParticles;
 
     void Update()
     {
+
+        // Juan was here
+        if (Input.GetKeyDown(KeyCode.W) && playerGround && coffinTaken == false)
+        {
+            jumpParticles.Play();
+        }
+        if (rb2d.velocity.x != 0 && playerGround)
+        {
+            runParticles.Play();
+        }
+        else
+        {
+            runParticles.Stop();
+        }
+        //Sorry for this
+
         input = new Vector2(InputManager.MainHorizontal(), System.Convert.ToInt32(InputManager.AButton()));
         ImprimirCadena();
         if (throwing)
