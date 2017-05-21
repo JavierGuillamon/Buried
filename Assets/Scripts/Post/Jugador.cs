@@ -135,6 +135,22 @@ public class Jugador : MonoBehaviour {
     [SerializeField]
     float distanciaMinimaEscalando = 0;
 
+    [SerializeField]
+    AtaudDetectCollisionsBelow detectCollisionsBelowLft;
+    [SerializeField]
+    AtaudDetectCollisionsBelow detectCollisionsBelowRgt;
+
+    [SerializeField]
+    bool tirandoDeMas = false;
+    [SerializeField]
+    ParticleSystem sweatParticles;
+    [SerializeField]
+    ParticleSystem launchParticles;
+    [SerializeField]
+    ParticleSystem jumpParticles;
+    [SerializeField]
+    ParticleSystem runParticles;
+
     void Start () {
         rb2d = GetComponent<Rigidbody2D>();
         moving = true;
@@ -242,11 +258,7 @@ public class Jugador : MonoBehaviour {
             sweatParticles.Stop();
         }
     }
-    [SerializeField]
-    AtaudDetectCollisionsBelow detectCollisionsBelowLft;
-    [SerializeField]
-    AtaudDetectCollisionsBelow detectCollisionsBelowRgt;
-
+    
     private void TakeCoffin()
     {
         leftPrevious = left;
@@ -255,6 +267,7 @@ public class Jugador : MonoBehaviour {
 
         if (leftTick)
         {
+            RedistribuirCadena(true);
             if (distanciaJugadorCoffin > distanceToTakeCoffin)
             {
                 tiempoRecogerCadena = duracionRecogerCadena * (1 - distanciaJugadorCoffin / maxDistanceCadena);
@@ -268,6 +281,7 @@ public class Jugador : MonoBehaviour {
                 }
                 else
                 {
+                    //RedistribuirCadena(false);
                     coffinTaken = true;
                 }
             }
@@ -275,8 +289,10 @@ public class Jugador : MonoBehaviour {
 
         if (left)
         {
+            RedistribuirCadena(true);
             if (distanciaJugadorCoffin > distanceToTakeCoffin || !playerGround)
             {
+                //RedistribuirCadena(false);
                 tiempoRecogerCadena += speedTakeCoffin * Time.deltaTime;
                 tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena, 0, duracionRecogerCadena);
                 /*foreach (HingeJoint2D j in joints)
@@ -287,6 +303,7 @@ public class Jugador : MonoBehaviour {
             taking = true;
         }else
         {
+            RedistribuirCadena(false);
             taking = false;
             tiempoRecogerCadena -= speedTakeCoffin * Time.deltaTime;
             tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena, 0, duracionRecogerCadena);
@@ -311,20 +328,48 @@ public class Jugador : MonoBehaviour {
         jointCoffin.distance = Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaMinima, maxDistanceCadena);
 
     }
+
+
     [SerializeField]
-    bool tirandoDeMas = false;
-    [SerializeField]
-    ParticleSystem sweatParticles;
-    [SerializeField]
-    ParticleSystem launchParticles;
-    [SerializeField]
-    ParticleSystem jumpParticles;
-    [SerializeField]
-    ParticleSystem runParticles;
+    List<GameObject> linksBloqueados;
+    bool tick=false;
+    private void RedistribuirCadena(bool recoger)
+    {
+        if (recoger)
+        {
+            while (sumaDistanciasJoint > distanciaJugadorCoffin)
+            {
+                linksBloqueados.Add(links[0]);
+                linksBloqueados[linksBloqueados.Count-1].transform.position = Vector2.MoveTowards(linksBloqueados[linksBloqueados.Count-1].transform.position, transform.position,10);
+                links.RemoveAt(0);
+                ImprimirCadena();
+                tick = true;             
+            }
+        }
+        else
+        {
+            if (tick)
+            {
+                while (links.Count > 0)
+                {
+                    linksBloqueados.Add(links[0]);
+                    links.RemoveAt(0);
+                }
+                tick = false;
+            }
+            for (int i = 0; i < linksBloqueados.Count; i++)
+            {
+                links.Add(linksBloqueados[0]);
+               // links.Insert(int.Parse(linksBloqueados[0].name), linksBloqueados[0]);
+                linksBloqueados.RemoveAt(0);
+                links.Sort(delegate (GameObject i1, GameObject i2) { return i1.name.CompareTo(i2.name); });
+                ImprimirCadena();
+            }
+        }
+    }
 
     void Update()
     {
-
         // Juan was here
         if (Input.GetKeyDown(KeyCode.W) && playerGround && coffinTaken == false)
         {
@@ -498,8 +543,10 @@ public class Jugador : MonoBehaviour {
         }
     }
 
+    float sumaDistanciasJoint;
     private void ImprimirCadena()
     {
+        sumaDistanciasJoint = 0;
         lineRenderer.positionCount=links.Count;
         for (int i = 0; i < links.Count; i++)
         {
@@ -507,9 +554,12 @@ public class Jugador : MonoBehaviour {
             if (i == links.Count - 1) pos= transform.position;
             else if (i == 0)pos=coffin.position;
             else pos=links[i].transform.position;
+            sumaDistanciasJoint += links[i].GetComponent<DistanceJoint2D>().distance;
+            
             pos.z -= posCadenaZ;
             lineRenderer.SetPosition(i, pos);
         }
+        //Debug.Log("sumDist" + sumaDistanciasJoint+ " distanciaJugadorCoffin:"+ distanciaJugadorCoffin);
     }
          
     public void setCoffinGround(bool aux)
