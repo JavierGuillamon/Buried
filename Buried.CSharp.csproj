@@ -132,6 +132,9 @@
     <Compile Include="Assets\Scripts\Post\AtaudDetectCollisionsBelow.cs" />
     <Compile Include="Assets\Scripts\Post\Interpolator.cs" />
     <Compile Include="Assets\Scripts\Post\Jugador.cs" />
+    <Compile Include="Assets\Scripts\Post\LevelEditor\ColorToPrefab.cs" />
+    <Compile Include="Assets\Scripts\Post\LevelEditor\LevelGenerator.cs" />
+    <Compile Include="Assets\Scripts\Post\LevelEditor\LevelLoader.cs" />
     <Compile Include="Assets\Scripts\Post\MovingPlatform.cs" />
     <Compile Include="Assets\Scripts\Post\PlatformDetector.cs" />
     <Compile Include="Assets\Scripts\Post\Scr_CamMov.cs" />

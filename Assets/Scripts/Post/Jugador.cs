@@ -340,7 +340,7 @@ public class Jugador : MonoBehaviour {
             while (sumaDistanciasJoint > distanciaJugadorCoffin)
             {
                 linksBloqueados.Add(links[0]);
-                linksBloqueados[linksBloqueados.Count-1].transform.position = Vector2.MoveTowards(linksBloqueados[linksBloqueados.Count-1].transform.position, transform.position,10);
+                linksBloqueados[linksBloqueados.Count - 1].transform.position = transform.position;
                 links.RemoveAt(0);
                 ImprimirCadena();
                 tick = true;             
