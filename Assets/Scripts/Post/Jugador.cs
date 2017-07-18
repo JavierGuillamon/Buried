@@ -98,7 +98,8 @@ public class Jugador : MonoBehaviour {
     [SerializeField]
     float achorDistance;
     [SerializeField]
-    List<GameObject> links;
+    List<GameObject> Links;
+    Stack<GameObject> links = new Stack<GameObject>();
     [SerializeField]
     LineRenderer lineRenderer;
     [SerializeField]
@@ -151,6 +152,8 @@ public class Jugador : MonoBehaviour {
     [SerializeField]
     ParticleSystem runParticles;
 
+    DistanceJoint2D firsjoint;
+
     void Start () {
         rb2d = GetComponent<Rigidbody2D>();
         moving = true;
@@ -158,6 +161,10 @@ public class Jugador : MonoBehaviour {
         for (int i = 0; i < numTrajectoryPoints; i++)
             trajectoryPoints.Add(Instantiate(trajectoryPrefeb));
         DisableTrajectory();
+        foreach (GameObject l in Links) {
+            links.Push(l);
+        }
+        firsjoint = links.Pop().GetComponent<DistanceJoint2D>();
     }
 
     void CheckKinematics()
@@ -331,40 +338,48 @@ public class Jugador : MonoBehaviour {
 
 
     [SerializeField]
-    List<GameObject> linksBloqueados;
+    Stack<GameObject> linksBloqueados = new Stack<GameObject>();
     bool tick=false;
+    public float forceToTakeLink = 15;
+
     private void RedistribuirCadena(bool recoger)
     {
         if (recoger)
         {
-            while (sumaDistanciasJoint > distanciaJugadorCoffin)
+            //hacer que tire tambien el ataud
+            /*float maximumForce = 0;
+            foreach (GameObject l in links) {
+                if (l.GetComponent<DistanceJoint2D>().reactionForce.magnitude > maximumForce) {
+                    maximumForce = l.GetComponent<DistanceJoint2D>().reactionForce.magnitude;
+                }
+            }
+            Debug.Log(maximumForce);*/
+            GameObject toTest = links.Pop();
+            if (links.Count > 0 && Vector2.Distance(toTest.transform.position, transform.position) < 2 && Vector2.Distance(toTest.transform.position, links.Peek().transform.position) < 2)
             {
-                linksBloqueados.Add(links[0]);
-                linksBloqueados[linksBloqueados.Count - 1].transform.position = transform.position;
-                links.RemoveAt(0);
+                linksBloqueados.Push(toTest);
+                linksBloqueados.Peek().transform.position = transform.position ;
+                linksBloqueados.Peek().transform.SetParent(this.transform);
+                linksBloqueados.Peek().GetComponent<DistanceJoint2D>().connectedBody = null;
+               firsjoint.connectedBody = links.Peek().GetComponent<Rigidbody2D>();
                 ImprimirCadena();
-                tick = true;             
+            }
+            else {
+                links.Push(toTest);
             }
         }
         else
         {
-            if (tick)
-            {
-                while (links.Count > 0)
+                while (linksBloqueados.Count > 0)
                 {
-                    linksBloqueados.Add(links[0]);
-                    links.RemoveAt(0);
-                }
-                tick = false;
+                    linksBloqueados.Peek().GetComponent<DistanceJoint2D>().connectedBody = links.Peek().GetComponent<Rigidbody2D>();
+                    links.Push(linksBloqueados.Pop());
+                    links.Peek().transform.SetParent(null);
+                    links.Peek().transform.position = transform.position + Vector3.up * 1.5f;
+                    links.Peek().GetComponent<DistanceJoint2D>().connectedBody = firsjoint.connectedBody;
+                    firsjoint.connectedBody = links.Peek().GetComponent<Rigidbody2D>();
             }
-            for (int i = 0; i < linksBloqueados.Count; i++)
-            {
-                links.Add(linksBloqueados[0]);
-               // links.Insert(int.Parse(linksBloqueados[0].name), linksBloqueados[0]);
-                linksBloqueados.RemoveAt(0);
-                links.Sort(delegate (GameObject i1, GameObject i2) { return i1.name.CompareTo(i2.name); });
-                ImprimirCadena();
-            }
+            ImprimirCadena();
         }
     }
 
@@ -548,16 +563,18 @@ public class Jugador : MonoBehaviour {
     {
         sumaDistanciasJoint = 0;
         lineRenderer.positionCount=links.Count;
-        for (int i = 0; i < links.Count; i++)
+        int i = 0;
+        foreach (GameObject l in links)
         {
             Vector3 pos;
-            if (i == links.Count - 1) pos= transform.position;
-            else if (i == 0)pos=coffin.position;
-            else pos=links[i].transform.position;
-            sumaDistanciasJoint += links[i].GetComponent<DistanceJoint2D>().distance;
+            if (i == 0) pos= transform.position;
+            else if (i == links.Count - 1)pos=coffin.position;
+            else pos=l.transform.position;
+            sumaDistanciasJoint += l.GetComponent<DistanceJoint2D>().distance;
             
             pos.z -= posCadenaZ;
             lineRenderer.SetPosition(i, pos);
+            i++;
         }
         //Debug.Log("sumDist" + sumaDistanciasJoint+ " distanciaJugadorCoffin:"+ distanciaJugadorCoffin);
     }
