@@ -145,7 +145,6 @@
     <Compile Include="Assets\Scripts\Pre\Agua\Agua.cs" />
     <Compile Include="Assets\Scripts\Pre\Anclado\DetectCollisionsBelow.cs" />
     <Compile Include="Assets\Scripts\Pre\Anclado\PlayerCoffinPositionManager.cs" />
-    <Compile Include="Assets\Scripts\Pre\Chain\Chain.cs" />
     <Compile Include="Assets\Scripts\Pre\Chain\ControlChainSpeed.cs" />
     <Compile Include="Assets\Scripts\Pre\ControlCamera.cs" />
     <Compile Include="Assets\Scripts\Pre\ControlManager.cs" />

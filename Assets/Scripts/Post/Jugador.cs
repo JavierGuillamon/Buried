@@ -100,6 +100,9 @@ public class Jugador : MonoBehaviour {
     [SerializeField]
     List<GameObject> Links;
     Stack<GameObject> links = new Stack<GameObject>();
+    Stack<GameObject> linksCoffin = new Stack<GameObject>();
+
+
     [SerializeField]
     LineRenderer lineRenderer;
     [SerializeField]
@@ -152,7 +155,9 @@ public class Jugador : MonoBehaviour {
     [SerializeField]
     ParticleSystem runParticles;
 
-    DistanceJoint2D firsjoint;
+    public DistanceJoint2D firsjoint;
+    public DistanceJoint2D firsjointCoffin;
+    
 
     void Start () {
         rb2d = GetComponent<Rigidbody2D>();
@@ -161,10 +166,21 @@ public class Jugador : MonoBehaviour {
         for (int i = 0; i < numTrajectoryPoints; i++)
             trajectoryPoints.Add(Instantiate(trajectoryPrefeb));
         DisableTrajectory();
-        foreach (GameObject l in Links) {
+        foreach (GameObject l in Links)
+        {
             links.Push(l);
         }
+       /* for(int i = 0; i <= Links.Count / 2; i++)
+        {
+            links.Push(Links[i]);
+        }*/
+
+        for(int i = Links.Count-1; i >= Links.Count; i--)
+        {
+            linksCoffin.Push(Links[i]);
+        }
         firsjoint = links.Pop().GetComponent<DistanceJoint2D>();
+        //firsjointCoffin = linksCoffin.Pop().GetComponent<DistanceJoint2D>();
     }
 
     void CheckKinematics()
@@ -174,6 +190,7 @@ public class Jugador : MonoBehaviour {
 
         if (coffinTaken)
         {
+            Debug.Log("1");
             jointCoffin.connectedBody = kinematicBody;
             jointPlayer.connectedBody = kinematicBodyPlayer;
 
@@ -181,17 +198,20 @@ public class Jugador : MonoBehaviour {
         {
             if (taking)
             {
+                Debug.Log("2");
                 jointCoffin.connectedBody = rb2dc;
                 jointPlayer.connectedBody = kinematicBodyPlayer;
             }
             else
             {
+                Debug.Log("3");
                 jointCoffin.connectedBody = rb2dc;
                 jointPlayer.connectedBody = kinematicBodyPlayer;
             }
         }
         else if (!this.playerGround && this.coffinGround)
         {
+            Debug.Log("4");
             jointCoffin.connectedBody = kinematicBody;
             jointPlayer.connectedBody = this.rb2d;
             if (Vector2.Distance(rb2dc.position, this.rb2d.position) > massChangeDistance)
@@ -201,11 +221,13 @@ public class Jugador : MonoBehaviour {
         }
         else if (this.playerGround && !this.coffinGround)
         {
+            Debug.Log("5");
             jointCoffin.connectedBody = rb2dc;
             jointPlayer.connectedBody = kinematicBodyPlayer;
         }
         else
         {
+            Debug.Log("6");
             jointCoffin.connectedBody = rb2dc;
             jointPlayer.connectedBody = kinematicBodyPlayer;
         }
@@ -265,7 +287,9 @@ public class Jugador : MonoBehaviour {
             sweatParticles.Stop();
         }
     }
-    
+
+    float maxDistanceCadenaAux;
+    bool canResetDistance = true;
     private void TakeCoffin()
     {
         leftPrevious = left;
@@ -274,10 +298,14 @@ public class Jugador : MonoBehaviour {
 
         if (leftTick)
         {
-            RedistribuirCadena(true);
+               RedistribuirCadena(true);
             if (distanciaJugadorCoffin > distanceToTakeCoffin)
             {
-                tiempoRecogerCadena = duracionRecogerCadena * (1 - distanciaJugadorCoffin / maxDistanceCadena);
+                if (isInTension())
+                {
+                    Debug.Log("A");
+                    tiempoRecogerCadena = duracionRecogerCadena * (1 - distanciaJugadorCoffin / maxDistanceCadena);
+                }
             }
             else if(playerGround)
             {
@@ -296,22 +324,32 @@ public class Jugador : MonoBehaviour {
 
         if (left)
         {
-            RedistribuirCadena(true);
+               RedistribuirCadena(true);
             if (distanciaJugadorCoffin > distanceToTakeCoffin || !playerGround)
             {
-                //RedistribuirCadena(false);
-                tiempoRecogerCadena += speedTakeCoffin * Time.deltaTime;
-                tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena, 0, duracionRecogerCadena);
-                /*foreach (HingeJoint2D j in joints)
+               if (isInTension())
                 {
-                    j.anchor = new Vector2(Mathf.Lerp(-achorDistance, achorDistance, tiempoRecogerCadena), 0);
-                }*/
+                    Debug.Log("B");
+                    /*if (canResetDistance)
+                    {
+                        canResetDistance = false;
+                        maxDistanceCadenaAux = maxDistanceCadena;
+                        maxDistanceCadena = distanciaJugadorCoffin;
+                    }*/
+                    tiempoRecogerCadena += speedTakeCoffin * Time.deltaTime;
+                    tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena, 0, duracionRecogerCadena);
+                }
             }
             taking = true;
         }else
         {
             RedistribuirCadena(false);
             taking = false;
+           /* if (!canResetDistance)
+            {
+                canResetDistance = true;
+                maxDistanceCadena = maxDistanceCadenaAux;
+            }*/
             tiempoRecogerCadena -= speedTakeCoffin * Time.deltaTime;
             tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena, 0, duracionRecogerCadena);
             /*foreach (HingeJoint2D j in joints)
@@ -337,23 +375,48 @@ public class Jugador : MonoBehaviour {
     }
 
 
+    private bool isInTension()
+    {
+        if(this.transform.position.x > coffin.position.x)
+        {
+            foreach(GameObject l in links)
+            {
+                if (l.transform.position.x < coffin.position.x-0.5f)
+                    return false;
+            }
+        }
+        else
+        {
+            foreach (GameObject l in links)
+            {
+                if (l.transform.position.x > coffin.position.x+0.5f)
+                    return false;
+            }
+        }
+        return true;
+    }
+
     [SerializeField]
     Stack<GameObject> linksBloqueados = new Stack<GameObject>();
+    [SerializeField]
+    Stack<GameObject> linksBloqueadosCoffin = new Stack<GameObject>();
     bool tick=false;
     public float forceToTakeLink = 15;
-
+    [SerializeField]
+    Transform ChainParent;
+    ArrayList list = new ArrayList();
     private void RedistribuirCadena(bool recoger)
     {
         if (recoger)
         {
             //hacer que tire tambien el ataud
-            /*float maximumForce = 0;
-            foreach (GameObject l in links) {
-                if (l.GetComponent<DistanceJoint2D>().reactionForce.magnitude > maximumForce) {
-                    maximumForce = l.GetComponent<DistanceJoint2D>().reactionForce.magnitude;
-                }
-            }
-            Debug.Log(maximumForce);*/
+            //float maximumForce = 0;
+           // foreach (GameObject l in links) {
+             //   if (l.GetComponent<DistanceJoint2D>().reactionForce.magnitude > maximumForce) {
+            //        maximumForce = l.GetComponent<DistanceJoint2D>().reactionForce.magnitude;
+           //     }
+          //  }
+           // Debug.Log(maximumForce);
             GameObject toTest = links.Pop();
             if (links.Count > 0 && Vector2.Distance(toTest.transform.position, transform.position) < 2 && Vector2.Distance(toTest.transform.position, links.Peek().transform.position) < 2)
             {
@@ -361,27 +424,83 @@ public class Jugador : MonoBehaviour {
                 linksBloqueados.Peek().transform.position = transform.position ;
                 linksBloqueados.Peek().transform.SetParent(this.transform);
                 linksBloqueados.Peek().GetComponent<DistanceJoint2D>().connectedBody = null;
-               firsjoint.connectedBody = links.Peek().GetComponent<Rigidbody2D>();
-                ImprimirCadena();
+                firsjoint.connectedBody = links.Peek().GetComponent<Rigidbody2D>();
             }
             else {
                 links.Push(toTest);
             }
+
+            //Para el ataud
+           /* GameObject toTest1 = linksCoffin.Pop();
+            if(linksCoffin.Count > 0 && Vector2.Distance(toTest1.transform.position, coffin.position)<2 && Vector2.Distance(toTest1.transform.position, linksCoffin.Peek().transform.position) < 2)
+            {
+                linksBloqueadosCoffin.Push(toTest1);
+                linksBloqueadosCoffin.Peek().transform.position = transform.position;
+                linksBloqueadosCoffin.Peek().transform.SetParent(this.transform);
+                linksBloqueadosCoffin.Peek().GetComponent<DistanceJoint2D>().connectedBody = null;
+
+                //firsjointCoffin.connectedBody = links.Peek().GetComponent<Rigidbody2D>();
+                linksCoffin.Peek().GetComponent<DistanceJoint2D>().connectedBody = firsjointCoffin.connectedBody;
+            }
+            else
+            {
+                linksCoffin.Push(toTest);
+            }*/
+
+            ImprimirCadena();
         }
         else
         {
-                while (linksBloqueados.Count > 0)
-                {
-                    linksBloqueados.Peek().GetComponent<DistanceJoint2D>().connectedBody = links.Peek().GetComponent<Rigidbody2D>();
-                    links.Push(linksBloqueados.Pop());
-                    links.Peek().transform.SetParent(null);
-                    links.Peek().transform.position = transform.position + Vector3.up * 1.5f;
-                    links.Peek().GetComponent<DistanceJoint2D>().connectedBody = firsjoint.connectedBody;
-                    firsjoint.connectedBody = links.Peek().GetComponent<Rigidbody2D>();
-            }
+           while (linksBloqueados.Count > 0)
+            {
+                linksBloqueados.Peek().GetComponent<DistanceJoint2D>().connectedBody = links.Peek().GetComponent<Rigidbody2D>();
+                links.Push(linksBloqueados.Pop());
+                links.Peek().transform.SetParent(ChainParent);
+                links.Peek().transform.position = transform.position + Vector3.up * 1.5f;
+                links.Peek().GetComponent<DistanceJoint2D>().connectedBody = firsjoint.connectedBody;
+                firsjoint.connectedBody = links.Peek().GetComponent<Rigidbody2D>();
+            }            
+            /*while (linksBloqueadosCoffin.Count > 0)
+            {
+                linksBloqueadosCoffin.Peek().GetComponent<DistanceJoint2D>().connectedBody = linksCoffin.Peek().GetComponent<Rigidbody2D>();
+                linksCoffin.Peek().GetComponent<DistanceJoint2D>().connectedBody = linksBloqueadosCoffin.Peek().GetComponent<Rigidbody2D>();
+                linksCoffin.Push(linksBloqueados.Pop());
+                linksCoffin.Peek().transform.SetParent(ChainParent);
+                linksCoffin.Peek().transform.position = transform.position + Vector3.up * 1.5f;
+
+            }*/
             ImprimirCadena();
         }
     }
+    /*[UnityEditor.CustomEditor(typeof(Jugador))]
+    public class StackPreview : UnityEditor.Editor
+    {
+        public override void OnInspectorGUI()
+        {
+
+            // get the target script as TestScript and get the stack from it
+            var ts = (Jugador)target;
+            var stack = ts.links;
+            var stack2 = ts.linksCoffin;
+            // some styling for the header, this is optional
+            var bold = new GUIStyle();
+            bold.fontStyle = FontStyle.Bold;
+            GUILayout.Label("Items in my stack", bold);
+
+            // add a label for each item, you can add more properties
+            // you can even access components inside each item and display them
+            // for example if every item had a sprite we could easily show it 
+            foreach (var item in stack)
+            {
+                GUILayout.Label(item.name);
+            }
+            GUILayout.Label("Items in my stack coffin", bold);
+            foreach (var item1 in stack2)
+            {
+                GUILayout.Label(item1.name);
+            }
+        }
+    }*/
 
     void Update()
     {
@@ -557,11 +676,9 @@ public class Jugador : MonoBehaviour {
             moving = true;
         }
     }
-
-    float sumaDistanciasJoint;
     private void ImprimirCadena()
     {
-        sumaDistanciasJoint = 0;
+        //Debug.Log("Suma: " +links.Count+" "+linksCoffin.Count+"::"+(links.Count+linksCoffin.Count));
         lineRenderer.positionCount=links.Count;
         int i = 0;
         foreach (GameObject l in links)
@@ -570,13 +687,21 @@ public class Jugador : MonoBehaviour {
             if (i == 0) pos= transform.position;
             else if (i == links.Count - 1)pos=coffin.position;
             else pos=l.transform.position;
-            sumaDistanciasJoint += l.GetComponent<DistanceJoint2D>().distance;
             
             pos.z -= posCadenaZ;
             lineRenderer.SetPosition(i, pos);
             i++;
         }
-        //Debug.Log("sumDist" + sumaDistanciasJoint+ " distanciaJugadorCoffin:"+ distanciaJugadorCoffin);
+        /*foreach(GameObject l in linksCoffin)
+        {
+            Vector3 pos;
+            if (i == 0) pos = transform.position;
+            else if (i == links.Count - 1) pos = coffin.position;
+            else pos = l.transform.position;
+            pos.z -= posCadenaZ;
+            lineRenderer.SetPosition(i, pos);
+            i++;
+        }*/
     }
          
     public void setCoffinGround(bool aux)

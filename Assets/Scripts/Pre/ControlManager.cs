@@ -9,7 +9,7 @@ public class ControlManager : MonoBehaviour {
     public bool swing;
     public bool climb;
     public bool resize;
-    public Chain chainScript;
+    //public Chain chainScript;
     public Rigidbody2D rb2d;
 
     public bool coffinInPlace=false;
@@ -17,10 +17,10 @@ public class ControlManager : MonoBehaviour {
 	
 	void Update () {
         //moving
-        if(resize)
-            chainScript.setResize(true);
-        else
-            chainScript.setResize(false);
+       // if(resize)
+            //chainScript.setResize(true);
+        //else
+            //chainScript.setResize(false);
         if (moving)
         {
             //chainScript.setResize(true);

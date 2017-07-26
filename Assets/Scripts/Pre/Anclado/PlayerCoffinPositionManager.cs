@@ -17,7 +17,7 @@ public class PlayerCoffinPositionManager : MonoBehaviour {
     private Player pj;
 
     public ControlManager control;
-    public Chain chainScript;
+    //public Chain chainScript;
     public Rigidbody2D rb2d;
     public Rigidbody2D rb2dc;
 
