@@ -137,7 +137,7 @@ public class Jugador : MonoBehaviour {
     [SerializeField]
     float distanciaMinimaNormal = 2;
     [SerializeField]
-    float distanciaMinimaEscalando = 0;
+    float distanciaMinimaEscalando = 2;
 
     [SerializeField]
     AtaudDetectCollisionsBelow detectCollisionsBelowLft;
@@ -190,7 +190,6 @@ public class Jugador : MonoBehaviour {
 
         if (coffinTaken)
         {
-            Debug.Log("1");
             jointCoffin.connectedBody = kinematicBody;
             jointPlayer.connectedBody = kinematicBodyPlayer;
 
@@ -198,20 +197,17 @@ public class Jugador : MonoBehaviour {
         {
             if (taking)
             {
-                Debug.Log("2");
                 jointCoffin.connectedBody = rb2dc;
                 jointPlayer.connectedBody = kinematicBodyPlayer;
             }
             else
             {
-                Debug.Log("3");
                 jointCoffin.connectedBody = rb2dc;
                 jointPlayer.connectedBody = kinematicBodyPlayer;
             }
         }
         else if (!this.playerGround && this.coffinGround)
         {
-            Debug.Log("4");
             jointCoffin.connectedBody = kinematicBody;
             jointPlayer.connectedBody = this.rb2d;
             if (Vector2.Distance(rb2dc.position, this.rb2d.position) > massChangeDistance)
@@ -221,13 +217,11 @@ public class Jugador : MonoBehaviour {
         }
         else if (this.playerGround && !this.coffinGround)
         {
-            Debug.Log("5");
             jointCoffin.connectedBody = rb2dc;
             jointPlayer.connectedBody = kinematicBodyPlayer;
         }
         else
         {
-            Debug.Log("6");
             jointCoffin.connectedBody = rb2dc;
             jointPlayer.connectedBody = kinematicBodyPlayer;
         }
@@ -292,18 +286,19 @@ public class Jugador : MonoBehaviour {
     bool canResetDistance = true;
     private void TakeCoffin()
     {
+        Debug.Log("TRC: " + tiempoRecogerCadena + " DRC: "+duracionRecogerCadena+" DJC: "+distanciaJugadorCoffin+" MDC: "+maxDistanceCadena);
         leftPrevious = left;
         left = InputManager.LeftTrigger();
         bool leftTick = !leftPrevious && left;
 
         if (leftTick)
         {
-               RedistribuirCadena(true);
+            RedistribuirCadena(true);
+            tiempoRecogerCadena = duracionRecogerCadena * (1 - distanciaJugadorCoffin / maxDistanceCadena);
             if (distanciaJugadorCoffin > distanceToTakeCoffin)
             {
                 if (isInTension())
                 {
-                    Debug.Log("A");
                     tiempoRecogerCadena = duracionRecogerCadena * (1 - distanciaJugadorCoffin / maxDistanceCadena);
                 }
             }
@@ -329,7 +324,6 @@ public class Jugador : MonoBehaviour {
             {
                if (isInTension())
                 {
-                    Debug.Log("B");
                     /*if (canResetDistance)
                     {
                         canResetDistance = false;
@@ -359,8 +353,8 @@ public class Jugador : MonoBehaviour {
 
         }
         tirandoDeMas = tiempoRecogerCadena >= duracionRecogerCadena * (1 - (distanciaJugadorCoffin - 1f) / maxDistanceCadena);
-        if(playerGround)
-            tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena , 0, duracionRecogerCadena * (1 - (distanciaJugadorCoffin - 1f) / maxDistanceCadena));
+        /*if(playerGround)
+            tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena , 0, duracionRecogerCadena * (1 - (distanciaJugadorCoffin - 1f) / maxDistanceCadena));*/
        
         // Debug.Log("EV::"+ curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena));
         //2 distancias minimas, una cuando sube y otra para cuando esta en el suelo, hacer clamp sobre clamp, si el jugador esta en el aire  el jugador en el suelo es 0, 2
@@ -381,7 +375,7 @@ public class Jugador : MonoBehaviour {
         {
             foreach(GameObject l in links)
             {
-                if (l.transform.position.x < coffin.position.x-0.5f)
+                if (l.transform.position.x < coffin.position.x-0.8f)
                     return false;
             }
         }
@@ -389,7 +383,7 @@ public class Jugador : MonoBehaviour {
         {
             foreach (GameObject l in links)
             {
-                if (l.transform.position.x > coffin.position.x+0.5f)
+                if (l.transform.position.x > coffin.position.x+0.8f)
                     return false;
             }
         }
