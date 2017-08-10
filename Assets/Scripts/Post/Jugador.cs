@@ -286,7 +286,6 @@ public class Jugador : MonoBehaviour {
     bool canResetDistance = true;
     private void TakeCoffin()
     {
-        Debug.Log("TRC: " + tiempoRecogerCadena + " DRC: "+duracionRecogerCadena+" DJC: "+distanciaJugadorCoffin+" MDC: "+maxDistanceCadena);
         leftPrevious = left;
         left = InputManager.LeftTrigger();
         bool leftTick = !leftPrevious && left;
@@ -670,19 +669,36 @@ public class Jugador : MonoBehaviour {
             moving = true;
         }
     }
+
+    public float chainOffsetX;
+    public float chainOffsetY;
     private void ImprimirCadena()
     {
-        //Debug.Log("Suma: " +links.Count+" "+linksCoffin.Count+"::"+(links.Count+linksCoffin.Count));
         lineRenderer.positionCount=links.Count;
         int i = 0;
+        Vector3 v1=Vector3.zero, v2=Vector3.zero;
         foreach (GameObject l in links)
         {
             Vector3 pos;
-            if (i == 0) pos= transform.position;
-            else if (i == links.Count - 1)pos=coffin.position;
-            else pos=l.transform.position;
+            if (i == 0) pos = transform.position;
+            else if (i == links.Count - 1) pos = coffin.position;
+            else
+            {
+                pos = l.transform.position;
+                pos.x += chainOffsetX;
+                pos.y += chainOffsetY;
+            }
             
             pos.z -= posCadenaZ;
+/*
+            if (i >= 2 && Vector3.Distance(v2, pos)<Vector3.Distance(v1, pos))
+            {
+               // Debug.Log("ENrtoasmdo");
+                //lineRenderer.SetVertexCount(i - 1);
+                Debug.Log("v2: " + v2+ " v1: "+v1+"   ");
+            }
+            if (i != 0) v2 = v1;
+            v1 = pos;*/
             lineRenderer.SetPosition(i, pos);
             i++;
         }
