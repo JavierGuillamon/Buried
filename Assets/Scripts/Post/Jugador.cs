@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -226,7 +227,11 @@ public class Jugador : MonoBehaviour {
             jointPlayer.connectedBody = kinematicBodyPlayer;
         }
     }
- 
+
+    public bool movSlow;
+    public float lastY;
+    public float fallHeight;
+    public float deathHeight;
     void FixedUpdate ()
     {
         playerGround = groundTrigger.IsTouchingLayers(groundMask);
@@ -273,13 +278,33 @@ public class Jugador : MonoBehaviour {
 
         React();
 
-        if (tirandoDeMas && !sweatParticles.isPlaying)
+        if ((tirandoDeMas || movSlow )&& !sweatParticles.isPlaying)
         {
             sweatParticles.Play();
         }
-        else if (!tirandoDeMas && sweatParticles.isPlaying) {
+        else if (!tirandoDeMas && !movSlow && sweatParticles.isPlaying) {
             sweatParticles.Stop();
         }
+
+        //death fall
+        if (!playerGround)
+        {
+            float Ydistance = transform.position.y - lastY;
+            if (Ydistance < 0)
+                fallHeight += Ydistance;
+            else
+                fallHeight = 0;
+        }
+        else
+        {
+            if (-fallHeight >= deathHeight)
+            {
+                Debug.Log("HAS MUERTO");
+                SceneManager.LoadScene(3);
+            }
+            fallHeight = 0;
+        }
+        lastY = transform.position.y;
     }
 
     float maxDistanceCadenaAux;
@@ -366,7 +391,6 @@ public class Jugador : MonoBehaviour {
         jointCoffin.distance = Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaMinima, maxDistanceCadena);
 
     }
-
 
     private bool isInTension()
     {
@@ -524,9 +548,10 @@ public class Jugador : MonoBehaviour {
             input = new Vector2(0, 0);
     }
 
+    public float verticalOffset;
     private Vector2 Apuntar() {
 
-        Vector2 apuntar = InputManager.MainHorizontal() * Vector2.right + InputManager.MainVertical() * Vector2.up;
+        Vector2 apuntar = InputManager.MainHorizontal() * Vector2.right + InputManager.MainVertical() * verticalOffset * Vector2.up;
         if (apuntar.magnitude < 0.2f)
         {
             if (this.LookingRight)
@@ -621,22 +646,35 @@ public class Jugador : MonoBehaviour {
         {
             vely = jumpVelocity * Vector2.up;
         }
-        
+
         if (coffinTaken)
         {
             rb2d.velocity = new Vector2(input.x * Time.deltaTime * accelerationXSlow, vely.y);
+            movSlow = true;
         }
         else if (distanciaJugadorCoffin >= maxDistanceAtaudCofin)
         {
-             if (transform.position.x > coffin.position.x && InputManager.MainHorizontal() > 0)
-                 rb2d.velocity = new Vector2(input.x * Time.deltaTime * accelerationXSlow, vely.y);
-             else if (transform.position.x < coffin.position.x && InputManager.MainHorizontal() < 0)
-                 rb2d.velocity = new Vector2(input.x * Time.deltaTime * accelerationXSlow, vely.y);
-             else
-                 rb2d.velocity = new Vector2(input.x * Time.deltaTime * accelerationXNormal, vely.y);
-        }          
+            if (transform.position.x > coffin.position.x && InputManager.MainHorizontal() > 0)
+            {
+                rb2d.velocity = new Vector2(input.x * Time.deltaTime * accelerationXSlow, vely.y);
+                movSlow = true;
+            }
+            else if (transform.position.x < coffin.position.x && InputManager.MainHorizontal() < 0)
+            {
+                rb2d.velocity = new Vector2(input.x * Time.deltaTime * accelerationXSlow, vely.y);
+                movSlow = true;
+            }
+            else
+            {
+                rb2d.velocity = new Vector2(input.x * Time.deltaTime * accelerationXNormal, vely.y);
+                movSlow = false;
+            }
+        }
         else
-            rb2d.velocity = new Vector2(input.x * Time.deltaTime * accelerationXNormal, vely.y);                    
+        {
+            rb2d.velocity = new Vector2(input.x * Time.deltaTime * accelerationXNormal, vely.y);
+            movSlow = false;
+        }
     }
 
     private void MoveSwing()
@@ -676,7 +714,7 @@ public class Jugador : MonoBehaviour {
     {
         lineRenderer.positionCount=links.Count;
         int i = 0;
-        Vector3 v1=Vector3.zero, v2=Vector3.zero;
+        Vector2 v1=Vector2.zero;
         foreach (GameObject l in links)
         {
             Vector3 pos;
@@ -688,18 +726,18 @@ public class Jugador : MonoBehaviour {
                 pos.x += chainOffsetX;
                 pos.y += chainOffsetY;
             }
-            
+
+             /*if (i != 0 && i != links.Count - 1 )
+             {
+                 Debug.Log("ay: "+(pos.y-v1.y)+" by: "+(links.Peek().transform.position.y-v1.y));
+             }
+             else
+             {
+
+             }*/
             pos.z -= posCadenaZ;
-/*
-            if (i >= 2 && Vector3.Distance(v2, pos)<Vector3.Distance(v1, pos))
-            {
-               // Debug.Log("ENrtoasmdo");
-                //lineRenderer.SetVertexCount(i - 1);
-                Debug.Log("v2: " + v2+ " v1: "+v1+"   ");
-            }
-            if (i != 0) v2 = v1;
-            v1 = pos;*/
             lineRenderer.SetPosition(i, pos);
+            v1 = pos;
             i++;
         }
         /*foreach(GameObject l in linksCoffin)
