@@ -299,6 +299,7 @@ public class Jugador : MonoBehaviour {
         {
             if (-fallHeight >= deathHeight)
             {
+                fallHeight = 0;
                 Debug.Log("HAS MUERTO");
                 SceneManager.LoadScene(3);
             }
@@ -650,7 +651,6 @@ public class Jugador : MonoBehaviour {
         if (coffinTaken)
         {
             rb2d.velocity = new Vector2(input.x * Time.deltaTime * accelerationXSlow, vely.y);
-            movSlow = true;
         }
         else if (distanciaJugadorCoffin >= maxDistanceAtaudCofin)
         {
