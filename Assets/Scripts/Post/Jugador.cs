@@ -232,6 +232,7 @@ public class Jugador : MonoBehaviour {
     public float lastY;
     public float fallHeight;
     public float deathHeight;
+    bool tensandoCadena;
     void FixedUpdate ()
     {
         playerGround = groundTrigger.IsTouchingLayers(groundMask);
@@ -299,12 +300,21 @@ public class Jugador : MonoBehaviour {
         {
             if (-fallHeight >= deathHeight)
             {
+                fallHeight = 0;
                 Debug.Log("HAS MUERTO");
                 SceneManager.LoadScene(3);
             }
             fallHeight = 0;
         }
         lastY = transform.position.y;
+        //Tensar cadena cuando el jugador esta colgando
+        if (coffinGround && !playerGround)
+        {
+            Debug.Log("AYAY");
+            TensarCadena(true);
+        }
+        else
+            tensandoCadena = false;
     }
 
     float maxDistanceCadenaAux;
@@ -322,74 +332,79 @@ public class Jugador : MonoBehaviour {
             if (distanciaJugadorCoffin > distanceToTakeCoffin)
             {
                 if (isInTension())
-                {
-                    tiempoRecogerCadena = duracionRecogerCadena * (1 - distanciaJugadorCoffin / maxDistanceCadena);
-                }
+                    tiempoRecogerCadena = duracionRecogerCadena * (1 - distanciaJugadorCoffin / maxDistanceCadena);               
             }
             else if(playerGround)
             {
                 tiempoRecogerCadena = 0;
                 if (coffinTaken)
-                {
-                    coffinTaken = false;
-                }
+                    coffinTaken = false;              
                 else
-                {
-                    //RedistribuirCadena(false);
                     coffinTaken = true;
-                }
             }
         }
 
         if (left)
         {
-               RedistribuirCadena(true);
+            RedistribuirCadena(true);
             if (distanciaJugadorCoffin > distanceToTakeCoffin || !playerGround)
             {
                if (isInTension())
                 {
-                    /*if (canResetDistance)
-                    {
-                        canResetDistance = false;
-                        maxDistanceCadenaAux = maxDistanceCadena;
-                        maxDistanceCadena = distanciaJugadorCoffin;
-                    }*/
                     tiempoRecogerCadena += speedTakeCoffin * Time.deltaTime;
                     tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena, 0, duracionRecogerCadena);
                 }
             }
             taking = true;
-        }else
+        }else if (!tensandoCadena)
         {
             RedistribuirCadena(false);
             taking = false;
-           /* if (!canResetDistance)
-            {
-                canResetDistance = true;
-                maxDistanceCadena = maxDistanceCadenaAux;
-            }*/
             tiempoRecogerCadena -= speedTakeCoffin * Time.deltaTime;
             tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena, 0, duracionRecogerCadena);
-            /*foreach (HingeJoint2D j in joints)
-            {
-                j.anchor = new Vector2(Mathf.Lerp(-achorDistance, achorDistance, tiempoRecogerCadena), 0);
-            }*/
-
         }
         tirandoDeMas = tiempoRecogerCadena >= duracionRecogerCadena * (1 - (distanciaJugadorCoffin - 1f) / maxDistanceCadena);
-        /*if(playerGround)
-            tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena , 0, duracionRecogerCadena * (1 - (distanciaJugadorCoffin - 1f) / maxDistanceCadena));*/
-       
-        // Debug.Log("EV::"+ curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena));
-        //2 distancias minimas, una cuando sube y otra para cuando esta en el suelo, hacer clamp sobre clamp, si el jugador esta en el aire  el jugador en el suelo es 0, 2
-        //Debug.Log("CLAMP::" + Mathf.Clamp(Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaJugadorCoffin - 0.05f, maxDistanceCadena), distanciaMinima, maxDistanceCadena)+" Aaa::"+(1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)));
         
-        //jointPlayer.distance = Mathf.Clamp(Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaJugadorCoffin - 0.05f, maxDistanceCadena) ,distanciaMinima, maxDistanceCadena) ;
-        //jointCoffin.distance = Mathf.Clamp(Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaJugadorCoffin - 0.05f, maxDistanceCadena), distanciaMinima, maxDistanceCadena);
+        jointPlayer.distance = Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaMinima, maxDistanceCadena);
+        jointCoffin.distance = Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaMinima, maxDistanceCadena);
+    }
+
+    bool aux = false;
+    private void TensarCadena(bool left)
+    {
+        leftPrevious = left;
+        bool leftTick = !leftPrevious && left;
+        if (InputManager.LeftTrigger())
+            aux = true;
+        else if (tiempoRecogerCadena == 0)
+            aux = false;
+        if (aux)
+            tensandoCadena = false;
+        else
+            tensandoCadena = true;
+
+        if (leftTick)
+        {
+            RedistribuirCadena(true);
+            tiempoRecogerCadena = duracionRecogerCadena * (1 - distanciaJugadorCoffin / maxDistanceCadena);
+            
+        }
+
+        if (left)
+        {
+            RedistribuirCadena(true);
+        }
+        else //if (!tensandoCadena)
+        {
+            RedistribuirCadena(false);
+            taking = false;
+            tiempoRecogerCadena -= speedTakeCoffin * Time.deltaTime;
+            tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena, 0, duracionRecogerCadena);
+        }
+        tirandoDeMas = tiempoRecogerCadena >= duracionRecogerCadena * (1 - (distanciaJugadorCoffin - 1f) / maxDistanceCadena);
 
         jointPlayer.distance = Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaMinima, maxDistanceCadena);
         jointCoffin.distance = Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaMinima, maxDistanceCadena);
-
     }
 
     private bool isInTension()
@@ -426,14 +441,6 @@ public class Jugador : MonoBehaviour {
     {
         if (recoger)
         {
-            //hacer que tire tambien el ataud
-            //float maximumForce = 0;
-           // foreach (GameObject l in links) {
-             //   if (l.GetComponent<DistanceJoint2D>().reactionForce.magnitude > maximumForce) {
-            //        maximumForce = l.GetComponent<DistanceJoint2D>().reactionForce.magnitude;
-           //     }
-          //  }
-           // Debug.Log(maximumForce);
             GameObject toTest = links.Pop();
             if (links.Count > 0 && Vector2.Distance(toTest.transform.position, transform.position) < 2 && Vector2.Distance(toTest.transform.position, links.Peek().transform.position) < 2)
             {
@@ -446,24 +453,6 @@ public class Jugador : MonoBehaviour {
             else {
                 links.Push(toTest);
             }
-
-            //Para el ataud
-           /* GameObject toTest1 = linksCoffin.Pop();
-            if(linksCoffin.Count > 0 && Vector2.Distance(toTest1.transform.position, coffin.position)<2 && Vector2.Distance(toTest1.transform.position, linksCoffin.Peek().transform.position) < 2)
-            {
-                linksBloqueadosCoffin.Push(toTest1);
-                linksBloqueadosCoffin.Peek().transform.position = transform.position;
-                linksBloqueadosCoffin.Peek().transform.SetParent(this.transform);
-                linksBloqueadosCoffin.Peek().GetComponent<DistanceJoint2D>().connectedBody = null;
-
-                //firsjointCoffin.connectedBody = links.Peek().GetComponent<Rigidbody2D>();
-                linksCoffin.Peek().GetComponent<DistanceJoint2D>().connectedBody = firsjointCoffin.connectedBody;
-            }
-            else
-            {
-                linksCoffin.Push(toTest);
-            }*/
-
             ImprimirCadena();
         }
         else
@@ -476,48 +465,10 @@ public class Jugador : MonoBehaviour {
                 links.Peek().transform.position = transform.position + Vector3.up * 1.5f;
                 links.Peek().GetComponent<DistanceJoint2D>().connectedBody = firsjoint.connectedBody;
                 firsjoint.connectedBody = links.Peek().GetComponent<Rigidbody2D>();
-            }            
-            /*while (linksBloqueadosCoffin.Count > 0)
-            {
-                linksBloqueadosCoffin.Peek().GetComponent<DistanceJoint2D>().connectedBody = linksCoffin.Peek().GetComponent<Rigidbody2D>();
-                linksCoffin.Peek().GetComponent<DistanceJoint2D>().connectedBody = linksBloqueadosCoffin.Peek().GetComponent<Rigidbody2D>();
-                linksCoffin.Push(linksBloqueados.Pop());
-                linksCoffin.Peek().transform.SetParent(ChainParent);
-                linksCoffin.Peek().transform.position = transform.position + Vector3.up * 1.5f;
-
-            }*/
+            }   
             ImprimirCadena();
         }
     }
-    /*[UnityEditor.CustomEditor(typeof(Jugador))]
-    public class StackPreview : UnityEditor.Editor
-    {
-        public override void OnInspectorGUI()
-        {
-
-            // get the target script as TestScript and get the stack from it
-            var ts = (Jugador)target;
-            var stack = ts.links;
-            var stack2 = ts.linksCoffin;
-            // some styling for the header, this is optional
-            var bold = new GUIStyle();
-            bold.fontStyle = FontStyle.Bold;
-            GUILayout.Label("Items in my stack", bold);
-
-            // add a label for each item, you can add more properties
-            // you can even access components inside each item and display them
-            // for example if every item had a sprite we could easily show it 
-            foreach (var item in stack)
-            {
-                GUILayout.Label(item.name);
-            }
-            GUILayout.Label("Items in my stack coffin", bold);
-            foreach (var item1 in stack2)
-            {
-                GUILayout.Label(item1.name);
-            }
-        }
-    }*/
 
     void Update()
     {
@@ -538,6 +489,7 @@ public class Jugador : MonoBehaviour {
 
         input = new Vector2(InputManager.MainHorizontal(), System.Convert.ToInt32(InputManager.AButton()));
         ImprimirCadena();
+
         if (throwing)
         {
             input = new Vector2(0, 0);
