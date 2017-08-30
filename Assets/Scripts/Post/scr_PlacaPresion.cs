@@ -4,29 +4,124 @@ using UnityEngine;
 
 public class scr_PlacaPresion : MonoBehaviour {
 
-    public Animator anim;
+    public string ejeMovimiento;
 
-    private void OnTriggerStay2D(Collider2D collision)
+    public Transform movingObject;
+    public AnimationCurve idaCurve;
+    public AnimationCurve vueltaCurve;
+    public float speedIda;
+    public float speedVuelta;
+    public float distance;
+    public bool showGizmo;
+    [Range(0f, 1f)]
+    public float gizmoScale;
+
+    private int objectsInTrigger;
+    private bool open;
+    private Vector3 objectOriginPos;
+    private Vector3 objectFinalPos;
+    private bool opening;
+    private bool closing;
+    private bool closeMotion;
+
+    private void Start()
     {
-        if (collision.tag == "Player")
+        objectOriginPos = movingObject.position;
+        objectsInTrigger = 0;
+        open = false;
+        opening = false;
+        closeMotion = false;
+        switch (ejeMovimiento)
         {
-            anim.SetBool("Permiso", true);
+            case "x":
+                objectFinalPos = new Vector3(movingObject.position.x + distance, movingObject.position.y, movingObject.position.z);
+                break;
+            case "y":
+                objectFinalPos = new Vector3(movingObject.position.x, movingObject.position.y + distance, movingObject.position.z);
+                break;
+            case "z":
+                objectFinalPos = new Vector3(movingObject.position.x, movingObject.position.y, movingObject.position.z + distance);
+                break;
         }
-        if (collision.tag == "Coffin")
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "TriggerPlacaPresion")
         {
-            anim.SetBool("Permiso", true);
+            objectsInTrigger += 1;
+            if (objectsInTrigger == 2)
+            {
+                open = true;
+                opening = true;
+                StartCoroutine(_OpenDoor());
+            }
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.tag == "Player")
+        if (collision.tag == "TriggerPlacaPresion")
         {
-            anim.SetBool("Permiso", false);
+            objectsInTrigger -= 1;
+            if (open && !closeMotion)
+            {
+                closing = true;
+                StartCoroutine(_CloseDoor());
+            }
         }
-        if (collision.tag == "Coffin")
+    }
+
+    IEnumerator _OpenDoor()
+    {
+        closing = false;
+        Vector3 oldPosition = movingObject.position;
+        float curveTime = 0;
+        float curveAmount = idaCurve.Evaluate(curveTime);
+        while (curveAmount < 1.0f && opening)
         {
-            anim.SetBool("Permiso", false);
+            curveTime += Time.deltaTime * speedIda;
+            curveAmount = idaCurve.Evaluate(curveTime);
+            movingObject.position = Vector3.Lerp(oldPosition, objectFinalPos, curveAmount);
+            yield return null;
+        }
+    }
+
+    IEnumerator _CloseDoor()
+    {
+        closeMotion = true;
+        opening = false;
+        Vector3 oldPosition = movingObject.position;
+        float curveTime = 0;
+        float curveAmount = vueltaCurve.Evaluate(curveTime);
+        while (curveAmount < 1.0f && closing)
+        {
+            curveTime += Time.deltaTime * speedVuelta;
+            curveAmount = vueltaCurve.Evaluate(curveTime);
+            movingObject.position = Vector3.Lerp(oldPosition, objectOriginPos, curveAmount);
+            yield return null;
+        }
+        closeMotion = false;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (showGizmo)
+        {
+            switch (ejeMovimiento)
+            {
+                case "x":
+                    objectFinalPos = new Vector3(movingObject.position.x + distance, movingObject.position.y, movingObject.position.z);
+                    break;
+                case "y":
+                    objectFinalPos = new Vector3(movingObject.position.x, movingObject.position.y + distance, movingObject.position.z);
+                    break;
+                case "z":
+                    objectFinalPos = new Vector3(movingObject.position.x, movingObject.position.y, movingObject.position.z + distance);
+                    break;
+            }
+            Gizmos.color = new Color (0, 1, 0, .5f);
+            Gizmos.DrawCube(objectFinalPos, new Vector3((movingObject.localScale.x + .1f) * gizmoScale, (movingObject.localScale.y + .1f) * gizmoScale, (movingObject.localScale.z + .1f) * gizmoScale));
         }
     }
 }

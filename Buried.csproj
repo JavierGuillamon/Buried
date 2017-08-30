@@ -172,7 +172,6 @@
     <Compile Include="Assets\PostProcessing\Utilities\CustomMotionTexture\ExampleWheelController.cs" />
     <Compile Include="Assets\Scr_plataform_destroy.cs" />
     <Compile Include="Assets\Scr_platform_move.cs" />
-    <Compile Include="Assets\Scripts\Abrir_puerta.cs" />
     <Compile Include="Assets\Scripts\Post\Ataud.cs" />
     <Compile Include="Assets\Scripts\Post\AtaudDetectCollisionsBelow.cs" />
     <Compile Include="Assets\Scripts\Post\CamPositionReference.cs" />
