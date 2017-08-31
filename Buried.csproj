@@ -182,6 +182,8 @@
     <Compile Include="Assets\Scripts\Post\LevelEditor\LevelLoader.cs" />
     <Compile Include="Assets\Scripts\Post\MovingPlatform.cs" />
     <Compile Include="Assets\Scripts\Post\PlatformDetector.cs" />
+    <Compile Include="Assets\Scripts\Post\PlatformSpawner.cs" />
+    <Compile Include="Assets\Scripts\Post\PlatformTraslation.cs" />
     <Compile Include="Assets\Scripts\Post\scr_CameraModifier.cs" />
     <Compile Include="Assets\Scripts\Post\Scr_CamMov.cs" />
     <Compile Include="Assets\Scripts\Post\scr_CamMovement.cs" />
