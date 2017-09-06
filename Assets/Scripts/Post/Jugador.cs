@@ -158,7 +158,7 @@ public class Jugador : MonoBehaviour {
 
     public DistanceJoint2D firsjoint;
     public DistanceJoint2D firsjointCoffin;
-    
+    public Animator animator;
 
     void Start () {
         rb2d = GetComponent<Rigidbody2D>();
@@ -704,6 +704,17 @@ public class Jugador : MonoBehaviour {
         }*/
     }
          
+    private void playAnimations()
+    {
+        /*
+        idle forever
+        when(player mirando izq e input derecha
+            girar
+        lo mismo al reves
+        else 
+            run forward
+    */
+    }
     public void setCoffinGround(bool aux)
     {
         coffinGround = aux;
