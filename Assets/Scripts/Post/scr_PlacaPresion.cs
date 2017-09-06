@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class scr_PlacaPresion : MonoBehaviour {
-
+    
+    [Tooltip("Introducir en minúsculas el eje debe moverse el objeto")]
     public string ejeMovimiento;
-
     public Transform movingObject;
     public AnimationCurve idaCurve;
     public AnimationCurve vueltaCurve;
-    public float speedIda;
-    public float speedVuelta;
+    public float speedForward;
+    public float speedBackwards;
     public float distance;
     public bool showGizmo;
     [Range(0f, 1f)]
@@ -23,6 +23,7 @@ public class scr_PlacaPresion : MonoBehaviour {
     private bool opening;
     private bool closing;
     private bool closeMotion;
+    private float lastPercent;
 
     private void Start()
     {
@@ -54,7 +55,7 @@ public class scr_PlacaPresion : MonoBehaviour {
             {
                 open = true;
                 opening = true;
-                StartCoroutine(_OpenDoor());
+                StartCoroutine(_MoveForward());
             }
         }
     }
@@ -67,28 +68,31 @@ public class scr_PlacaPresion : MonoBehaviour {
             if (open && !closeMotion)
             {
                 closing = true;
-                StartCoroutine(_CloseDoor());
+                StartCoroutine(_MoveBackwards());
             }
         }
     }
 
-    IEnumerator _OpenDoor()
+    IEnumerator _MoveForward()
     {
+        float newSpeed = (speedForward * lastPercent) + speedForward;
         closing = false;
         Vector3 oldPosition = movingObject.position;
         float curveTime = 0;
         float curveAmount = idaCurve.Evaluate(curveTime);
         while (curveAmount < 1.0f && opening)
         {
-            curveTime += Time.deltaTime * speedIda;
+            curveTime += Time.deltaTime * speedForward;
             curveAmount = idaCurve.Evaluate(curveTime);
             movingObject.position = Vector3.Lerp(oldPosition, objectFinalPos, curveAmount);
+            lastPercent = curveAmount;
             yield return null;
         }
     }
 
-    IEnumerator _CloseDoor()
+    IEnumerator _MoveBackwards()
     {
+        float newSpeed = (speedBackwards * lastPercent) + speedBackwards;
         closeMotion = true;
         opening = false;
         Vector3 oldPosition = movingObject.position;
@@ -96,9 +100,10 @@ public class scr_PlacaPresion : MonoBehaviour {
         float curveAmount = vueltaCurve.Evaluate(curveTime);
         while (curveAmount < 1.0f && closing)
         {
-            curveTime += Time.deltaTime * speedVuelta;
+            curveTime += Time.deltaTime * newSpeed;
             curveAmount = vueltaCurve.Evaluate(curveTime);
             movingObject.position = Vector3.Lerp(oldPosition, objectOriginPos, curveAmount);
+            lastPercent = curveAmount;
             yield return null;
         }
         closeMotion = false;
