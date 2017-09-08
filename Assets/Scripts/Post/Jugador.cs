@@ -159,7 +159,7 @@ public class Jugador : MonoBehaviour {
     public DistanceJoint2D firsjoint;
     public DistanceJoint2D firsjointCoffin;
     public Animator animator;
-
+    public GameObject VisualGO;
     void Start () {
         rb2d = GetComponent<Rigidbody2D>();
         moving = true;
@@ -233,6 +233,7 @@ public class Jugador : MonoBehaviour {
     public float fallHeight;
     public float deathHeight;
     bool tensandoCadena;
+    bool contadorDeGiro=false;
     void FixedUpdate ()
     {
         playerGround = groundTrigger.IsTouchingLayers(groundMask);
@@ -246,9 +247,15 @@ public class Jugador : MonoBehaviour {
         CheckKinematics();
 
         if (InputManager.MainHorizontal() > 0)
+        {
+            if (!lookingRight) contadorDeGiro = true;
             lookingRight = true;
+        }
         else if (InputManager.MainHorizontal() < 0)
+        {
+            if (lookingRight) contadorDeGiro = true;
             lookingRight = false;
+        }
 
         if (!InputManager.RightTrigger())
         {
@@ -315,6 +322,8 @@ public class Jugador : MonoBehaviour {
         }
         else
             tensandoCadena = false;
+
+        playAnimations();
     }
 
     float maxDistanceCadenaAux;
@@ -703,17 +712,18 @@ public class Jugador : MonoBehaviour {
             i++;
         }*/
     }
-         
+    
     private void playAnimations()
     {
-        /*
-        idle forever
-        when(player mirando izq e input derecha
-            girar
-        lo mismo al reves
-        else 
-            run forward
-    */
+        animator.SetFloat("InputX",input.x);
+        if (contadorDeGiro)
+        {
+            //VisualGO.transform.rotation = Quaternion.Lerp(VisualGO.transform.rotation, Quaternion.Euler(0, 180, 0), Time.deltaTime);
+            VisualGO.transform.Rotate(0, 180, 0);
+            contadorDeGiro = false;
+        }
+        animator.SetBool("Ataud", coffinTaken);
+        animator.SetBool("TakingAtaud", taking);
     }
     public void setCoffinGround(bool aux)
     {
