@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-guid: 743daaa74b025e6439cad6cb780b7e9d
+guid: 9328c3fcfed58d04188da3dba1731c16
 timeCreated: 1494803096
 licenseType: Free
 ModelImporter:
-  serializedVersion: 19
+  serializedVersion: 21
   fileIDToRecycleName:
     100000: agarre_cubeta
     100002: agarre_cubeta1
@@ -1256,6 +1256,7 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
+    extraUserProperties: []
     clipAnimations: []
     isReadable: 1
   meshes:
@@ -1263,7 +1264,10 @@ ModelImporter:
     globalScale: 30
     meshCompression: 0
     addColliders: 0
+    importVisibility: 0
     importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
@@ -1279,6 +1283,7 @@ ModelImporter:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
+    normalCalculationMode: 0
   importAnimation: 1
   copyAvatar: 0
   humanDescription:

@@ -722,7 +722,6 @@ public class Jugador : MonoBehaviour {
             contadorDeGiro = false;
         }
         animator.SetBool("Ataud", coffinTaken);
-        Debug.Log("SWING" + (!playerGround && coffinGround));
         if(!playerGround && coffinGround)
         {
             animator.SetBool("Climbing", taking);
