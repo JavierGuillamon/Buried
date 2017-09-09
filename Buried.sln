@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2015
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buried.CSharp.Plugins", "Buried.CSharp.Plugins.csproj", "{F1277DAC-C546-58E4-579E-D60906958BC0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buried.CSharp", "Buried.CSharp.csproj", "{26593110-210D-16A0-A764-A7D494C1AF3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buried.CSharp.Editor.Plugins", "Buried.CSharp.Editor.Plugins.csproj", "{5EDA47FD-F058-9869-EB4F-D5D026FCD54C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buried.CSharp.Plugins", "Buried.CSharp.Plugins.csproj", "{F1277DAC-C546-58E4-579E-D60906958BC0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buried.CSharp.Editor", "Buried.CSharp.Editor.csproj", "{7577D92B-B7C8-E20D-1D8B-DF97187FC07C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buried.CSharp.Editor.Plugins", "Buried.CSharp.Editor.Plugins.csproj", "{5EDA47FD-F058-9869-EB4F-D5D026FCD54C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,22 +15,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F1277DAC-C546-58E4-579E-D60906958BC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F1277DAC-C546-58E4-579E-D60906958BC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F1277DAC-C546-58E4-579E-D60906958BC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F1277DAC-C546-58E4-579E-D60906958BC0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{26593110-210D-16A0-A764-A7D494C1AF3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{26593110-210D-16A0-A764-A7D494C1AF3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26593110-210D-16A0-A764-A7D494C1AF3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26593110-210D-16A0-A764-A7D494C1AF3B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5EDA47FD-F058-9869-EB4F-D5D026FCD54C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5EDA47FD-F058-9869-EB4F-D5D026FCD54C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5EDA47FD-F058-9869-EB4F-D5D026FCD54C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5EDA47FD-F058-9869-EB4F-D5D026FCD54C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1277DAC-C546-58E4-579E-D60906958BC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1277DAC-C546-58E4-579E-D60906958BC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1277DAC-C546-58E4-579E-D60906958BC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1277DAC-C546-58E4-579E-D60906958BC0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7577D92B-B7C8-E20D-1D8B-DF97187FC07C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7577D92B-B7C8-E20D-1D8B-DF97187FC07C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7577D92B-B7C8-E20D-1D8B-DF97187FC07C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7577D92B-B7C8-E20D-1D8B-DF97187FC07C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EDA47FD-F058-9869-EB4F-D5D026FCD54C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EDA47FD-F058-9869-EB4F-D5D026FCD54C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EDA47FD-F058-9869-EB4F-D5D026FCD54C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EDA47FD-F058-9869-EB4F-D5D026FCD54C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

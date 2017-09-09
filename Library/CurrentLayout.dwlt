@@ -110,7 +110,7 @@ MonoBehaviour:
   m_MinSize: {x: 713, y: 492}
   m_MaxSize: {x: 18008, y: 14042}
   vertical: 0
-  controlID: 183
+  controlID: 100
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -180,8 +180,8 @@ MonoBehaviour:
     y: 369
     width: 952
     height: 362
-  m_MinSize: {x: 202, y: 221}
-  m_MaxSize: {x: 4002, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 16}
@@ -326,23 +326,18 @@ MonoBehaviour:
     - {x: 520, y: 197.40001}
     - {x: 450.00003, y: 55}
     - {x: 520, y: 153.80005}
-    - {x: 677, y: 168.40002}
+    - {x: 522, y: 244.8}
     - {x: 129.00003, y: 180}
     - {x: 450.00003, y: 148.80005}
     - {x: 129.00003, y: 53.80002}
   m_PreviewAnimator: {fileID: 0}
-  m_AnimatorController: {fileID: 9100000, guid: a5080f7712bbc31418c8364c7e3f3939,
-    type: 2}
-  m_BreadCrumbs:
-  - m_Target: {fileID: 1107143153947783770, guid: a5080f7712bbc31418c8364c7e3f3939,
-      type: 2}
-    m_ScrollPosition: {x: 0, y: 0}
+  m_AnimatorController: {fileID: 0}
+  m_BreadCrumbs: []
   stateMachineGraph: {fileID: 0}
   stateMachineGraphGUI: {fileID: 0}
   blendTreeGraph: {fileID: 0}
   blendTreeGraphGUI: {fileID: 0}
   m_AutoLiveLink: 1
-  m_LiveLinkFollowTransitions: 0
   m_MiniTool: 0
   m_SerializedLocked: 0
   m_CurrentEditor: 1
@@ -585,23 +580,23 @@ MonoBehaviour:
     height: 362
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: bcf8ffff
-    m_LastClickedID: -1860
-    m_ExpandedIDs: e4fbffff00000000383b0000aa3d0000
+    m_SelectedIDs: 
+    m_LastClickedID: 0
+    m_ExpandedIDs: 64f2feff00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: xbot
-      m_OriginalName: xbot
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 13996
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 0
       m_ClientGUIView: {fileID: 10}
     m_SearchString: 
@@ -642,6 +637,7 @@ MonoBehaviour:
     m_AssetLabels: []
     m_AssetBundleNames: []
     m_VersionControlStates: []
+    m_SoftLockControlStates: []
     m_ReferencingInstanceIDs: 
     m_ScenePaths: []
     m_ShowAllHits: 0
@@ -657,9 +653,9 @@ MonoBehaviour:
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: f4300000
-    m_LastClickedID: 12532
-    m_ExpandedIDs: 00000000ee260000022b0000c62b0000ea2b0000f62b0000982c00005e32000090460000924600009446000096460000ffffff7f
+    m_SelectedIDs: 88440000
+    m_LastClickedID: 17544
+    m_ExpandedIDs: 00000000c03b00009a3f0000024000001a400000204000007c400000124500001456000016560000185600001a560000ffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -687,7 +683,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000ee260000022b0000c62b0000ea2b0000f62b0000982c00005e32000090460000924600009446000096460000
+    m_ExpandedIDs: 00000000c03b00009a3f0000024000001a400000204000007c400000124500001456000016560000185600001a560000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -714,7 +710,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 1
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: 000000000a32000018ecffff9e490000b0490000c0490000ba2c0000f0300000da2c0000a67a0100c67a0100be7a010024800100b67a0100a2460000fa2c0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
