@@ -317,7 +317,6 @@ public class Jugador : MonoBehaviour {
         //Tensar cadena cuando el jugador esta colgando
         if (coffinGround && !playerGround)
         {
-            Debug.Log("AYAY");
             TensarCadena(true);
         }
         else
@@ -723,7 +722,15 @@ public class Jugador : MonoBehaviour {
             contadorDeGiro = false;
         }
         animator.SetBool("Ataud", coffinTaken);
-        animator.SetBool("TakingAtaud", taking);
+        Debug.Log("SWING" + (!playerGround && coffinGround));
+        if(!playerGround && coffinGround)
+        {
+            animator.SetBool("Climbing", taking);
+        }
+        else
+        {
+            animator.SetBool("TakingAtaud", taking);
+        }
     }
     public void setCoffinGround(bool aux)
     {
