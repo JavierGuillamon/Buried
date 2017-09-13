@@ -174,6 +174,8 @@
     <Compile Include="Assets\Scripts\Post\AudioManager.cs" />
     <Compile Include="Assets\Scripts\Post\CamPositionReference.cs" />
     <Compile Include="Assets\Scripts\Post\CamTimelineManager.cs" />
+    <Compile Include="Assets\Scripts\Post\CharacterJumpSounds.cs" />
+    <Compile Include="Assets\Scripts\Post\CutsceneActivator.cs" />
     <Compile Include="Assets\Scripts\Post\Interpolator.cs" />
     <Compile Include="Assets\Scripts\Post\Jugador.cs" />
     <Compile Include="Assets\Scripts\Post\LevelEditor\ColorToPrefab.cs" />
@@ -183,6 +185,7 @@
     <Compile Include="Assets\Scripts\Post\PlatformDetector.cs" />
     <Compile Include="Assets\Scripts\Post\PlatformSpawner.cs" />
     <Compile Include="Assets\Scripts\Post\PlatformTraslation.cs" />
+    <Compile Include="Assets\Scripts\Post\SceneObjectManager.cs" />
     <Compile Include="Assets\Scripts\Post\scr_CameraModifier.cs" />
     <Compile Include="Assets\Scripts\Post\Scr_CamMov.cs" />
     <Compile Include="Assets\Scripts\Post\scr_CamMovement.cs" />
@@ -278,6 +281,7 @@
     <None Include="Assets\Resources\Internal-DeferredShading.shader" />
     <None Include="Assets\Resources\UnityDeprecatedEX.cginc" />
     <None Include="Assets\Resources\UnityStandardBRDFCustom.cginc" />
+    <None Include="Assets\Shaders\GearXStage.shader" />
     <None Include="Assets\Shaders\shd_Toon.shader" />
     <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
     <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\BlendModesOverlay.shader" />

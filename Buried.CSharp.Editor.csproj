@@ -249,6 +249,7 @@
     <None Include="Assets\Resources\Internal-DeferredShading.shader" />
     <None Include="Assets\Resources\UnityDeprecatedEX.cginc" />
     <None Include="Assets\Resources\UnityStandardBRDFCustom.cginc" />
+    <None Include="Assets\Shaders\GearXStage.shader" />
     <None Include="Assets\Shaders\shd_Toon.shader" />
     <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
     <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\BlendModesOverlay.shader" />

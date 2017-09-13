@@ -2,37 +2,66 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
+using Cinemachine;
 
 public class CamTimelineManager : MonoBehaviour {
 
     public PlayableDirector pd;
     public Animator anim;
+    public CinemachineVirtualCamera titleCam;
+    public CinemachineVirtualCamera gameplayCam;
+    public CinemachineVirtualCamera cutsceneCam;
+    [HideInInspector]
+    public bool secondPlay;
 
     private float timeToChange;
-    private float timeLeft;
-    private bool stop;
-
+    private float firstTimeLeft;
+    private float secondTimeLeft;
+    private bool fistStop;
+    private bool secondStop;
 
     void Start () {
-        timeLeft = .1f;
+        firstTimeLeft = .1f;
+        secondTimeLeft = 7.6f;
         pd = GetComponent<PlayableDirector>();
-        stop = false;
+        fistStop = false;
+        secondStop = false;
+        secondPlay = false;
         FindObjectOfType<AudioManager>().Play("AmbientWind");
+        titleCam.Priority = 1;
+        gameplayCam.Priority = 0;
+        cutsceneCam.Priority = 0;
     }
 	
 
 	void Update () {
-        timeLeft -= Time.deltaTime;
-        if (timeLeft < 0 && !stop)
+        firstTimeLeft -= Time.deltaTime;
+        if (firstTimeLeft < 0 && !fistStop)
         {
             pd.Pause();
         }
-        if (Input.anyKey && !stop)
+        if (Input.anyKey && !fistStop)
         {
             pd.Play();
+            titleCam.Priority = 0;
+            gameplayCam.Priority = 1;
             anim.SetBool("Permiso", true);
-            stop = true;
+            fistStop = true;
             FindObjectOfType<AudioManager>().Play("EntryLevel");
+            secondStop = true;
         }
+
+        if (secondStop)
+        {
+            secondTimeLeft -= Time.deltaTime;
+            if (secondTimeLeft < 0)
+            {
+                pd.Pause();
+            }
+            if (secondPlay)
+            {
+                pd.Play();
+            }
+        }      
     }
 }

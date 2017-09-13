@@ -1,0 +1,332 @@
+fileFormatVersion: 2
+guid: 8ebeb01c529fb264a90c9ef9f3f85794
+timeCreated: 1505058072
+licenseType: Free
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: Barrote
+    100002: Barrote 1
+    100004: Barrote 2
+    100006: Barrote 3
+    100008: Barrotes
+    100010: Barrotes 1
+    100012: Barrotes 2
+    100014: Barrotes 3
+    100016: Barrotes 4
+    100018: Barrotes 5
+    100020: Barrotes 6
+    100022: Barrotes 7
+    100024: //RootNode
+    100026: Chimenea_02_Edif_05
+    100028: Chimenea_02_Edif_05 1
+    100030: Chimenea_02_Edif_06
+    100032: Chimenea_02_Edif_06 1
+    100034: Cristal
+    100036: Cristal 1
+    100038: Cristal 10
+    100040: Cristal 11
+    100042: Cristal 2
+    100044: Cristal 3
+    100046: Cristal 4
+    100048: Cristal 5
+    100050: Cristal 6
+    100052: Cristal 7
+    100054: Cristal 8
+    100056: Cristal 9
+    100058: G_Chimenea_01
+    100060: G_Chimenea_02
+    100062: G_Edificio_Fondo_03
+    100064: Parte_01
+    100066: pCube4
+    100068: pCube4 1
+    100070: polySurface6
+    100072: Ventana
+    100074: Ventana 1
+    100076: Ventana 2
+    100078: Ventana 3
+    100080: Ventana 4
+    100082: Ventana 5
+    100084: Ventana 6
+    100086: Ventana 7
+    100088: Ventanal
+    100090: Ventanal 1
+    100092: Ventanal 2
+    100094: Ventanal 3
+    100096: Ventanales_01
+    100098: Ventanales_02
+    100100: Ventanales_03
+    100102: Ventanales_04
+    100104: Ventanales_05
+    100106: Ventanales_06
+    100108: Ventanales_07
+    100110: Ventanales_08
+    100112: Ventanales_09
+    100114: Ventanales_10
+    100116: Ventanales_11
+    100118: Ventanales_12
+    400000: Barrote
+    400002: Barrote 1
+    400004: Barrote 2
+    400006: Barrote 3
+    400008: Barrotes
+    400010: Barrotes 1
+    400012: Barrotes 2
+    400014: Barrotes 3
+    400016: Barrotes 4
+    400018: Barrotes 5
+    400020: Barrotes 6
+    400022: Barrotes 7
+    400024: //RootNode
+    400026: Chimenea_02_Edif_05
+    400028: Chimenea_02_Edif_05 1
+    400030: Chimenea_02_Edif_06
+    400032: Chimenea_02_Edif_06 1
+    400034: Cristal
+    400036: Cristal 1
+    400038: Cristal 10
+    400040: Cristal 11
+    400042: Cristal 2
+    400044: Cristal 3
+    400046: Cristal 4
+    400048: Cristal 5
+    400050: Cristal 6
+    400052: Cristal 7
+    400054: Cristal 8
+    400056: Cristal 9
+    400058: G_Chimenea_01
+    400060: G_Chimenea_02
+    400062: G_Edificio_Fondo_03
+    400064: Parte_01
+    400066: pCube4
+    400068: pCube4 1
+    400070: polySurface6
+    400072: Ventana
+    400074: Ventana 1
+    400076: Ventana 2
+    400078: Ventana 3
+    400080: Ventana 4
+    400082: Ventana 5
+    400084: Ventana 6
+    400086: Ventana 7
+    400088: Ventanal
+    400090: Ventanal 1
+    400092: Ventanal 2
+    400094: Ventanal 3
+    400096: Ventanales_01
+    400098: Ventanales_02
+    400100: Ventanales_03
+    400102: Ventanales_04
+    400104: Ventanales_05
+    400106: Ventanales_06
+    400108: Ventanales_07
+    400110: Ventanales_08
+    400112: Ventanales_09
+    400114: Ventanales_10
+    400116: Ventanales_11
+    400118: Ventanales_12
+    2300000: Barrote
+    2300002: Barrote 1
+    2300004: Barrote 2
+    2300006: Barrote 3
+    2300008: Barrotes
+    2300010: Barrotes 1
+    2300012: Barrotes 2
+    2300014: Barrotes 3
+    2300016: Barrotes 4
+    2300018: Barrotes 5
+    2300020: Barrotes 6
+    2300022: Barrotes 7
+    2300024: Chimenea_02_Edif_05
+    2300026: Chimenea_02_Edif_05 1
+    2300028: Chimenea_02_Edif_06
+    2300030: Chimenea_02_Edif_06 1
+    2300032: Cristal
+    2300034: Cristal 1
+    2300036: Cristal 10
+    2300038: Cristal 11
+    2300040: Cristal 2
+    2300042: Cristal 3
+    2300044: Cristal 4
+    2300046: Cristal 5
+    2300048: Cristal 6
+    2300050: Cristal 7
+    2300052: Cristal 8
+    2300054: Cristal 9
+    2300056: pCube4
+    2300058: pCube4 1
+    2300060: polySurface6
+    2300062: Ventana
+    2300064: Ventana 1
+    2300066: Ventana 2
+    2300068: Ventana 3
+    2300070: Ventana 4
+    2300072: Ventana 5
+    2300074: Ventana 6
+    2300076: Ventana 7
+    2300078: Ventanal
+    2300080: Ventanal 1
+    2300082: Ventanal 2
+    2300084: Ventanal 3
+    3300000: Barrote
+    3300002: Barrote 1
+    3300004: Barrote 2
+    3300006: Barrote 3
+    3300008: Barrotes
+    3300010: Barrotes 1
+    3300012: Barrotes 2
+    3300014: Barrotes 3
+    3300016: Barrotes 4
+    3300018: Barrotes 5
+    3300020: Barrotes 6
+    3300022: Barrotes 7
+    3300024: Chimenea_02_Edif_05
+    3300026: Chimenea_02_Edif_05 1
+    3300028: Chimenea_02_Edif_06
+    3300030: Chimenea_02_Edif_06 1
+    3300032: Cristal
+    3300034: Cristal 1
+    3300036: Cristal 10
+    3300038: Cristal 11
+    3300040: Cristal 2
+    3300042: Cristal 3
+    3300044: Cristal 4
+    3300046: Cristal 5
+    3300048: Cristal 6
+    3300050: Cristal 7
+    3300052: Cristal 8
+    3300054: Cristal 9
+    3300056: pCube4
+    3300058: pCube4 1
+    3300060: polySurface6
+    3300062: Ventana
+    3300064: Ventana 1
+    3300066: Ventana 2
+    3300068: Ventana 3
+    3300070: Ventana 4
+    3300072: Ventana 5
+    3300074: Ventana 6
+    3300076: Ventana 7
+    3300078: Ventanal
+    3300080: Ventanal 1
+    3300082: Ventanal 2
+    3300084: Ventanal 3
+    4300000: Ventana
+    4300002: Cristal
+    4300004: Barrotes
+    4300006: Ventana
+    4300008: Cristal
+    4300010: Barrotes
+    4300012: Ventana
+    4300014: Cristal
+    4300016: Barrotes
+    4300018: Barrote
+    4300020: Ventanal
+    4300022: Cristal
+    4300024: Barrote
+    4300026: Ventanal
+    4300028: Cristal
+    4300030: Barrote
+    4300032: Ventanal
+    4300034: Cristal
+    4300036: Barrote
+    4300038: Ventanal
+    4300040: Cristal
+    4300042: Ventana
+    4300044: Cristal
+    4300046: Barrotes
+    4300048: Ventana
+    4300050: Cristal
+    4300052: Barrotes
+    4300054: Ventana
+    4300056: Cristal
+    4300058: Barrotes
+    4300060: Ventana
+    4300062: Cristal
+    4300064: Barrotes
+    4300066: Ventana
+    4300068: Cristal
+    4300070: Barrotes
+    4300072: polySurface6
+    4300074: pCube4
+    4300076: Chimenea_02_Edif_06
+    4300078: Chimenea_02_Edif_05
+    4300080: pCube4
+    4300082: Chimenea_02_Edif_06
+    4300084: Chimenea_02_Edif_05
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

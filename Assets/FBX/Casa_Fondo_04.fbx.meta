@@ -1,0 +1,243 @@
+fileFormatVersion: 2
+guid: dab0d20b34980214c9a1e8a31cd5caff
+timeCreated: 1505058073
+licenseType: Free
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: Barrote_Vent_02_Edif_015
+    100002: Barrote_Vent_02_Edif_016
+    100004: Barrote_Vent_02_Edif_017
+    100006: Barrote_Vent_02_Edif_018
+    100008: Barrote_Vent_02_Edif_019
+    100010: Barrote_Vent_02_Edif_020
+    100012: Barrote_Vent_02_Edif_021
+    100014: Barrote_Vent_02_Edif_022
+    100016: Barrote_Vent_02_Edif_023
+    100018: //RootNode
+    100020: Cristal_Vent_02_Edif_010
+    100022: Cristal_Vent_02_Edif_011
+    100024: Cristal_Vent_02_Edif_012
+    100026: Cristal_Vent_02_Edif_013
+    100028: Cristal_Vent_02_Edif_05
+    100030: Cristal_Vent_02_Edif_06
+    100032: Cristal_Vent_02_Edif_07
+    100034: Cristal_Vent_02_Edif_08
+    100036: Cristal_Vent_02_Edif_09
+    100038: Esquina_Pared_05
+    100040: Esquina_Pared_06
+    100042: G_Edificio_04
+    100044: G_Ventana_010
+    100046: G_Ventana_08
+    100048: G_Ventana_09
+    100050: Marco_02_Edif_010
+    100052: Marco_02_Edif_011
+    100054: Marco_02_Edif_012
+    100056: Marco_02_Edif_013
+    100058: Marco_02_Edif_05
+    100060: Marco_02_Edif_06
+    100062: Marco_02_Edif_07
+    100064: Marco_02_Edif_08
+    100066: Marco_02_Edif_09
+    100068: pCube148
+    400000: Barrote_Vent_02_Edif_015
+    400002: Barrote_Vent_02_Edif_016
+    400004: Barrote_Vent_02_Edif_017
+    400006: Barrote_Vent_02_Edif_018
+    400008: Barrote_Vent_02_Edif_019
+    400010: Barrote_Vent_02_Edif_020
+    400012: Barrote_Vent_02_Edif_021
+    400014: Barrote_Vent_02_Edif_022
+    400016: Barrote_Vent_02_Edif_023
+    400018: //RootNode
+    400020: Cristal_Vent_02_Edif_010
+    400022: Cristal_Vent_02_Edif_011
+    400024: Cristal_Vent_02_Edif_012
+    400026: Cristal_Vent_02_Edif_013
+    400028: Cristal_Vent_02_Edif_05
+    400030: Cristal_Vent_02_Edif_06
+    400032: Cristal_Vent_02_Edif_07
+    400034: Cristal_Vent_02_Edif_08
+    400036: Cristal_Vent_02_Edif_09
+    400038: Esquina_Pared_05
+    400040: Esquina_Pared_06
+    400042: G_Edificio_04
+    400044: G_Ventana_010
+    400046: G_Ventana_08
+    400048: G_Ventana_09
+    400050: Marco_02_Edif_010
+    400052: Marco_02_Edif_011
+    400054: Marco_02_Edif_012
+    400056: Marco_02_Edif_013
+    400058: Marco_02_Edif_05
+    400060: Marco_02_Edif_06
+    400062: Marco_02_Edif_07
+    400064: Marco_02_Edif_08
+    400066: Marco_02_Edif_09
+    400068: pCube148
+    2300000: Barrote_Vent_02_Edif_015
+    2300002: Barrote_Vent_02_Edif_016
+    2300004: Barrote_Vent_02_Edif_017
+    2300006: Barrote_Vent_02_Edif_018
+    2300008: Barrote_Vent_02_Edif_019
+    2300010: Barrote_Vent_02_Edif_020
+    2300012: Barrote_Vent_02_Edif_021
+    2300014: Barrote_Vent_02_Edif_022
+    2300016: Barrote_Vent_02_Edif_023
+    2300018: Cristal_Vent_02_Edif_010
+    2300020: Cristal_Vent_02_Edif_011
+    2300022: Cristal_Vent_02_Edif_012
+    2300024: Cristal_Vent_02_Edif_013
+    2300026: Cristal_Vent_02_Edif_05
+    2300028: Cristal_Vent_02_Edif_06
+    2300030: Cristal_Vent_02_Edif_07
+    2300032: Cristal_Vent_02_Edif_08
+    2300034: Cristal_Vent_02_Edif_09
+    2300036: Esquina_Pared_05
+    2300038: Esquina_Pared_06
+    2300040: Marco_02_Edif_010
+    2300042: Marco_02_Edif_011
+    2300044: Marco_02_Edif_012
+    2300046: Marco_02_Edif_013
+    2300048: Marco_02_Edif_05
+    2300050: Marco_02_Edif_06
+    2300052: Marco_02_Edif_07
+    2300054: Marco_02_Edif_08
+    2300056: Marco_02_Edif_09
+    2300058: pCube148
+    3300000: Barrote_Vent_02_Edif_015
+    3300002: Barrote_Vent_02_Edif_016
+    3300004: Barrote_Vent_02_Edif_017
+    3300006: Barrote_Vent_02_Edif_018
+    3300008: Barrote_Vent_02_Edif_019
+    3300010: Barrote_Vent_02_Edif_020
+    3300012: Barrote_Vent_02_Edif_021
+    3300014: Barrote_Vent_02_Edif_022
+    3300016: Barrote_Vent_02_Edif_023
+    3300018: Cristal_Vent_02_Edif_010
+    3300020: Cristal_Vent_02_Edif_011
+    3300022: Cristal_Vent_02_Edif_012
+    3300024: Cristal_Vent_02_Edif_013
+    3300026: Cristal_Vent_02_Edif_05
+    3300028: Cristal_Vent_02_Edif_06
+    3300030: Cristal_Vent_02_Edif_07
+    3300032: Cristal_Vent_02_Edif_08
+    3300034: Cristal_Vent_02_Edif_09
+    3300036: Esquina_Pared_05
+    3300038: Esquina_Pared_06
+    3300040: Marco_02_Edif_010
+    3300042: Marco_02_Edif_011
+    3300044: Marco_02_Edif_012
+    3300046: Marco_02_Edif_013
+    3300048: Marco_02_Edif_05
+    3300050: Marco_02_Edif_06
+    3300052: Marco_02_Edif_07
+    3300054: Marco_02_Edif_08
+    3300056: Marco_02_Edif_09
+    3300058: pCube148
+    4300000: pCube148
+    4300002: Esquina_Pared_05
+    4300004: Esquina_Pared_06
+    4300006: Marco_02_Edif_05
+    4300008: Cristal_Vent_02_Edif_05
+    4300010: Barrote_Vent_02_Edif_015
+    4300012: Marco_02_Edif_08
+    4300014: Cristal_Vent_02_Edif_08
+    4300016: Barrote_Vent_02_Edif_018
+    4300018: Marco_02_Edif_011
+    4300020: Cristal_Vent_02_Edif_011
+    4300022: Barrote_Vent_02_Edif_021
+    4300024: Marco_02_Edif_06
+    4300026: Cristal_Vent_02_Edif_06
+    4300028: Barrote_Vent_02_Edif_016
+    4300030: Marco_02_Edif_09
+    4300032: Cristal_Vent_02_Edif_09
+    4300034: Barrote_Vent_02_Edif_019
+    4300036: Marco_02_Edif_012
+    4300038: Cristal_Vent_02_Edif_012
+    4300040: Barrote_Vent_02_Edif_022
+    4300042: Marco_02_Edif_07
+    4300044: Cristal_Vent_02_Edif_07
+    4300046: Barrote_Vent_02_Edif_017
+    4300048: Marco_02_Edif_010
+    4300050: Cristal_Vent_02_Edif_010
+    4300052: Barrote_Vent_02_Edif_020
+    4300054: Marco_02_Edif_013
+    4300056: Cristal_Vent_02_Edif_013
+    4300058: Barrote_Vent_02_Edif_023
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
