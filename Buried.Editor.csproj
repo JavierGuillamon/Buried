@@ -133,6 +133,12 @@
     <Reference Include="UnityEditor.iOS.Extensions.Common">
       <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
+    <Reference Include="AmplifyColor">
+      <HintPath>Assets\AmplifyColor\Plugins\AmplifyColor.dll</HintPath>
+    </Reference>
+    <Reference Include="AmplifyColorEditor">
+      <HintPath>Assets\AmplifyColor\Plugins\Editor\AmplifyColorEditor.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Buried.csproj">
@@ -149,6 +155,27 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\AmplifyColor\Plugins\Editor\About.cs" />
+    <Compile Include="Assets\AmplifyColor\Plugins\Editor\AmplifyColorEffectEditor.cs" />
+    <Compile Include="Assets\AmplifyColor\Plugins\Editor\AmplifyColorEffectEditorBase.cs" />
+    <Compile Include="Assets\AmplifyColor\Plugins\Editor\AmplifyColorVolumeEditor.cs" />
+    <Compile Include="Assets\AmplifyColor\Plugins\Editor\AmplifyColorVolumeEditorBase.cs" />
+    <Compile Include="Assets\AmplifyColor\Plugins\Editor\BackBufferHandler.cs" />
+    <Compile Include="Assets\AmplifyColor\Plugins\Editor\CameraCollection.cs" />
+    <Compile Include="Assets\AmplifyColor\Plugins\Editor\EncryptDecrypt.cs" />
+    <Compile Include="Assets\AmplifyColor\Plugins\Editor\FileHandler.cs" />
+    <Compile Include="Assets\AmplifyColor\Plugins\Editor\ImageResult.cs" />
+    <Compile Include="Assets\AmplifyColor\Plugins\Editor\LUTEditor.cs" />
+    <Compile Include="Assets\AmplifyColor\Plugins\Editor\LUTResult.cs" />
+    <Compile Include="Assets\AmplifyColor\Plugins\Editor\LUTSettings.cs" />
+    <Compile Include="Assets\AmplifyColor\Plugins\Editor\LUTWriter.cs" />
+    <Compile Include="Assets\AmplifyColor\Plugins\Editor\PhotoshopConnection.cs" />
+    <Compile Include="Assets\AmplifyColor\Plugins\Editor\PhotoshopEncryptDecrypt.cs" />
+    <Compile Include="Assets\AmplifyColor\Plugins\Editor\PhotoshopHandler.cs" />
+    <Compile Include="Assets\AmplifyColor\Plugins\Editor\PhotoshopProtocol.cs" />
+    <Compile Include="Assets\AmplifyColor\Plugins\Editor\PhotoshopTouchHelper.cs" />
+    <Compile Include="Assets\AmplifyColor\Plugins\Editor\ResolutionSettings.cs" />
+    <Compile Include="Assets\AmplifyColor\Plugins\Editor\ToolSettings.cs" />
     <Compile Include="Assets\Cinema Suite\About\Editor\CinemaSuiteWelcome.cs" />
     <Compile Include="Assets\Cinema Suite\About\Editor\ProductInfo.cs" />
     <Compile Include="Assets\Cinema Suite\Cinema Themes\Editor\CinemaThemesWindow.cs" />
@@ -218,6 +245,17 @@
     <Compile Include="Assets\PostProcessing\Editor\Utils\ReflectionUtils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\AmplifyColor\Readme.txt" />
+    <None Include="Assets\AmplifyColor\Resources\Base.shader" />
+    <None Include="Assets\AmplifyColor\Resources\Blend.shader" />
+    <None Include="Assets\AmplifyColor\Resources\BlendCache.shader" />
+    <None Include="Assets\AmplifyColor\Resources\Common.cginc" />
+    <None Include="Assets\AmplifyColor\Resources\DepthMask.shader" />
+    <None Include="Assets\AmplifyColor\Resources\DepthMaskBlend.shader" />
+    <None Include="Assets\AmplifyColor\Resources\Mask.shader" />
+    <None Include="Assets\AmplifyColor\Resources\MaskBlend.shader" />
+    <None Include="Assets\AmplifyColor\Resources\ProcessOnly.shader" />
+    <None Include="Assets\AmplifyColor\Samples\Check out the full LUT Package.txt" />
     <None Include="Assets\Cinema Suite\About\Editor\Resources\BaseProductInfo.xml" />
     <None Include="Assets\Cinema Suite\Cinema Themes\Editor\Resources\CinemaThemesInstalledProductInfo.xml" />
     <None Include="Assets\Cinema Suite\Cinema Themes\ReadMe.txt" />
