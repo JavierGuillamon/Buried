@@ -1,0 +1,138 @@
+fileFormatVersion: 2
+guid: cad073d8e25097c4da6b3f09cf24704e
+timeCreated: 1504448603
+licenseType: Free
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: Barrote_Vent_02_Edif_02
+    100002: Barrote_Vent_02_Edif_04
+    100004: Barrote_Vent_02_Edif_05
+    100006: Cristal_Vent_02_Edif_02
+    100008: Cristal_Vent_02_Edif_03
+    100010: Cristal_Vent_02_Edif_04
+    100012: M_Pared_Ventanal
+    100014: Marco_02_Edif_02
+    100016: Marco_02_Edif_03
+    100018: Marco_02_Edif_04
+    100020: Modulo_Pared_Ventanal_03
+    100022: //RootNode
+    100024: polySurface29
+    400000: Barrote_Vent_02_Edif_02
+    400002: Barrote_Vent_02_Edif_04
+    400004: Barrote_Vent_02_Edif_05
+    400006: Cristal_Vent_02_Edif_02
+    400008: Cristal_Vent_02_Edif_03
+    400010: Cristal_Vent_02_Edif_04
+    400012: M_Pared_Ventanal
+    400014: Marco_02_Edif_02
+    400016: Marco_02_Edif_03
+    400018: Marco_02_Edif_04
+    400020: Modulo_Pared_Ventanal_03
+    400022: //RootNode
+    400024: polySurface29
+    2300000: Barrote_Vent_02_Edif_02
+    2300002: Barrote_Vent_02_Edif_04
+    2300004: Barrote_Vent_02_Edif_05
+    2300006: Cristal_Vent_02_Edif_02
+    2300008: Cristal_Vent_02_Edif_03
+    2300010: Cristal_Vent_02_Edif_04
+    2300012: Marco_02_Edif_02
+    2300014: Marco_02_Edif_03
+    2300016: Marco_02_Edif_04
+    2300018: polySurface29
+    3300000: Barrote_Vent_02_Edif_02
+    3300002: Barrote_Vent_02_Edif_04
+    3300004: Barrote_Vent_02_Edif_05
+    3300006: Cristal_Vent_02_Edif_02
+    3300008: Cristal_Vent_02_Edif_03
+    3300010: Cristal_Vent_02_Edif_04
+    3300012: Marco_02_Edif_02
+    3300014: Marco_02_Edif_03
+    3300016: Marco_02_Edif_04
+    3300018: polySurface29
+    4300000: Marco_02_Edif_02
+    4300002: Cristal_Vent_02_Edif_02
+    4300004: Barrote_Vent_02_Edif_02
+    4300006: Marco_02_Edif_03
+    4300008: Cristal_Vent_02_Edif_03
+    4300010: Barrote_Vent_02_Edif_04
+    4300012: Marco_02_Edif_04
+    4300014: Cristal_Vent_02_Edif_04
+    4300016: Barrote_Vent_02_Edif_05
+    4300018: polySurface29
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

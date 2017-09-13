@@ -1,0 +1,153 @@
+fileFormatVersion: 2
+guid: 74dc6760dff52024caf728a875850385
+timeCreated: 1505065009
+licenseType: Free
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: Barrote_Vent_02_Edif_02
+    100002: Barrote_Vent_02_Edif_02 1
+    100004: Barrote_Vent_02_Edif_02 2
+    100006: //RootNode
+    100008: Cristal_Vent_02_Edif_02
+    100010: Cristal_Vent_02_Edif_02 1
+    100012: Cristal_Vent_02_Edif_02 2
+    100014: Esquina_Pared_010
+    100016: Esquina_Pared_09
+    100018: G_Edificio_06
+    100020: G_Ventana_011
+    100022: G_Ventana_012
+    100024: G_Ventana_013
+    100026: Marco_02_Edif_02
+    100028: Marco_02_Edif_02 1
+    100030: Marco_02_Edif_02 2
+    100032: pCube153
+    400000: Barrote_Vent_02_Edif_02
+    400002: Barrote_Vent_02_Edif_02 1
+    400004: Barrote_Vent_02_Edif_02 2
+    400006: //RootNode
+    400008: Cristal_Vent_02_Edif_02
+    400010: Cristal_Vent_02_Edif_02 1
+    400012: Cristal_Vent_02_Edif_02 2
+    400014: Esquina_Pared_010
+    400016: Esquina_Pared_09
+    400018: G_Edificio_06
+    400020: G_Ventana_011
+    400022: G_Ventana_012
+    400024: G_Ventana_013
+    400026: Marco_02_Edif_02
+    400028: Marco_02_Edif_02 1
+    400030: Marco_02_Edif_02 2
+    400032: pCube153
+    2300000: Barrote_Vent_02_Edif_02
+    2300002: Barrote_Vent_02_Edif_02 1
+    2300004: Barrote_Vent_02_Edif_02 2
+    2300006: Cristal_Vent_02_Edif_02
+    2300008: Cristal_Vent_02_Edif_02 1
+    2300010: Cristal_Vent_02_Edif_02 2
+    2300012: Esquina_Pared_010
+    2300014: Esquina_Pared_09
+    2300016: Marco_02_Edif_02
+    2300018: Marco_02_Edif_02 1
+    2300020: Marco_02_Edif_02 2
+    2300022: pCube153
+    3300000: Barrote_Vent_02_Edif_02
+    3300002: Barrote_Vent_02_Edif_02 1
+    3300004: Barrote_Vent_02_Edif_02 2
+    3300006: Cristal_Vent_02_Edif_02
+    3300008: Cristal_Vent_02_Edif_02 1
+    3300010: Cristal_Vent_02_Edif_02 2
+    3300012: Esquina_Pared_010
+    3300014: Esquina_Pared_09
+    3300016: Marco_02_Edif_02
+    3300018: Marco_02_Edif_02 1
+    3300020: Marco_02_Edif_02 2
+    3300022: pCube153
+    4300000: pCube153
+    4300002: Marco_02_Edif_02
+    4300004: Cristal_Vent_02_Edif_02
+    4300006: Barrote_Vent_02_Edif_02
+    4300008: Marco_02_Edif_02
+    4300010: Cristal_Vent_02_Edif_02
+    4300012: Barrote_Vent_02_Edif_02
+    4300014: Marco_02_Edif_02
+    4300016: Cristal_Vent_02_Edif_02
+    4300018: Barrote_Vent_02_Edif_02
+    4300020: Esquina_Pared_09
+    4300022: Esquina_Pared_010
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 100
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class scr_PlacaPresion : MonoBehaviour {
-    
+
     [Tooltip("Introducir en minúsculas el eje debe moverse el objeto")]
     public string ejeMovimiento;
     public Transform movingObject;
@@ -125,7 +125,7 @@ public class scr_PlacaPresion : MonoBehaviour {
                     objectFinalPos = new Vector3(movingObject.position.x, movingObject.position.y, movingObject.position.z + distance);
                     break;
             }
-            Gizmos.color = new Color (0, 1, 0, .5f);
+            Gizmos.color = new Color(0, 1, 0, .5f);
             Gizmos.DrawCube(objectFinalPos, new Vector3((movingObject.localScale.x + .1f) * gizmoScale, (movingObject.localScale.y + .1f) * gizmoScale, (movingObject.localScale.z + .1f) * gizmoScale));
         }
     }
