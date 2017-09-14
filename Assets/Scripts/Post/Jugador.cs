@@ -103,7 +103,8 @@ public class Jugador : MonoBehaviour {
     Stack<GameObject> links = new Stack<GameObject>();
     Stack<GameObject> linksCoffin = new Stack<GameObject>();
 
-
+    [SerializeField]
+    Transform Hand;
     [SerializeField]
     LineRenderer lineRenderer;
     [SerializeField]
@@ -484,6 +485,7 @@ public class Jugador : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.W) && playerGround && coffinTaken == false)
         {
             jumpParticles.Play();
+            animator.SetBool("Jump", true);
         }
         if (rb2d.velocity.x != 0 && playerGround)
         {
@@ -595,9 +597,10 @@ public class Jugador : MonoBehaviour {
         throwing = false;
     }
 
+    Vector2 vely;
     private void Move()
     {
-        Vector2 vely = rb2d.velocity.y * Vector2.up;
+        vely = rb2d.velocity.y * Vector2.up;
         if (rb2d.velocity.y >= 0)
             vely -= gravityUp * Time.deltaTime * Vector2.up;
         else
@@ -678,7 +681,7 @@ public class Jugador : MonoBehaviour {
         foreach (GameObject l in links)
         {
             Vector3 pos;
-            if (i == 0) pos = transform.position;
+            if (i == 0) pos = Hand.position;
             else if (i == links.Count - 1) pos = coffin.position;
             else
             {
@@ -715,22 +718,39 @@ public class Jugador : MonoBehaviour {
     private void playAnimations()
     {
         animator.SetFloat("InputX",input.x);
+        animator.SetFloat("InputY", vely.y);
         if (contadorDeGiro)
         {
-            //VisualGO.transform.rotation = Quaternion.Lerp(VisualGO.transform.rotation, Quaternion.Euler(0, 180, 0), Time.deltaTime);
             VisualGO.transform.Rotate(0, 180, 0);
             contadorDeGiro = false;
         }
         animator.SetBool("Ataud", coffinTaken);
-        if(!playerGround && coffinGround)
+        animator.SetBool("TakingAtaud", taking);
+        if (!playerGround && coffinGround &&(coffin.position.y>transform.position.y))
         {
-            animator.SetBool("Climbing", taking);
+            animator.SetBool("Climbing", true);
         }
         else
         {
-            animator.SetBool("TakingAtaud", taking);
+            animator.SetBool("Climbing", false);
+            if (taking)
+            {
+                if (lookingRight && coffin.position.x < transform.position.x)
+                {
+                    lookingRight = false;
+                    VisualGO.transform.Rotate(0, 180, 0);
+                }
+                else if (!lookingRight && coffin.position.x > transform.position.x)
+                {
+                    lookingRight = true;
+                    VisualGO.transform.Rotate(0, 180, 0);
+                }
+            }
         }
+        if (playerGround)
+            animator.SetBool("Jump", false);
     }
+
     public void setCoffinGround(bool aux)
     {
         coffinGround = aux;
