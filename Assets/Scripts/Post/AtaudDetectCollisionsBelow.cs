@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class AtaudDetectCollisionsBelow : MonoBehaviour {
-    public Jugador jugadorScript;
+   /* public Jugador jugadorScript;
     public float margin;
     public Collider2D col;
     public LayerMask layerMask;
@@ -30,5 +30,5 @@ public class AtaudDetectCollisionsBelow : MonoBehaviour {
     public bool getHitting()
     {
         return isHitting;
-    }
+    }*/
 }

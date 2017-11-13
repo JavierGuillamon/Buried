@@ -16,7 +16,7 @@ public class scr_PlacaPresion : MonoBehaviour {
     [Range(0f, 1f)]
     public float gizmoScale;
 
-    private int objectsInTrigger;
+    public int objectsInTrigger;
     private bool open;
     private Vector3 objectOriginPos;
     private Vector3 objectFinalPos;

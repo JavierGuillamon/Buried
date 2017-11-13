@@ -22,7 +22,7 @@ public class SkillsController : MonoBehaviour {
     /*public float cooldownHielo;
     public float manaHielo;*/
     [Header("Sombra")]
-    public SombraCoffinDetect sombraDetect;
+   // public SombraCoffinDetect sombraDetect;
    /* public KeyCode sombraKeyCode;
     public float cooldownSombra;
     public float manaSombra;*/
@@ -47,7 +47,7 @@ public class SkillsController : MonoBehaviour {
             if (sombraActiva)
             {
                 sombraActiva = !sombraActiva;
-                Coffin.GetComponent<SombraMov>().Reject();
+                //Coffin.GetComponent<SombraMov>().Reject();
             }
             else
             {
@@ -61,17 +61,17 @@ public class SkillsController : MonoBehaviour {
         {
             //SOMBRA
             if (!sombraActiva) {
-                if (sombraDetect.canUseSombra())
+                /*if (sombraDetect.canUseSombra())
                 {
                     sombraActiva = true;
                     hieloActivo = false;
                     Coffin.layer = LayerMask.NameToLayer("sombra");
-                }
+                }*/
             }
             else
             {
                 sombraActiva = false;
-                Coffin.GetComponent<SombraMov>().Reject();
+               // Coffin.GetComponent<SombraMov>().Reject();
             }
         }
 

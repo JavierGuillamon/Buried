@@ -54,8 +54,8 @@ public class Hielo : MonoBehaviour {
     }
 
     private IEnumerator freeze(float time, Collider2D other) {
-        other.transform.GetComponent<PlatformController>().enabled = false;
+      //  other.transform.GetComponent<PlatformController>().enabled = false;
         yield return new WaitForSeconds(time);
-        other.transform.GetComponent<PlatformController>().enabled = true;
+       // other.transform.GetComponent<PlatformController>().enabled = true;
     }
 }

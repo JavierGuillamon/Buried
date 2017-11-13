@@ -18,7 +18,11 @@ public class Jugador : MonoBehaviour {
     [SerializeField]
     float accelerationXNormal;
     [SerializeField]
-    float accelerationXSlow;
+    float maxVelXSlow;
+    [SerializeField]
+    float maxVelX;
+    [SerializeField]
+    float dragX;
     [SerializeField]
     float jumpVelocity;
     //end
@@ -31,11 +35,35 @@ public class Jugador : MonoBehaviour {
     //PlayerCoffinPositionManager
     [Header("PlayerCoffinPositionManager")]
     public Transform coffin;
-    public bool playerGround;
-    public bool coffinGround;
-    public bool CoffinGround {
-        get { return coffinGround; }
+    [SerializeField]
+    List<GroundDetector> coffinDetectors;
+    [SerializeField]
+    List<GroundDetector> playerDetectors;
+    bool playerGround
+    {
+        get
+        {
+            foreach (GroundDetector gd in playerDetectors)
+            {
+                if (gd.DetectGround())
+                    return true;
+            }
+            return false;
+        }
     }
+    bool coffinGround
+    {
+        get
+        {
+            foreach (GroundDetector gd in coffinDetectors)
+            {
+                if (gd.DetectGround())
+                    return true;
+            }
+            return false;
+        }
+    }
+   
     [SerializeField]
     private float speedTakeCoffin = 10;
     public Rigidbody2D rb2dc;
@@ -66,10 +94,6 @@ public class Jugador : MonoBehaviour {
     [SerializeField]
     float massChangeDistance = 10;
     [SerializeField]
-    DistanceJoint2D jointPlayer;
-    [SerializeField]
-    DistanceJoint2D jointCoffin;
-    [SerializeField]
     Rigidbody2D kinematicBody;
     [SerializeField]
     Rigidbody2D kinematicBodyPlayer;
@@ -94,21 +118,6 @@ public class Jugador : MonoBehaviour {
     float maxDistanceCadena = 15;
     [SerializeField]
     float duracionRecogerCadena = 5;
-    [SerializeField]
-    List<HingeJoint2D> joints;
-    [SerializeField]
-    float achorDistance;
-    [SerializeField]
-    List<GameObject> Links;
-    Stack<GameObject> links = new Stack<GameObject>();
-    Stack<GameObject> linksCoffin = new Stack<GameObject>();
-
-    [SerializeField]
-    Transform Hand;
-    [SerializeField]
-    LineRenderer lineRenderer;
-    [SerializeField]
-    float posCadenaZ = 1;
 
     //Coffin actions
     bool taking = false;
@@ -142,11 +151,6 @@ public class Jugador : MonoBehaviour {
     float distanciaMinimaEscalando = 2;
 
     [SerializeField]
-    AtaudDetectCollisionsBelow detectCollisionsBelowLft;
-    [SerializeField]
-    AtaudDetectCollisionsBelow detectCollisionsBelowRgt;
-
-    [SerializeField]
     bool tirandoDeMas = false;
     [SerializeField]
     ParticleSystem sweatParticles;
@@ -168,21 +172,6 @@ public class Jugador : MonoBehaviour {
         for (int i = 0; i < numTrajectoryPoints; i++)
             trajectoryPoints.Add(Instantiate(trajectoryPrefeb));
         DisableTrajectory();
-        foreach (GameObject l in Links)
-        {
-            links.Push(l);
-        }
-       /* for(int i = 0; i <= Links.Count / 2; i++)
-        {
-            links.Push(Links[i]);
-        }*/
-
-        for(int i = Links.Count-1; i >= Links.Count; i--)
-        {
-            linksCoffin.Push(Links[i]);
-        }
-        firsjoint = links.Pop().GetComponent<DistanceJoint2D>();
-        //firsjointCoffin = linksCoffin.Pop().GetComponent<DistanceJoint2D>();
     }
 
     void CheckKinematics()
@@ -192,40 +181,37 @@ public class Jugador : MonoBehaviour {
 
         if (coffinTaken)
         {
-            jointCoffin.connectedBody = kinematicBody;
-            jointPlayer.connectedBody = kinematicBodyPlayer;
+            chain.pullFromCoffin = false;
+            chain.pullFromPlayer = false;
 
         } else if (this.playerGround && this.coffinGround)
         {
             if (taking)
             {
-                jointCoffin.connectedBody = rb2dc;
-                jointPlayer.connectedBody = kinematicBodyPlayer;
+                chain.pullFromCoffin = true;
+                chain.pullFromPlayer = false;
             }
             else
             {
-                jointCoffin.connectedBody = rb2dc;
-                jointPlayer.connectedBody = kinematicBodyPlayer;
+                chain.pullFromCoffin = true;
+                chain.pullFromPlayer = false;
             }
         }
         else if (!this.playerGround && this.coffinGround)
         {
-            jointCoffin.connectedBody = kinematicBody;
-            jointPlayer.connectedBody = this.rb2d;
-            if (Vector2.Distance(rb2dc.position, this.rb2d.position) > massChangeDistance)
-            {
-                this.rb2d.mass = maxMass;
-            }
+            chain.pullFromCoffin = false;
+            chain.pullFromPlayer = true;
+            
         }
         else if (this.playerGround && !this.coffinGround)
         {
-            jointCoffin.connectedBody = rb2dc;
-            jointPlayer.connectedBody = kinematicBodyPlayer;
+            chain.pullFromCoffin = true;
+            chain.pullFromPlayer = false;
         }
         else
         {
-            jointCoffin.connectedBody = rb2dc;
-            jointPlayer.connectedBody = kinematicBodyPlayer;
+            chain.pullFromCoffin = true;
+            chain.pullFromPlayer = false;
         }
     }
 
@@ -237,7 +223,6 @@ public class Jugador : MonoBehaviour {
     bool contadorDeGiro=false;
     void FixedUpdate ()
     {
-        playerGround = groundTrigger.IsTouchingLayers(groundMask);
         
         distanciaJugadorCoffin = Vector2.Distance(transform.position, coffin.position);
 
@@ -260,8 +245,11 @@ public class Jugador : MonoBehaviour {
 
         if (!InputManager.RightTrigger())
         {
-            if (moving && !throwing) Move();
+            if (moving && !throwing && !swing) Move();
             if (swing) MoveSwing();
+        }else
+        {
+            MoveHolding();
         }
 
         if (coffinTaken)
@@ -310,6 +298,7 @@ public class Jugador : MonoBehaviour {
             {
                 fallHeight = 0;
                 Debug.Log("HAS MUERTO");
+                //TODO cambiar este numero por el de la escena real, que se pueda cambiar por parametro
                 SceneManager.LoadScene(3);
             }
             fallHeight = 0;
@@ -328,6 +317,8 @@ public class Jugador : MonoBehaviour {
 
     float maxDistanceCadenaAux;
     bool canResetDistance = true;
+    [SerializeField]
+    Chain chainScript;
     private void TakeCoffin()
     {
         leftPrevious = left;
@@ -336,47 +327,55 @@ public class Jugador : MonoBehaviour {
 
         if (leftTick)
         {
-            RedistribuirCadena(true);
             tiempoRecogerCadena = duracionRecogerCadena * (1 - distanciaJugadorCoffin / maxDistanceCadena);
             if (distanciaJugadorCoffin > distanceToTakeCoffin)
             {
-                if (isInTension())
                     tiempoRecogerCadena = duracionRecogerCadena * (1 - distanciaJugadorCoffin / maxDistanceCadena);               
             }
             else if(playerGround)
             {
                 tiempoRecogerCadena = 0;
                 if (coffinTaken)
-                    coffinTaken = false;              
+                    coffinTaken = false;
                 else
+                {
                     coffinTaken = true;
+                    chainScript.ResetCorners();
+                }
             }
         }
 
         if (left)
         {
-            RedistribuirCadena(true);
             if (distanciaJugadorCoffin > distanceToTakeCoffin || !playerGround)
             {
-               if (isInTension())
-                {
-                    tiempoRecogerCadena += speedTakeCoffin * Time.deltaTime;
-                    tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena, 0, duracionRecogerCadena);
-                }
+                tiempoRecogerCadena += speedTakeCoffin * Time.deltaTime;
+                tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena, 0, duracionRecogerCadena);               
             }
             taking = true;
-        }else if (!tensandoCadena)
+        }else 
         {
-            RedistribuirCadena(false);
-            taking = false;
-            tiempoRecogerCadena -= speedTakeCoffin * Time.deltaTime;
-            tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena, 0, duracionRecogerCadena);
+                taking = false;
+            if (this.playerGround && this.coffinGround)
+            {
+                tiempoRecogerCadena = 0;
+            }
+            else
+            {
+                tiempoRecogerCadena -= speedTakeCoffin * Time.deltaTime;
+                tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena, 0, duracionRecogerCadena);
+            }
         }
         tirandoDeMas = tiempoRecogerCadena >= duracionRecogerCadena * (1 - (distanciaJugadorCoffin - 1f) / maxDistanceCadena);
-        
-        jointPlayer.distance = Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaMinima, maxDistanceCadena);
-        jointCoffin.distance = Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaMinima, maxDistanceCadena);
+        float desiredDistance= Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaMinima, maxDistanceCadena);
+
+        chain.currDistance = desiredDistance;
+
+
     }
+
+    [SerializeField]
+    Chain chain;
 
     bool aux = false;
     private void TensarCadena(bool left)
@@ -394,47 +393,22 @@ public class Jugador : MonoBehaviour {
 
         if (leftTick)
         {
-            RedistribuirCadena(true);
             tiempoRecogerCadena = duracionRecogerCadena * (1 - distanciaJugadorCoffin / maxDistanceCadena);
             
         }
 
-        if (left)
+        if (!left)
         {
-            RedistribuirCadena(true);
-        }
-        else //if (!tensandoCadena)
-        {
-            RedistribuirCadena(false);
             taking = false;
             tiempoRecogerCadena -= speedTakeCoffin * Time.deltaTime;
             tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena, 0, duracionRecogerCadena);
         }
         tirandoDeMas = tiempoRecogerCadena >= duracionRecogerCadena * (1 - (distanciaJugadorCoffin - 1f) / maxDistanceCadena);
 
-        jointPlayer.distance = Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaMinima, maxDistanceCadena);
-        jointCoffin.distance = Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaMinima, maxDistanceCadena);
-    }
+        float desiredDistance = Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaMinima, maxDistanceCadena);
 
-    private bool isInTension()
-    {
-        if(this.transform.position.x > coffin.position.x)
-        {
-            foreach(GameObject l in links)
-            {
-                if (l.transform.position.x < coffin.position.x-0.8f)
-                    return false;
-            }
-        }
-        else
-        {
-            foreach (GameObject l in links)
-            {
-                if (l.transform.position.x > coffin.position.x+0.8f)
-                    return false;
-            }
-        }
-        return true;
+        chain.currDistance = desiredDistance;
+
     }
 
     [SerializeField]
@@ -446,42 +420,10 @@ public class Jugador : MonoBehaviour {
     [SerializeField]
     Transform ChainParent;
     ArrayList list = new ArrayList();
-    private void RedistribuirCadena(bool recoger)
-    {
-        if (recoger)
-        {
-            GameObject toTest = links.Pop();
-            if (links.Count > 0 && Vector2.Distance(toTest.transform.position, transform.position) < 2 && Vector2.Distance(toTest.transform.position, links.Peek().transform.position) < 2)
-            {
-                linksBloqueados.Push(toTest);
-                linksBloqueados.Peek().transform.position = transform.position ;
-                linksBloqueados.Peek().transform.SetParent(this.transform);
-                linksBloqueados.Peek().GetComponent<DistanceJoint2D>().connectedBody = null;
-                firsjoint.connectedBody = links.Peek().GetComponent<Rigidbody2D>();
-            }
-            else {
-                links.Push(toTest);
-            }
-            ImprimirCadena();
-        }
-        else
-        {
-           while (linksBloqueados.Count > 0)
-            {
-                linksBloqueados.Peek().GetComponent<DistanceJoint2D>().connectedBody = links.Peek().GetComponent<Rigidbody2D>();
-                links.Push(linksBloqueados.Pop());
-                links.Peek().transform.SetParent(ChainParent);
-                links.Peek().transform.position = transform.position + Vector3.up * 1.5f;
-                links.Peek().GetComponent<DistanceJoint2D>().connectedBody = firsjoint.connectedBody;
-                firsjoint.connectedBody = links.Peek().GetComponent<Rigidbody2D>();
-            }   
-            ImprimirCadena();
-        }
-    }
-
+    
     void Update()
     {
-        // Juan was here
+        // Particulas
         if (Input.GetKeyDown(KeyCode.W) && playerGround && coffinTaken == false)
         {
             jumpParticles.Play();
@@ -495,16 +437,16 @@ public class Jugador : MonoBehaviour {
         {
             runParticles.Stop();
         }
-        //Sorry for this
+        //end
 
         input = new Vector2(InputManager.MainHorizontal(), System.Convert.ToInt32(InputManager.AButton()));
-        ImprimirCadena();
 
         if (throwing)
         {
             input = new Vector2(0, 0);
-            if (InputManager.MainHorizontal() <= 0.1 && InputManager.MainVertical() <= 0.1)
+            if (InputManager.MainHorizontal() == 0 && InputManager.MainVertical() == 0)
                 throwing = false;
+           
         }
         if (taking && playerGround && !coffinTaken)
             input = new Vector2(0, 0);
@@ -541,8 +483,9 @@ public class Jugador : MonoBehaviour {
                 Vector2 apuntar = Apuntar();
                 throwForce += Time.deltaTime;
                 Vector3 currenpoint = transform.position;
-                Vector3 currentVel = apuntar.normalized * throwCurve.Evaluate(Mathf.Clamp01(throwForce / throwCoffinTimeMax)) * throwMaxStrength;
-                for (int i = 0; i < numTrajectoryPoints; i++)
+                //Vector3 currentVel = apuntar.normalized * throwCurve.Evaluate(Mathf.Clamp01(throwForce / throwCoffinTimeMax)) * throwMaxStrength;
+                Vector3 currentVel = apuntar.normalized * throwCurve.Evaluate(throwForce / throwCoffinTimeMax) * throwMaxStrength;
+                 for (int i = 0; i < numTrajectoryPoints; i++)
                 {
                     trajectoryPoints[i].transform.position = currenpoint;
                     currenpoint += currentVel * Time.fixedDeltaTime;
@@ -598,6 +541,8 @@ public class Jugador : MonoBehaviour {
     }
 
     Vector2 vely;
+
+
     private void Move()
     {
         vely = rb2d.velocity.y * Vector2.up;
@@ -612,56 +557,76 @@ public class Jugador : MonoBehaviour {
 
         if (coffinTaken)
         {
-            rb2d.velocity = new Vector2(input.x * Time.deltaTime * accelerationXSlow, vely.y);
+            rb2d.velocity += Vector2.right * Time.deltaTime * accelerationXNormal * InputManager.MainHorizontal();
             movSlow = true;
         }
-        else if (distanciaJugadorCoffin >= maxDistanceAtaudCofin)
+        else if (distanciaJugadorCoffin >= chain.currDistance - 2)
         {
             if (transform.position.x > coffin.position.x && InputManager.MainHorizontal() > 0)
             {
-                rb2d.velocity = new Vector2(input.x * Time.deltaTime * accelerationXSlow, vely.y);
+                rb2d.velocity += Vector2.right * Time.deltaTime * accelerationXNormal * InputManager.MainHorizontal();
                 movSlow = true;
             }
             else if (transform.position.x < coffin.position.x && InputManager.MainHorizontal() < 0)
             {
-                rb2d.velocity = new Vector2(input.x * Time.deltaTime * accelerationXSlow, vely.y);
+                rb2d.velocity += Vector2.right * Time.deltaTime * accelerationXNormal * InputManager.MainHorizontal();
                 movSlow = true;
             }
             else
             {
-                rb2d.velocity = new Vector2(input.x * Time.deltaTime * accelerationXNormal, vely.y);
+                rb2d.velocity += Vector2.right* Time.deltaTime* accelerationXNormal * InputManager.MainHorizontal();
                 movSlow = false;
             }
         }
         else
         {
-            rb2d.velocity = new Vector2(input.x * Time.deltaTime * accelerationXNormal, vely.y);
+            rb2d.velocity += Vector2.right * Time.deltaTime * accelerationXNormal * InputManager.MainHorizontal();
             movSlow = false;
         }
+        if(movSlow)
+            rb2d.velocity = new Vector2(Mathf.Clamp(rb2d.velocity.x,-maxVelXSlow, maxVelXSlow), rb2d.velocity.y);
+        else
+            rb2d.velocity = new Vector2(Mathf.Clamp(rb2d.velocity.x, -maxVelX, maxVelX), rb2d.velocity.y);
+        rb2d.velocity = new Vector2(rb2d.velocity.x * dragX, vely.y);
+    }
+
+    void MoveHolding()
+    {
+        rb2d.velocity = new Vector2(rb2d.velocity.x * dragX, vely.y) - gravityDown * Time.deltaTime * Vector2.up;
     }
 
     private void MoveSwing()
     {
-        Vector2 moveVelocity = rb2d.velocity;
-        moveVelocity = Vector2.right * InputManager.MainHorizontal() * speedSwing;
-        rb2d.AddForce(moveVelocity);
+        Vector3 n = chain.chainNormal;
+        Vector3 chainRight = Vector3.Cross(n,Vector3.forward);
+        rb2d.velocity += (Vector2)chainRight * InputManager.MainHorizontal() * speedSwing * Time.deltaTime - gravityDown * Time.deltaTime * Vector2.up;
+        
     }
-
+    
     private void React()
     {
         distanciaMinima = distanciaMinimaNormal;
         if (playerGround && coffinGround)
         {
             controlCoffin.ataudColgando = false;
+            swing = false;
         }
         else if (playerGround && !coffinGround)
         {
             controlCoffin.ataudColgando = true;
+            swing = false;
         }
         else if (!playerGround && coffinGround && this.transform.position.y < coffin.position.y)
         {
             controlCoffin.ataudColgando = false;
             distanciaMinima = distanciaMinimaEscalando;
+            swing = true;
+            if (((this.transform.position.y - coffin.position.y) > -2)&& InputManager.LeftTrigger())
+            {
+                //chapuzilla para solucionar el fallo de terminar de trepar en una plataforma. TODO: mejorar 
+                this.transform.position = new Vector3(this.transform.position.x,this.transform.position.y+1,this.transform.position.z);
+            }
+            
         }
         else if (!playerGround && !coffinGround)
         {
@@ -669,50 +634,6 @@ public class Jugador : MonoBehaviour {
             swing = false;
             moving = true;
         }
-    }
-
-    public float chainOffsetX;
-    public float chainOffsetY;
-    private void ImprimirCadena()
-    {
-        lineRenderer.positionCount=links.Count;
-        int i = 0;
-        Vector2 v1=Vector2.zero;
-        foreach (GameObject l in links)
-        {
-            Vector3 pos;
-            if (i == 0) pos = Hand.position;
-            else if (i == links.Count - 1) pos = coffin.position;
-            else
-            {
-                pos = l.transform.position;
-                pos.x += chainOffsetX;
-                pos.y += chainOffsetY;
-            }
-
-             /*if (i != 0 && i != links.Count - 1 )
-             {
-                 Debug.Log("ay: "+(pos.y-v1.y)+" by: "+(links.Peek().transform.position.y-v1.y));
-             }
-             else
-             {
-
-             }*/
-            pos.z -= posCadenaZ;
-            lineRenderer.SetPosition(i, pos);
-            v1 = pos;
-            i++;
-        }
-        /*foreach(GameObject l in linksCoffin)
-        {
-            Vector3 pos;
-            if (i == 0) pos = transform.position;
-            else if (i == links.Count - 1) pos = coffin.position;
-            else pos = l.transform.position;
-            pos.z -= posCadenaZ;
-            lineRenderer.SetPosition(i, pos);
-            i++;
-        }*/
     }
     
     private void playAnimations()
@@ -725,14 +646,15 @@ public class Jugador : MonoBehaviour {
             contadorDeGiro = false;
         }
         animator.SetBool("Ataud", coffinTaken);
-        animator.SetBool("TakingAtaud", taking);
         if (!playerGround && coffinGround &&(coffin.position.y>transform.position.y))
         {
             animator.SetBool("Climbing", true);
+            animator.SetBool("TakingAtaud", taking);
         }
         else
         {
             animator.SetBool("Climbing", false);
+            animator.SetBool("TakingAtaud", taking);
             if (taking)
             {
                 if (lookingRight && coffin.position.x < transform.position.x)
@@ -749,20 +671,5 @@ public class Jugador : MonoBehaviour {
         }
         if (playerGround)
             animator.SetBool("Jump", false);
-    }
-
-    public void setCoffinGround(bool aux)
-    {
-        coffinGround = aux;
-    }
-
-    public void setMoving(bool aux)
-    {
-        moving = aux;
-    }
-
-    public void setSombra(bool aux)
-    {
-        sombra = aux;
     }
 }
