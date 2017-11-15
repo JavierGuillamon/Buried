@@ -165,6 +165,9 @@ public class Jugador : MonoBehaviour {
     public DistanceJoint2D firsjointCoffin;
     public Animator animator;
     public GameObject VisualGO;
+
+    public Transform camPos;
+
     void Start () {
         rb2d = GetComponent<Rigidbody2D>();
         moving = true;
@@ -497,7 +500,7 @@ public class Jugador : MonoBehaviour {
                 for (int i = 1; i < trajectoryPoints.Count; i++)
                 {
                     trajectoryPoints[i].GetComponent<Renderer>().enabled = true;
-                    RaycastHit2D hitInformation = Physics2D.Raycast(trajectoryPoints[i].transform.position, Camera.main.transform.forward, 1);
+                    RaycastHit2D hitInformation = Physics2D.Raycast(trajectoryPoints[i].transform.position, camPos.forward, 1);
                     if (hitInformation.collider != null)
                     {
                         GameObject touchedObject = hitInformation.transform.gameObject;
