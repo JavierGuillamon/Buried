@@ -166,7 +166,14 @@ public class Jugador : MonoBehaviour {
     public Animator animator;
     public GameObject VisualGO;
 
-    public Transform camPos;
+    [Space(20)]
+    [SerializeField] Transform camPos;
+    [SerializeField] float speedTakingCoffin;
+    [SerializeField] AnimationCurve takeCoffinCurve;
+    [SerializeField] GameObject throwParticles;
+    private Vector3 oldCoffinPos;
+    private float takeCoffinTimer;
+    
 
     void Start () {
         rb2d = GetComponent<Rigidbody2D>();
@@ -218,6 +225,7 @@ public class Jugador : MonoBehaviour {
         }
     }
 
+    [Space(20)]
     public bool movSlow;
     public float lastY;
     public float fallHeight;
@@ -258,7 +266,9 @@ public class Jugador : MonoBehaviour {
         if (coffinTaken)
         {
             coffinController.SetVelocity(Vector2.zero);
-            coffin.position = coffingTakenPos.position;
+            //coffin.position = coffingTakenPos.position;
+            takeCoffinTimer += Time.deltaTime * speedTakingCoffin;
+            coffin.position = Vector3.Lerp(oldCoffinPos, coffingTakenPos.position, takeCoffinCurve.Evaluate(takeCoffinTimer));
             tiempoRecogerCadena = 0;
             coffinCollider.enabled = false;
             coffinCollider1.enabled = false;
@@ -342,6 +352,8 @@ public class Jugador : MonoBehaviour {
                     coffinTaken = false;
                 else
                 {
+                    oldCoffinPos = coffin.position;
+                    takeCoffinTimer = 0;
                     coffinTaken = true;
                     chainScript.ResetCorners();
                 }
