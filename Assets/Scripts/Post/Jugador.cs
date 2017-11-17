@@ -23,8 +23,6 @@ public class Jugador : MonoBehaviour {
     float maxVelX;
     [SerializeField]
     float dragX;
-    [SerializeField]
-    float jumpVelocity;
     //end
 
     //PlayerController
@@ -46,7 +44,10 @@ public class Jugador : MonoBehaviour {
             foreach (GroundDetector gd in playerDetectors)
             {
                 if (gd.DetectGround())
+                {
                     return true;
+                }
+
             }
             return false;
         }
@@ -269,7 +270,7 @@ public class Jugador : MonoBehaviour {
             //coffin.position = coffingTakenPos.position;
             takeCoffinTimer += Time.deltaTime * speedTakingCoffin;
             coffin.position = Vector3.Lerp(oldCoffinPos, coffingTakenPos.position, takeCoffinCurve.Evaluate(takeCoffinTimer));
-            tiempoRecogerCadena = 0;
+            desiredDistance = maxDistanceCadena;
             coffinCollider.enabled = false;
             coffinCollider1.enabled = false;
             coffinCollider2.enabled = false;
@@ -317,13 +318,6 @@ public class Jugador : MonoBehaviour {
             fallHeight = 0;
         }
         lastY = transform.position.y;
-        //Tensar cadena cuando el jugador esta colgando
-        if (coffinGround && !playerGround)
-        {
-            TensarCadena(true);
-        }
-        else
-            tensandoCadena = false;
 
         playAnimations();
     }
@@ -340,14 +334,10 @@ public class Jugador : MonoBehaviour {
 
         if (leftTick)
         {
-            tiempoRecogerCadena = duracionRecogerCadena * (1 - distanciaJugadorCoffin / maxDistanceCadena);
-            if (distanciaJugadorCoffin > distanceToTakeCoffin)
+            desiredDistance = chain.ChainLength;
+            tiempoRecogerCadena = 0;
+            if (distanciaJugadorCoffin <= distanceToTakeCoffin && playerGround)
             {
-                    tiempoRecogerCadena = duracionRecogerCadena * (1 - distanciaJugadorCoffin / maxDistanceCadena);               
-            }
-            else if(playerGround)
-            {
-                tiempoRecogerCadena = 0;
                 if (coffinTaken)
                     coffinTaken = false;
                 else
@@ -364,8 +354,8 @@ public class Jugador : MonoBehaviour {
         {
             if (distanciaJugadorCoffin > distanceToTakeCoffin || !playerGround)
             {
-                tiempoRecogerCadena += speedTakeCoffin * Time.deltaTime;
-                tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena, 0, duracionRecogerCadena);               
+                tiempoRecogerCadena +=  Time.deltaTime;
+                desiredDistance = desiredDistance - speedTakeCoffin * Time.deltaTime * curvaRecogerCadena.Evaluate(tiempoRecogerCadena);
             }
             taking = true;
         }else 
@@ -373,58 +363,27 @@ public class Jugador : MonoBehaviour {
                 taking = false;
             if (this.playerGround && this.coffinGround)
             {
-                tiempoRecogerCadena = 0;
+                desiredDistance = maxDistanceCadena;
             }
             else
             {
-                tiempoRecogerCadena -= speedTakeCoffin * Time.deltaTime;
-                tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena, 0, duracionRecogerCadena);
+                tiempoRecogerCadena -=  Time.deltaTime;
+                desiredDistance = desiredDistance + speedTakeCoffin * Time.deltaTime * curvaRecogerCadena.Evaluate(tiempoRecogerCadena);
             }
         }
-        tirandoDeMas = tiempoRecogerCadena >= duracionRecogerCadena * (1 - (distanciaJugadorCoffin - 1f) / maxDistanceCadena);
-        float desiredDistance= Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaMinima, maxDistanceCadena);
 
+        tirandoDeMas = chain.ChainLength >= maxDistanceCadena;
+        desiredDistance= Mathf.Clamp(desiredDistance , distanciaMinima, maxDistanceCadena);
         chain.currDistance = desiredDistance;
 
-
     }
+
+    float desiredDistance;
 
     [SerializeField]
     Chain chain;
 
     bool aux = false;
-    private void TensarCadena(bool left)
-    {
-        leftPrevious = left;
-        bool leftTick = !leftPrevious && left;
-        if (InputManager.LeftTrigger())
-            aux = true;
-        else if (tiempoRecogerCadena == 0)
-            aux = false;
-        if (aux)
-            tensandoCadena = false;
-        else
-            tensandoCadena = true;
-
-        if (leftTick)
-        {
-            tiempoRecogerCadena = duracionRecogerCadena * (1 - distanciaJugadorCoffin / maxDistanceCadena);
-            
-        }
-
-        if (!left)
-        {
-            taking = false;
-            tiempoRecogerCadena -= speedTakeCoffin * Time.deltaTime;
-            tiempoRecogerCadena = Mathf.Clamp(tiempoRecogerCadena, 0, duracionRecogerCadena);
-        }
-        tirandoDeMas = tiempoRecogerCadena >= duracionRecogerCadena * (1 - (distanciaJugadorCoffin - 1f) / maxDistanceCadena);
-
-        float desiredDistance = Mathf.Clamp(maxDistanceCadena * (1 - curvaRecogerCadena.Evaluate(tiempoRecogerCadena / duracionRecogerCadena)), distanciaMinima, maxDistanceCadena);
-
-        chain.currDistance = desiredDistance;
-
-    }
 
     [SerializeField]
     Stack<GameObject> linksBloqueados = new Stack<GameObject>();
@@ -555,20 +514,33 @@ public class Jugador : MonoBehaviour {
         throwing = false;
     }
 
-    Vector2 vely;
+    float vely;
+    [SerializeField]
+    float JumpSpeed = 5;
+    [SerializeField]
+    float JumpCutOff = 0.5f;
 
 
     private void Move()
     {
-        vely = rb2d.velocity.y * Vector2.up;
-        if (rb2d.velocity.y >= 0)
-            vely -= gravityUp * Time.deltaTime * Vector2.up;
-        else
-            vely -= gravityDown * Time.deltaTime * Vector2.up;
-        if (input.y > 0 && playerGround && !coffinTaken)
+        vely = rb2d.velocity.y;
+        if (InputManager.AButton() && playerGround && !coffinTaken)
         {
-            vely = jumpVelocity * Vector2.up;
+            vely = JumpSpeed ;
+            desiredDistance = chain.ChainLength;
+
         }
+        if (!InputManager.AButton() && vely > JumpCutOff)
+        {
+            Debug.Log("cutting");
+            vely = JumpCutOff;
+
+        }
+        if (vely >= 0)
+            vely -= gravityUp * Time.deltaTime ;
+        else
+            vely -= gravityDown * Time.deltaTime ;
+
 
         if (coffinTaken)
         {
@@ -602,12 +574,12 @@ public class Jugador : MonoBehaviour {
             rb2d.velocity = new Vector2(Mathf.Clamp(rb2d.velocity.x,-maxVelXSlow, maxVelXSlow), rb2d.velocity.y);
         else
             rb2d.velocity = new Vector2(Mathf.Clamp(rb2d.velocity.x, -maxVelX, maxVelX), rb2d.velocity.y);
-        rb2d.velocity = new Vector2(rb2d.velocity.x * dragX, vely.y);
+        rb2d.velocity = new Vector2(rb2d.velocity.x * dragX, vely );
     }
 
     void MoveHolding()
     {
-        rb2d.velocity = new Vector2(rb2d.velocity.x * dragX, vely.y) - gravityDown * Time.deltaTime * Vector2.up;
+        rb2d.velocity = new Vector2(rb2d.velocity.x * dragX, vely) - gravityDown * Time.deltaTime * Vector2.up;
     }
 
     private void MoveSwing()
@@ -631,7 +603,7 @@ public class Jugador : MonoBehaviour {
             controlCoffin.ataudColgando = true;
             swing = false;
         }
-        else if (!playerGround && coffinGround && this.transform.position.y < coffin.position.y)
+        else if (!playerGround && coffinGround && this.transform.position.y < coffin.position.y && rb2d.velocity.y <= 0)
         {
             controlCoffin.ataudColgando = false;
             distanciaMinima = distanciaMinimaEscalando;
@@ -654,7 +626,7 @@ public class Jugador : MonoBehaviour {
     private void playAnimations()
     {
         animator.SetFloat("InputX",input.x);
-        animator.SetFloat("InputY", vely.y);
+        animator.SetFloat("InputY", vely);
         if (contadorDeGiro)
         {
             VisualGO.transform.Rotate(0, 180, 0);

@@ -496,7 +496,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 226258880}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.48, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 262924081}
@@ -516,7 +516,7 @@ MonoBehaviour:
   terrainLayers:
     serializedVersion: 2
     m_Bits: 1048832
-  testDistance: 2.1
+  testDistance: 0.2
 --- !u!1001 &228867574
 Prefab:
   m_ObjectHideFlags: 0
@@ -658,12 +658,10 @@ GameObject:
   m_Component:
   - component: {fileID: 262924081}
   - component: {fileID: 262924082}
-  - component: {fileID: 262924088}
   - component: {fileID: 262924084}
   - component: {fileID: 262924087}
-  - component: {fileID: 262924086}
-  - component: {fileID: 262924085}
   - component: {fileID: 262924083}
+  - component: {fileID: 262924085}
   m_Layer: 10
   m_Name: JUGADOR (1)
   m_TagString: Player
@@ -763,7 +761,7 @@ MonoBehaviour:
   - {fileID: 64543863}
   playerDetectors:
   - {fileID: 226258882}
-  speedTakeCoffin: 5
+  speedTakeCoffin: 10
   rb2dc: {fileID: 975373119}
   controlCoffin: {fileID: 975373120}
   groundTrigger: {fileID: 619876480}
@@ -789,89 +787,35 @@ MonoBehaviour:
     - serializedVersion: 2
       time: 0
       value: 0
-      inSlope: 1
-      outSlope: 1.0085527
+      inSlope: -0.00054180773
+      outSlope: -0.00054180773
+      tangentMode: 34
+    - serializedVersion: 2
+      time: 0.0055555403
+      value: -0.0000030100346
+      inSlope: -0.00054180773
+      outSlope: 7.2692556
       tangentMode: 69
     - serializedVersion: 2
-      time: 0.12483413
-      value: 0.12590179
-      inSlope: 1.0085527
-      outSlope: 0.25975227
+      time: 0.14999999
+      value: 1.0500007
+      inSlope: 7.2692556
+      outSlope: -7.0271826
       tangentMode: 69
     - serializedVersion: 2
-      time: 0.1724565
-      value: 0.13827181
-      inSlope: 0.25975227
-      outSlope: 1.2948842
+      time: 0.29942015
+      value: -0.000002026558
+      inSlope: -7.0271826
+      outSlope: 0.020174153
       tangentMode: 69
     - serializedVersion: 2
-      time: 0.27216762
-      value: 0.26738617
-      inSlope: 1.2948842
-      outSlope: 0.14848806
-      tangentMode: 69
-    - serializedVersion: 2
-      time: 0.31834346
-      value: 0.27424273
-      inSlope: 0.14848806
-      outSlope: 1.4138829
-      tangentMode: 69
-    - serializedVersion: 2
-      time: 0.41425455
-      value: 0.40984976
-      inSlope: 1.4138829
-      outSlope: 0.1747365
-      tangentMode: 69
-    - serializedVersion: 2
-      time: 0.46278006
-      value: 0.41832894
-      inSlope: 0.1747365
-      outSlope: 1.4029555
-      tangentMode: 69
-    - serializedVersion: 2
-      time: 0.55637825
-      value: 0.54964304
-      inSlope: 1.4029555
-      outSlope: 0.12358152
-      tangentMode: 69
-    - serializedVersion: 2
-      time: 0.60374546
-      value: 0.55549675
-      inSlope: 0.12358152
-      outSlope: 1.4382577
-      tangentMode: 69
-    - serializedVersion: 2
-      time: 0.7065215
-      value: 0.7033152
-      inSlope: 1.4382577
-      outSlope: 0.17766738
-      tangentMode: 69
-    - serializedVersion: 2
-      time: 0.75910836
-      value: 0.71265817
-      inSlope: 0.17766738
-      outSlope: 1.2917356
-      tangentMode: 69
-    - serializedVersion: 2
-      time: 0.86274034
-      value: 0.8465233
-      inSlope: 1.2917356
-      outSlope: 0.20506462
-      tangentMode: 69
-    - serializedVersion: 2
-      time: 0.90836334
-      value: 0.85587895
-      inSlope: 0.20506462
-      outSlope: 1.5598675
-      tangentMode: 69
-    - serializedVersion: 2
-      time: 1.0022094
-      value: 1.0022664
-      inSlope: 1.5598675
-      outSlope: 1.0504684
-      tangentMode: 69
-    m_PreInfinity: 2
-    m_PostInfinity: 2
+      time: 0.4976852
+      value: 0.0039978027
+      inSlope: 0.020174153
+      outSlope: 0.020174153
+      tangentMode: 34
+    m_PreInfinity: 1
+    m_PostInfinity: 1
     m_RotationOrder: 0
   duracionRecogerCadena: 20
   throwCurve:
@@ -936,7 +880,7 @@ MonoBehaviour:
     type: 2}
   distanceToTakeCoffin: 2
   distanciaMinimaNormal: 2
-  distanciaMinimaEscalando: 3
+  distanciaMinimaEscalando: 0
   tirandoDeMas: 0
   sweatParticles: {fileID: 1711695638}
   launchParticles: {fileID: 715546652}
@@ -977,38 +921,37 @@ MonoBehaviour:
   forceToTakeLink: 1
   ChainParent: {fileID: 326940702}
   verticalOffset: 1.6
---- !u!58 &262924085
-CircleCollider2D:
+  JumpSpeed: 12
+  JumpCutOff: 0.5
+--- !u!60 &262924085
+PolygonCollider2D:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 58933943021404696, guid: 781bf380b3220c64993ad6b5194cdaae,
-    type: 2}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 262924080}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.74}
-  serializedVersion: 2
-  m_Radius: 0.5
---- !u!58 &262924086
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 58184459825959376, guid: 781bf380b3220c64993ad6b5194cdaae,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 262924080}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 6306f97557359c9409ff48ca55eba5c4, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0, y: 1.2845263}
+      - {x: -0.46049404, y: 0.43656325}
+      - {x: -0.22476912, y: -0.53430223}
+      - {x: 0.21495748, y: -0.51467955}
+      - {x: 0.45068264, y: 0.43656337}
 --- !u!114 &262924087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1026,32 +969,6 @@ MonoBehaviour:
   cooldownFuego: 3
   hielo: {fileID: 0}
   timeOnAir: 1
---- !u!61 &262924088
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 61066240180996444, guid: 781bf380b3220c64993ad6b5194cdaae,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 262924080}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.35}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.94, y: 0.78}
-  m_EdgeRadius: 0
 --- !u!1001 &290830338
 Prefab:
   m_ObjectHideFlags: 0
@@ -1715,7 +1632,6 @@ GameObject:
   - component: {fileID: 560732845}
   - component: {fileID: 560732849}
   - component: {fileID: 560732848}
-  - component: {fileID: 560732847}
   - component: {fileID: 560732846}
   m_Layer: 0
   m_Name: GoodSmoke
@@ -1764,18 +1680,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 3.02, y: 1}
   m_EdgeRadius: 0
---- !u!114 &560732847
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114156670084809478, guid: 9b07338c720bd8e4198f4697aca46051,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 560732844}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!199 &560732848
 ParticleSystemRenderer:
   serializedVersion: 4
@@ -9774,6 +9678,7 @@ GameObject:
   - component: {fileID: 975373116}
   - component: {fileID: 975373115}
   - component: {fileID: 975373114}
+  - component: {fileID: 975373122}
   m_Layer: 9
   m_Name: ATAUD (1)
   m_TagString: Coffin
@@ -9806,7 +9711,7 @@ BoxCollider2D:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 975373113}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -9832,7 +9737,7 @@ CircleCollider2D:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 975373113}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -9848,7 +9753,7 @@ CircleCollider2D:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 975373113}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -9943,6 +9848,35 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!60 &975373122
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 975373113}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.042853355, y: 0.52861404}
+      - {x: -1.4748187, y: 0.48519158}
+      - {x: -1.2877212, y: -0.4519065}
+      - {x: 1.2591534, y: -0.44714493}
+      - {x: 1.4649482, y: 0.47395432}
 --- !u!1001 &992680377
 Prefab:
   m_ObjectHideFlags: 0
@@ -10211,7 +10145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20fc313ba74b83744911ff38fb1bae75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 15
+  speed: 200
   target: {fileID: 262924081}
 --- !u!23 &1028495721
 MeshRenderer:
@@ -11779,7 +11713,6 @@ GameObject:
   - component: {fileID: 1448615957}
   - component: {fileID: 1448615956}
   - component: {fileID: 1448615955}
-  - component: {fileID: 1448615954}
   m_Layer: 9
   m_Name: Particle System
   m_TagString: TriggerPlacaPresion
@@ -11801,18 +11734,6 @@ Transform:
   m_Father: {fileID: 975373121}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1448615954
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114654713694898784, guid: 627de0c900c42cc49a0f79d28875f553,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1448615952}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a709e8ed32eada24381d4a00e9a941dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &1448615955
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -15486,7 +15407,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1512513832}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.04, z: 0}
+  m_LocalPosition: {x: 0, y: -0.57, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 262924081}
@@ -15504,7 +15425,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   offSet: 0.2
-  offSetHook: 1
+  offSetHook: 1.5
   maxDistance: 25
   currDistance: 5
   distanceToStartPull: 15
@@ -16043,7 +15964,6 @@ GameObject:
   - component: {fileID: 1640905525}
   - component: {fileID: 1640905524}
   - component: {fileID: 1640905523}
-  - component: {fileID: 1640905522}
   m_Layer: 9
   m_Name: Particle System (1)
   m_TagString: TriggerPlacaPresion
@@ -16065,18 +15985,6 @@ Transform:
   m_Father: {fileID: 975373121}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1640905522
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114654713694898784, guid: 627de0c900c42cc49a0f79d28875f553,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1640905520}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a709e8ed32eada24381d4a00e9a941dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &1640905523
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -16216,7 +16124,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 1563109096
+  randomSeed: 969414053
   InitialModule:
     serializedVersion: 3
     enabled: 1

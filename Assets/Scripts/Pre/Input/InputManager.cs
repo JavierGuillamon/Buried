@@ -97,7 +97,7 @@ public static class InputManager {
     }
     public static bool AButton()
     {
-        return Input.GetButtonDown("A_Button");
+        return Input.GetButton("A_Button");
     }
     public static bool BButton()
     {
