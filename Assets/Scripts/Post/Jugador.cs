@@ -168,20 +168,25 @@ public class Jugador : MonoBehaviour {
     public GameObject VisualGO;
 
     [Space(20)]
+    [SerializeField] LayerMask throwLayerCollision;
     [SerializeField] Transform camPos;
     [SerializeField] float speedTakingCoffin;
     [SerializeField] AnimationCurve takeCoffinCurve;
     [SerializeField] GameObject throwParticles;
     private Vector3 oldCoffinPos;
     private float takeCoffinTimer;
+    private LineRenderer throwLine;
     
 
-    void Start () {
+    void Start ()
+    {
+        throwLine = GetComponent<LineRenderer>();
         rb2d = GetComponent<Rigidbody2D>();
         moving = true;
         trajectoryPoints = new List<GameObject>();
-        for (int i = 0; i < numTrajectoryPoints; i++)
-            trajectoryPoints.Add(Instantiate(trajectoryPrefeb));
+        throwLine.positionCount = numTrajectoryPoints;
+        //for (int i = 0; i < numTrajectoryPoints; i++)
+        //trajectoryPoints.Add(Instantiate(trajectoryPrefeb));
         DisableTrajectory();
     }
 
@@ -275,9 +280,13 @@ public class Jugador : MonoBehaviour {
             coffinCollider1.enabled = false;
             coffinCollider2.enabled = false;
             if (playerGround)
+            {
                 CheckThrowCoffin();
+            }
             else
+            {
                 UnCheckThrowCoffin();
+            }
         }
         else {
             coffinCollider.enabled = true;
@@ -453,47 +462,75 @@ public class Jugador : MonoBehaviour {
         {
             if (right)
             {
+                throwParticles.SetActive(true);
                 throwing = true;
                 Vector2 apuntar = Apuntar();
                 throwForce += Time.deltaTime;
                 Vector3 currenpoint = transform.position;
                 //Vector3 currentVel = apuntar.normalized * throwCurve.Evaluate(Mathf.Clamp01(throwForce / throwCoffinTimeMax)) * throwMaxStrength;
                 Vector3 currentVel = apuntar.normalized * throwCurve.Evaluate(throwForce / throwCoffinTimeMax) * throwMaxStrength;
-                 for (int i = 0; i < numTrajectoryPoints; i++)
+                throwLine.enabled = true;
+                for (int i = 0; i < numTrajectoryPoints; i++)
                 {
-                    trajectoryPoints[i].transform.position = currenpoint;
+                    //trajectoryPoints[i].transform.position = currenpoint;
+                    throwLine.SetPosition(i, currenpoint);
                     currenpoint += currentVel * Time.fixedDeltaTime;
                     float g = coffinController.UpGrav;
                     if (currentVel.y < 0)
                         g = coffinController.DownGrav;
                     currentVel = currentVel.x * Vector2.right + currentVel.y * Vector2.up - Vector2.up * g * Time.fixedDeltaTime;
                 }
-                for (int i = 1; i < trajectoryPoints.Count; i++)
+
+                for (int i = 0; i < numTrajectoryPoints -1; i++)
                 {
-                    trajectoryPoints[i].GetComponent<Renderer>().enabled = true;
-                    RaycastHit2D hitInformation = Physics2D.Raycast(trajectoryPoints[i].transform.position, camPos.forward, 1);
-                    if (hitInformation.collider != null)
+                    RaycastHit2D hit = Physics2D.Raycast(throwLine.GetPosition(i), throwLine.GetPosition(i + 1) - throwLine.GetPosition(i), Vector3.Distance(throwLine.GetPosition(i + 1), throwLine.GetPosition(i)), throwLayerCollision);
+                    Debug.DrawRay(throwLine.GetPosition(i), throwLine.GetPosition(i + 1) - throwLine.GetPosition(i), Color.yellow);
+                    if (hit.collider != null)
                     {
-                        GameObject touchedObject = hitInformation.transform.gameObject;
-                        if (touchedObject.layer == 8)
-                            break;
+                        float percentPoint = (i * 100) / (numTrajectoryPoints - 1);
+                        float percentIndex1 = percentPoint / 100;
+                        float percentIndex2 = percentIndex1 + .05f;
+
+                        Gradient g;
+                        GradientAlphaKey[] gak;
+                        g = new Gradient();
+                        gak = new GradientAlphaKey[3];
+                        gak[0].alpha = 1;
+                        gak[0].time = 0;
+                        gak[1].alpha = 1;
+                        gak[1].time = percentIndex1;
+                        gak[2].alpha = 0;
+                        gak[2].time = percentIndex2;
+                        throwLine.colorGradient.SetKeys(throwLine.colorGradient.colorKeys, gak);
+
+                        throwParticles.transform.position = hit.point;
+                        Debug.DrawRay(hit.point, hit.normal, Color.cyan);
+                        if (hit.normal.y > 0)
+                            throwParticles.transform.eulerAngles = new Vector3(0, 0 , 0);
+                        else if (hit.normal.y < 0)
+                            throwParticles.transform.eulerAngles = new Vector3(-180, 0, 0);
+                        else if (hit.normal.x < 0)
+                            throwParticles.transform.eulerAngles = new Vector3(0, 0, 90);
+                        else if (hit.normal.x > 0)
+                            throwParticles.transform.eulerAngles = new Vector3(0, 0, -90);
+                        break;
                     }
                 }
                 rb2dc.transform.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.Cross(apuntar.normalized, Vector3.forward));
             }
-            else if(rightPrevious)
+            else if (rightPrevious)
             {
                 coffinTaken = false;
                 DoThrow();
                 throwForce = 0;
                 DisableTrajectory();
+                throwParticles.SetActive(false);
             }
         }
     }
 
     private void DoThrow()
     {
-
         Vector2 apuntar = Apuntar();
         rb2dc.velocity = apuntar.normalized * throwCurve.Evaluate(Mathf.Clamp01(throwForce / throwCoffinTimeMax)) * throwMaxStrength;
         rb2dc.mass = maxMass;
@@ -503,8 +540,9 @@ public class Jugador : MonoBehaviour {
 
     private void DisableTrajectory()
     {
-        for (int i = 0; i < numTrajectoryPoints; i++)
-            trajectoryPoints[i].GetComponent<Renderer>().enabled = false;
+        /*for (int i = 0; i < numTrajectoryPoints; i++)
+            trajectoryPoints[i].GetComponent<Renderer>().enabled = false;*/
+        throwLine.enabled = false;
     }
 
     private void UnCheckThrowCoffin()
