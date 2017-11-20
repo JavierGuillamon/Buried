@@ -194,6 +194,7 @@
     <Compile Include="Assets\Scripts\Post\scr_PlacaPresion.cs" />
     <Compile Include="Assets\Scripts\Post\scr_TriggerMuerte.cs" />
     <Compile Include="Assets\Scripts\Post\Sound.cs" />
+    <Compile Include="Assets\Scripts\Post\TestSineWave.cs" />
     <Compile Include="Assets\Scripts\Pre\Agua\Agua.cs" />
     <Compile Include="Assets\Scripts\Pre\ControlCamera.cs" />
     <Compile Include="Assets\Scripts\Pre\Fuego\detectorFuego.cs" />

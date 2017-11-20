@@ -60,10 +60,6 @@ public class Chain : MonoBehaviour {
             for (int i = 1; i < currenCornerPoints.Count; i++)
                 l += Vector2.Distance(currenCornerPoints[i-1].GetPosition(), currenCornerPoints[i ].GetPosition());
             return l;
-            /*float l = 0;
-                        for (int i = 1; i < corners.Count; i++)
-                            l += Vector2.Distance(corners[i-1].transform.position, corners[i ].transform.position);
-                        return l;*/
         }
     }
 

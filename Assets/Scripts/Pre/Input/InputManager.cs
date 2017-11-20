@@ -47,7 +47,7 @@ public static class InputManager {
         int r = 0;
         r += (int)Input.GetAxis("J_lftTrigger");
         r += System.Convert.ToInt32(Input.GetMouseButton(0));
-        if(r>0)
+        if(r!=0)
             return true;
         return false;
     }
@@ -56,7 +56,7 @@ public static class InputManager {
         int r = 0;
         r += (int)Input.GetAxis("J_lftTrigger");
         r += System.Convert.ToInt32(Input.GetMouseButtonDown(0));
-        if (r > 0)
+        if (r != 0)
             return true;
         return false;
     }
