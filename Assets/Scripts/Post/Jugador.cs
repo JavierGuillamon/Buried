@@ -348,7 +348,7 @@ public class Jugador : MonoBehaviour {
 
     private void agarrarAtaud()
     {
-        if (distanciaJugadorCoffin <= distanceToTakeCoffin+0.66f&& playerGround)
+        if (distanciaJugadorCoffin <= distanceToTakeCoffin + 0.66f && playerGround)
         {
             if (coffinTaken)
                 coffinTaken = false;
@@ -458,7 +458,6 @@ public class Jugador : MonoBehaviour {
 
     public float verticalOffset;
     private Vector2 Apuntar() {
-
         Vector2 apuntar = InputManager.MainHorizontal() * Vector2.right + InputManager.MainVertical() * verticalOffset * Vector2.up;
         if (apuntar.magnitude < 0.2f)
         {
@@ -508,22 +507,6 @@ public class Jugador : MonoBehaviour {
                     Debug.DrawRay(throwLine.GetPosition(i), throwLine.GetPosition(i + 1) - throwLine.GetPosition(i), Color.yellow);
                     if (hit.collider != null)
                     {
-                        float percentPoint = (i * 100) / (numTrajectoryPoints - 1);
-                        float percentIndex1 = percentPoint / 100;
-                        float percentIndex2 = percentIndex1 + .05f;
-
-                        Gradient g;
-                        GradientAlphaKey[] gak;
-                        g = new Gradient();
-                        gak = new GradientAlphaKey[3];
-                        gak[0].alpha = 1;
-                        gak[0].time = 0;
-                        gak[1].alpha = 1;
-                        gak[1].time = percentIndex1;
-                        gak[2].alpha = 0;
-                        gak[2].time = percentIndex2;
-                        throwLine.colorGradient.SetKeys(throwLine.colorGradient.colorKeys, gak);
-
                         throwParticles.transform.position = hit.point;
                         Debug.DrawRay(hit.point, hit.normal, Color.cyan);
                         if (hit.normal.y > 0)

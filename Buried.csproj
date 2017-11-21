@@ -184,6 +184,7 @@
     <Compile Include="Assets\Scripts\Post\LevelEditor\ColorToPrefab.cs" />
     <Compile Include="Assets\Scripts\Post\LevelEditor\LevelGenerator.cs" />
     <Compile Include="Assets\Scripts\Post\LevelEditor\LevelLoader.cs" />
+    <Compile Include="Assets\Scripts\Post\MenuManager.cs" />
     <Compile Include="Assets\Scripts\Post\MovingPlatform.cs" />
     <Compile Include="Assets\Scripts\Post\PlatformDetector.cs" />
     <Compile Include="Assets\Scripts\Post\PlatformSpawner.cs" />

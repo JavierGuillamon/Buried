@@ -6,5 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: b69b905413b10d9468b0aacb6ea2adb6
+  - enabled: 1
+    path: Assets/Scenes/Game_Feel_Work.unity
+    guid: ab5ae22bb4c3a5b46aff04d4eed35b51
+  - enabled: 1
     path: Assets/Scenes/Demo_Septiembre.unity
     guid: 6a89e3d2691abc74abb6f80e63283809
