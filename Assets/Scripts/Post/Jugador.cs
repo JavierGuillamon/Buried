@@ -377,7 +377,6 @@ public class Jugador : MonoBehaviour {
 
         if (left)
         {
-            Debug.Log("DIST: " + distanciaJugadorCoffin + " DTC: " + distanceToTakeCoffin);
             if (distanciaJugadorCoffin >= distanceToTakeCoffin || !playerGround)
             {
                 //Debug.Log("dentro");
@@ -442,9 +441,7 @@ public class Jugador : MonoBehaviour {
             runParticles.Stop();
         }
         //end
-
         input = new Vector2(InputManager.MainHorizontal(), System.Convert.ToInt32(InputManager.AButton()));
-
         if (throwing)
         {
             input = new Vector2(0, 0);
@@ -565,60 +562,67 @@ public class Jugador : MonoBehaviour {
 
     private void Move()
     {
-        vely = rb2d.velocity.y;
-        if (InputManager.AButton() && playerGround && !coffinTaken &&!jumped)
+        if (!InputManager.LeftTrigger() || (!playerGround&&InputManager.LeftTrigger()))
         {
-            vely = JumpSpeed ;
-            desiredDistance = chain.ChainLength;
-            jumped = true;
-        }
-        if (!InputManager.AButton() && vely > JumpCutOff)
-        {
-            Debug.Log("cutting");
-            vely = JumpCutOff;
-            jumped = false;
-        }
-        if (!InputManager.AButton())
-            jumped = false;
-        if (vely >= 0)
-            vely -= gravityUp * Time.deltaTime ;
-        else
-            vely -= gravityDown * Time.deltaTime ;
+            vely = rb2d.velocity.y;
+            if (InputManager.AButton() && playerGround && !coffinTaken && !jumped)
+            {
+                vely = JumpSpeed;
+                desiredDistance = chain.ChainLength;
+                jumped = true;
+            }
+            if (!InputManager.AButton() && vely > JumpCutOff)
+            {
+                Debug.Log("cutting");
+                vely = JumpCutOff;
+                jumped = false;
+            }
+            if (!InputManager.AButton())
+                jumped = false;
+            if (vely >= 0)
+                vely -= gravityUp * Time.deltaTime;
+            else
+                vely -= gravityDown * Time.deltaTime;
 
 
-        if (coffinTaken)
-        {
-            rb2d.velocity += Vector2.right * Time.deltaTime * accelerationXNormal * InputManager.MainHorizontal();
-            movSlow = true;
-        }
-        else if (distanciaJugadorCoffin >= chain.currDistance - 2)
-        {
-            if (transform.position.x > coffin.position.x && InputManager.MainHorizontal() > 0)
+            if (coffinTaken)
             {
                 rb2d.velocity += Vector2.right * Time.deltaTime * accelerationXNormal * InputManager.MainHorizontal();
                 movSlow = true;
             }
-            else if (transform.position.x < coffin.position.x && InputManager.MainHorizontal() < 0)
+            else if (distanciaJugadorCoffin >= chain.currDistance - 2)
             {
-                rb2d.velocity += Vector2.right * Time.deltaTime * accelerationXNormal * InputManager.MainHorizontal();
-                movSlow = true;
+                if (transform.position.x > coffin.position.x && InputManager.MainHorizontal() > 0)
+                {
+                    rb2d.velocity += Vector2.right * Time.deltaTime * accelerationXNormal * InputManager.MainHorizontal();
+                    movSlow = true;
+                }
+                else if (transform.position.x < coffin.position.x && InputManager.MainHorizontal() < 0)
+                {
+                    rb2d.velocity += Vector2.right * Time.deltaTime * accelerationXNormal * InputManager.MainHorizontal();
+                    movSlow = true;
+                }
+                else
+                {
+                    rb2d.velocity += Vector2.right * Time.deltaTime * accelerationXNormal * InputManager.MainHorizontal();
+                    movSlow = false;
+                }
             }
             else
             {
-                rb2d.velocity += Vector2.right* Time.deltaTime* accelerationXNormal * InputManager.MainHorizontal();
+                rb2d.velocity += Vector2.right * Time.deltaTime * accelerationXNormal * InputManager.MainHorizontal();
                 movSlow = false;
             }
+            if (movSlow)
+                rb2d.velocity = new Vector2(Mathf.Clamp(rb2d.velocity.x, -maxVelXSlow, maxVelXSlow), rb2d.velocity.y);
+            else
+                rb2d.velocity = new Vector2(Mathf.Clamp(rb2d.velocity.x, -maxVelX, maxVelX), rb2d.velocity.y);
+            rb2d.velocity = new Vector2(rb2d.velocity.x * dragX, vely);
         }
         else
         {
-            rb2d.velocity += Vector2.right * Time.deltaTime * accelerationXNormal * InputManager.MainHorizontal();
-            movSlow = false;
+               rb2d.velocity = new Vector2(0,0);
         }
-        if(movSlow)
-            rb2d.velocity = new Vector2(Mathf.Clamp(rb2d.velocity.x,-maxVelXSlow, maxVelXSlow), rb2d.velocity.y);
-        else
-            rb2d.velocity = new Vector2(Mathf.Clamp(rb2d.velocity.x, -maxVelX, maxVelX), rb2d.velocity.y);
-        rb2d.velocity = new Vector2(rb2d.velocity.x * dragX, vely );
     }
 
     void MoveHolding()
@@ -655,7 +659,7 @@ public class Jugador : MonoBehaviour {
             if (((this.transform.position.y - coffin.position.y) > -2)&& InputManager.LeftTrigger())
             {
                 //chapuzilla para solucionar el fallo de terminar de trepar en una plataforma. TODO: mejorar 
-                this.transform.position = new Vector3(this.transform.position.x,this.transform.position.y+1,this.transform.position.z);
+                this.transform.position = new Vector3(this.transform.position.x,this.transform.position.y+.5f,this.transform.position.z);
             }
             
         }
