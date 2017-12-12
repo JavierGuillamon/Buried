@@ -150,6 +150,7 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.VR.WSA.Spa
 45f3431f0103c41611e8d4eec3d439df UnityEngine.HoloLens.dll:UnityEngine.VR.WSA.SpatialMappingRenderer
 771631af1709c5313084a460b790125a Assembly-CSharp.dll:.AudioManager
 7b848b7feaa524953d09fc1851efa6da Assembly-CSharp.dll:Cinemachine.Timeline.CinemachineTrack
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.MenuManager
 d394e60d9918e5802ea7ed4192cbb41d Assembly-CSharp.dll:.GroundDetector
 93176f3f3453ecb525d6ed31655250ae Assembly-CSharp.dll:Cinemachine.CinemachineOrbitalTransposer
 88e745da281bc889e248b64cf4d72a54 Assembly-CSharp-firstpass.dll:UnityStandardAssets.ImageEffects.SunShafts
@@ -218,6 +219,7 @@ d8fd549c3bbab0301a69ee2c4a72c94e Assembly-CSharp.dll:.scr_PlacaPresion
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp-firstpass.dll:UnityStandardAssets.ImageEffects.PostEffectsBase
 53dbd7baa3c8da2f87828dd70d70dae4 Assembly-CSharp-firstpass.dll:UnityStandardAssets.ImageEffects.DepthOfFieldDeprecated
 7fc3adfac7efbc0706567dbaca46f637 Assembly-CSharp-firstpass.dll:UnityStandardAssets.ImageEffects.Fisheye
+797c6ea6e283317cf3c3ac2eb44723d0 Assembly-CSharp.dll:.PlacaInterruptor
 e2a8fd4524fc2a3a236b7e7720b544a6 Assembly-CSharp-firstpass.dll:UnityStandardAssets.ImageEffects.EdgeDetection
 b3432dfe180f02232d7612fb366593d3 Assembly-CSharp-firstpass.dll:UnityStandardAssets.ImageEffects.ColorCorrectionLookup
 fa13a1b0ff073fa1b299c99b81377ef1 Assembly-CSharp.dll:Cinemachine.CinemachineBrain
@@ -227,4 +229,4 @@ fa13a1b0ff073fa1b299c99b81377ef1 Assembly-CSharp.dll:Cinemachine.CinemachineBrai
 83cf8d445f7f66fde23b3753171acb45 Assembly-CSharp.dll:Cinemachine.CinemachineBasicMultiChannelPerlin
 06d24c1ff2618999b23f770a2654de51 Assembly-CSharp.dll:Cinemachine.CinemachineClearShot
 95d1ff1f9499bb8efacb4026d7c73a4e Assembly-CSharp.dll:.Chain
-05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.MenuManager
+ce1c03b6d6e9729ddc3d370708b6f5b2 Assembly-CSharp.dll:.Checkpoint

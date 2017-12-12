@@ -743,7 +743,7 @@ Transform:
   - {fileID: 226258881}
   - {fileID: 2014393038}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &262924082
 Rigidbody2D:
@@ -1231,7 +1231,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4360768081901698, guid: 87282409bbd3c124f8597d7ea363c5d2, type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 232858359920732716, guid: 87282409bbd3c124f8597d7ea363c5d2,
         type: 2}
@@ -16634,7 +16634,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 50, y: 30, z: 0}
 --- !u!1001 &1635198589
 Prefab:

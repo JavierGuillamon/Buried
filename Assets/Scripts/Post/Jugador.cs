@@ -573,7 +573,7 @@ public class Jugador : MonoBehaviour {
             }
             if (!InputManager.AButton() && vely > JumpCutOff)
             {
-                Debug.Log("cutting");
+                //Debug.Log("cutting");
                 vely = JumpCutOff;
                 jumped = false;
             }

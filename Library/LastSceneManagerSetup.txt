@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/Game_Feel_Work.unity
+- path: Assets/Scenes/Blockout.unity
   isLoaded: 1
   isActive: 1

@@ -178,6 +178,7 @@
     <Compile Include="Assets\Scripts\Post\CamPositionReference.cs" />
     <Compile Include="Assets\Scripts\Post\CamTimelineManager.cs" />
     <Compile Include="Assets\Scripts\Post\CharacterJumpSounds.cs" />
+    <Compile Include="Assets\Scripts\Post\Checkpoint.cs" />
     <Compile Include="Assets\Scripts\Post\CutsceneActivator.cs" />
     <Compile Include="Assets\Scripts\Post\Interpolator.cs" />
     <Compile Include="Assets\Scripts\Post\Jugador.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="Assets\Scripts\Post\LevelEditor\LevelLoader.cs" />
     <Compile Include="Assets\Scripts\Post\MenuManager.cs" />
     <Compile Include="Assets\Scripts\Post\MovingPlatform.cs" />
+    <Compile Include="Assets\Scripts\Post\PlacaInterruptor.cs" />
     <Compile Include="Assets\Scripts\Post\PlatformDetector.cs" />
     <Compile Include="Assets\Scripts\Post\PlatformSpawner.cs" />
     <Compile Include="Assets\Scripts\Post\PlatformTraslation.cs" />
