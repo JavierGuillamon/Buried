@@ -10015,8 +10015,6 @@ MonoBehaviour:
   launchParticles: {fileID: 583177303}
   jumpParticles: {fileID: 1109790317}
   runParticles: {fileID: 2139219404}
-  firsjoint: {fileID: 0}
-  firsjointCoffin: {fileID: 0}
   animator: {fileID: 1776237423}
   VisualGO: {fileID: 1594450486}
   throwLayerCollision:
@@ -32480,6 +32478,7 @@ GameObject:
   - component: {fileID: 838174787}
   - component: {fileID: 838174786}
   - component: {fileID: 838174785}
+  - component: {fileID: 838174788}
   m_Layer: 9
   m_Name: AtaudVisual
   m_TagString: Untagged
@@ -32494,14 +32493,14 @@ Transform:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 838174783}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.3037006, y: 0, z: 0, w: 0.9527676}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 3, y: 1, z: 1}
   m_Children:
   - {fileID: 628708981}
   m_Father: {fileID: 896647741}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -35.36, y: 0, z: 0}
 --- !u!114 &838174785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32557,6 +32556,17 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 838174783}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &838174788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 838174783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b6616562b2fdd344b2b5c6157e3a257, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &840374565
 Prefab:
   m_ObjectHideFlags: 0
@@ -34380,7 +34390,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 6
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 1

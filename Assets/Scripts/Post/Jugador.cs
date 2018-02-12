@@ -161,9 +161,7 @@ public class Jugador : MonoBehaviour {
     ParticleSystem jumpParticles;
     [SerializeField]
     ParticleSystem runParticles;
-
-    public DistanceJoint2D firsjoint;
-    public DistanceJoint2D firsjointCoffin;
+    
     public Animator animator;
     public GameObject VisualGO;
 

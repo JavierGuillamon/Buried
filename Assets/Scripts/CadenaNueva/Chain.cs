@@ -126,6 +126,8 @@ public class Chain : MonoBehaviour {
             coffinJoint.distance = currDistance - ChainLength + Vector2.Distance(currenCornerPoints[currenCornerPoints.Count - 1].GetPosition(), currenCornerPoints[currenCornerPoints.Count - 2].GetPosition());
         }
     }
+    int previousCorners = 2;
+
 
     void PlayerPull()
     {
@@ -139,7 +141,10 @@ public class Chain : MonoBehaviour {
                 off -= Vector3.right * 0.5f;
             jointPos += off;
             playerJoint.connectedAnchor = jointPos;
-            playerJoint.distance = currDistance - ChainLength + Vector2.Distance(currenCornerPoints[0].GetPosition(), currenCornerPoints[1].GetPosition());
+            if (currenCornerPoints.Count > 2 || previousCorners == 2)
+                playerJoint.distance = currDistance - ChainLength + Vector2.Distance(currenCornerPoints[0].GetPosition(), currenCornerPoints[1].GetPosition());
+            else
+                playerJoint.distance = currDistance - 2f;
         }
         else
         {
@@ -149,6 +154,7 @@ public class Chain : MonoBehaviour {
             playerJoint.connectedAnchor = jointPos;
             playerJoint.distance = maxDistance*2;
         }
+        previousCorners = currenCornerPoints.Count;
     }
    
    [System.Serializable]
